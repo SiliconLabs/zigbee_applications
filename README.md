@@ -17,7 +17,7 @@ This repo demonstrates some of the applications that can be built on top of the 
 
 ## Examples ##
 
-- Z3Switch with CLI and Debug Log through SWO
+- Two Zigbee Applications on one SoC
 
 ## Documentation ##
 

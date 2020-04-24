@@ -13,11 +13,12 @@
 
 # Silicon Labs Zigbee Application Examples #
 
-This repo demonstrates some of the applications that can be built on top of the Silicon Labs Zigbee stack
+This repo demonstrates some of the applications that can be built on top of the Silicon Labs Zigbee stack.
 
 ## Examples ##
 
 - Two Zigbee Applications on one SoC
+- Optimizing Boot-up Rejoin
 
 ## Documentation ##
 

@@ -1,0 +1,743 @@
+#ISD App Configuration:
+# Simplicity Studio version: 5.1.0.201812121611-1147
+#  Directory of framework within the stack, which helps in case there are more
+#  frameworks within a stack.
+FrameworkDirectory:protocol\zigbee\app\framework
+
+#  Identified of a stack descriptor used for this configuration. This should not
+#  be changed manually, unless you really know what you are doing.
+ConfiguratorID:auto-EM35X
+
+#  Output directory which is used as a root for all generated files. The actual
+#  files relative to that directory are defined by individual file name.
+GenerationDirectory:PATH(ABSOLUTE):C:\SiliconLabs\SimplicityStudio\v4\developer\sdks\gecko_sdk_suite\v2.4
+
+#  Unique identifier for this device. This string should be in a form of a C
+#  identifier, as it will be used in both generated variable, macros, as well as
+#  file names. You should generally not use characters which are not valid
+#  characters in a C identifier here.
+DeviceName:Z3Switch_SED
+
+#  Type of the endpoint. Each endpoint implement one endpoint type. There can be
+#  one or more endpoint types, regardless of number of actual endpoints.
+EndpointType:Primary,0
+
+#  The ZCL device that this particular endpoint is implementing.
+DeviceType:Primary,HA-onoff
+
+#  Type of the endpoint. Each endpoint implement one endpoint type. There can be
+#  one or more endpoint types, regardless of number of actual endpoints.
+EndpointType:Touchlink,2064
+
+#  The ZCL device that this particular endpoint is implementing.
+DeviceType:Touchlink,LO-colorscenecontroller
+
+#  Overrides a particular client configuration. This happens when you have
+#  chosen to include/exclude a client cluster that is optional. Contains
+#  'clusterId', 'exclude/include' and the endpoint type name.
+OverrideClient:1000,include,Touchlink
+
+#  Overrides a particular server configuration. This happens when you have
+#  chosen to include/exclude a server cluster that is optional. Contains
+#  'clusterId', 'exclude/include' and the endpoint type name.
+OverrideServer:1000,include,Touchlink
+
+#  Type of the endpoint. Each endpoint implement one endpoint type. There can be
+#  one or more endpoint types, regardless of number of actual endpoints.
+EndpointType:Centralized,0
+
+#  The ZCL device that this particular endpoint is implementing.
+DeviceType:Centralized,HA-onoff
+
+#  Overrides a particular server configuration. This happens when you have
+#  chosen to include/exclude a server cluster that is optional. Contains
+#  'clusterId', 'exclude/include' and the endpoint type name.
+OverrideServer:20,include,Centralized
+
+#  ZigBee PRO network configuration.  Each endpoint belongs to a single network
+#  configuration.  There can be one or more network configurations.
+ZigbeeProNetwork:*Primary,ZA_SLEEPY_END_DEVICE,Z3
+
+#  User defined default values for attributes.
+AttributeDefaults:32,0,server,0,0x00000050
+
+#  Lists the channels that this application will be configured to use.
+Channels:11
+
+#  Definitions of individual endpoints. For each endpoint the endpoint number
+#  (1-254) is listed, as well as the endpoint type that this endpoint will
+#  serve.
+ConfiguredEndpoints:*1&-1&-1&0&Centralized&Primary,2&-1&-1&0&Touchlink&Primary
+
+#  A single specification version for each profile defining the max version of
+#  the spec supported by this configuration.
+SpecVersions:
+
+#  In case of a network coprocessor, this lists a host processor used.
+Host:unknown
+
+#  Ember network processor targeted for this application.
+Platform:efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar
+
+#  The exact toolchain along with it's version targeted for this application.
+ExactArchitectureToolchain:com.silabs.ss.tool.ide.arm.toolchain.iar:8.30.2.160
+
+#  Enable callbacks.
+Callbacks:emberAfHalButtonIsrCallback,emberAfStackStatusCallback,emberAfPluginFindAndBindInitiatorCompleteCallback,emberAfPluginNetworkSteeringCompleteCallback,emberAfPluginZllCommissioningTouchLinkCompleteCallback,emberAfPluginZllCommissioningTouchLinkFailedCallback,
+
+#  Any customer-specific general purpose custom events.
+CustomEvents:commissioningEventControl,commissioningEventHandler
+
+CustomEvents:ledEventControl,ledEventHandler
+
+CustomEvents:findingAndBindingEventControl,findingAndBindingEventHandler
+
+#  If bindings are enabled then this is the maximum number of supported
+#  bindings.
+NumberOfBindings:2
+
+#  The size of the stack address table which will be used by the stack to
+#  maintain IEEE to ZigBee short id mappings.
+AddressTableSize:2
+
+#  The size of the portion of the address table used by the trust center as an
+#  address cache. The total size of the address table will be equal to this
+#  value plus the size of the address table set in the AddressTableSize.
+TrustCenterCacheSize:2
+
+#  Manufacturing code user in reporting.
+ManufacturingCode:4098
+
+#  Maximum number of supported reported attributes.
+ReportTableSize:5
+
+#  The mode of the link key handling on a trust center.
+LinkKeyMode:2
+
+#  If not using multiple endpoint support, this value contains the default
+#  endpoint. With multiple endpoint support, this number is ignored.
+Endpoint:10
+
+#  Version of this device.
+DeviceVersion:0
+
+#  Master endpoint which contains global information.
+DefaultDestinationEndpoint:10
+
+#  Profile Id used for the application.
+ProfileId:-1
+
+#  Device Id used for the application.
+DeviceId:-1
+
+#  The largest size for a fragment buffer.
+FragmentationMaxSize:255
+
+#  Size of the table for source routing.
+SourceRouteTableSize:7
+
+#  Default response policy.
+DefaultResponsePolicy:0
+
+#  The level of debugging supported.
+DebugLevel:1
+
+#  Configuration of command-line interface.
+CLIMode:2
+
+#  Configuration of heartbeat.
+HeartbeatLed:1
+
+#  If this option is set to true, standard reporting is enabled.
+EnableStandardReporting:false
+
+#  If the device needs to perform inter-PAN sends, then this option should be
+#  enabled.
+EnableInterPanSend:false
+
+#  If the device needs to perform inter-PAN receives, then this option should be
+#  enabled.
+EnableInterPanReceive:false
+
+#  Enable serial commands for ZDO.
+EnableZdoSerialCommands:false
+
+#  Enable this option if you wish to enable device bindings.
+EnableBindings:true
+
+#  Turn this option on, if end-device binding is enabled.
+EnableEndDeviceBind:false
+
+#  Enables the statistics receiving.
+EnableReceiveStatistics:false
+
+#  If true, then command discovery commands are supported.
+SupportCommandDiscovery:true
+
+#  Selects whether application will use the ECC 163k1 library.
+UseEcc163k1:false
+
+#  Selects whether application will use the ECC 283k1 library.
+UseEcc283k1:false
+
+#  Enable preconfigured keys for security.
+PreconfiguredKeyEnabled:false
+
+#  Enable network key.
+NetworkKeyEnabled:false
+
+#  If this option is turned on, then appBuilder will automatically generate the
+#  files, immediately upon saving the ISC file.
+AutoGenerate:false
+
+#  Enable key switching.
+EnableKeySwitch:false
+
+#  Use this setting to turn on fragmentation.
+FragmentationEnable:false
+
+#  Enables concentrator support
+EnableConcentrator:true
+
+#  If true, then this concentrator is low ram, otherwise high ram
+LowRamConcentrator:true
+
+#  If this option is set to true, then MFG_INSTALL_CODE token is used for
+#  setting the security install code.
+UseSeInstallCodes:false
+
+#  If this option is turned on, then the code will enable the checking of the
+#  attributes.
+EnableAttributeRangeChecking:false
+
+#  Enable application handling of supported ZigBee Device Object messages.
+ReceiveSupportedZdoRequests:false
+
+#  Enable application handling of unsupported ZigBee Device Object messages.
+HandleUnsupportedZdoRequests:false
+
+#  Enable application handling of ZigBee Device Object requests related to
+#  endpoints.
+HandleEndpointZdoRequests:false
+
+#  Enable application handling of ZigBee Device Object requests related to
+#  bindings.
+HandleBindingZdoRequests:false
+
+#  Use token for TX power mode.
+TxPowerModeUseToken:true
+
+#  Enable boost power mode.
+BoostMode:false
+
+#  Enable the alternate transmitter output.
+AlternatePowerMode:false
+
+#  Use legacy CLI instead of generated CLI.
+LegacyCli:false
+
+#  Add Custom CLI sub-menu
+AddCustomCli:false
+
+#  Include command and argument descriptions in the embedded code.
+IncludeCommandDescriptions:false
+
+#  If set, then project-specific callbacks file will be generated.
+GenerateCallbacksFile:false
+
+#  The manufacturer code for this app defaults to 0.
+ManufacturerCodeDefaultIsZero:true
+
+#  Actual preconfigured key, if it is enabled.
+PreconfiguredKey:56777777777777777777777777777777
+
+#  Actual network key.
+NetworkKey:12333333333333333333333333333333
+
+#  Actual second network key.
+NetworkKey2:ABCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+
+# Setup configurations
+{setupId:additionalFiles
+}
+{setupId:bleGattConfigurator
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <gatt generic_attribute_service="false" header="gatt_db.h" name="Custom BLE GATT" out="gatt_db.c" prefix="gattdb_"/>
+</project>
+}
+{setupId:boardHeader
+allowMissingHeader:false
+useHeaderInPlace:false
+em357=BOARD,em35x/dev0680,,
+EFR32MG1P233F256GM48+BRD4150A=USE_HARDWARE_CONFIGURATOR,,,
+efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar=USE_HARDWARE_CONFIGURATOR,,,
+}
+{setupId:bookkeeping
+}
+{setupId:bootloader
+}
+{setupId:callbackConfiguration
+}
+{setupId:debugConfiguration
+on
+area name off
+appSerial=1
+remove,ATTRIBUTES
+compile,DEBUG
+compile,POLL_CONTROL_CLUSTER
+compile,ZDO
+enable,DEBUG
+enable,POLL_CONTROL_CLUSTER
+}
+{setupId:halOptions
+}
+{setupId:hwConfig
+lastArchitectureId=efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar
+featureLevel=1
+active=true
+lastHwConfFileUsed=PATH(STACK_RELATIVE):app/builder/Z3Switch_SED/brd4162a_efr32mg12p332f1024gl125.hwconf
+}
+{setupId:information
+\{key:description
+ZigBee 3.0 Gateway, Light and Switch
+
+ZigBee 3.0 provides a foundation of commissioning and network management
+mechanisms to be used in all ZigBee applications. The sample scenario
+presented here demonstrates the flexibility that the ZigBee 3.0 specification
+provides to applications. They also act as an excellent starting point for users
+wishing to build their own ZigBee 3.0 applications.
+
+These applications can take on three possible roles.
+  1. Z3Gateway, the gateway can form a centralized network, and the light and the switch
+     can join the centralized network by performing network steering.
+  2. Z3Light, acting as a router, can form a distributed network, and the
+     Z3Switch, acting as an end device, can join the distributed network.
+  3. Z3Light, acting as a touchlink target, can touchlink with the
+     switch, acting as a touchlink initiator.
+
+Note: touchlinking is optional in Zigbee 3.0. In this application the touchlink
+functionality is available on endpoint 2. This functionality can be removed by
+deleting endpoint 2 on the ZCL Clusters tab
+
+
+The gateway provides CLI commands application interface to the user. The 
+CLI command "plugin network-creator start 1" can be issued in order to form
+a centralized network. The gateway application can then be triggered to allow
+other devices onto the network with the CLI command  "plugin network-creator-security
+open-network". Devices can then join the network using the ZigBeeAlliance09
+link key, or by manually entering the install code derived link key into the gateway
+using the CLI command "plugin network-creator-security set-joining-link-key".
+The CLI command "plugin network-creator-security close-network" will close the
+network and no longer allow devices onto the gateway's network.
+
+The light provides a very simplistic user interface. On power up, the light will
+perform network steering automatically. If the light does not find a suitable
+network to join, it forms its own distributed network. The light will not open
+its network for joining as soon as the network comes up, so this must be done
+manually. Once a distributed network is formed and opened, the switch may join
+its network by performing network steering itself or through touchlink
+commissioning.  Once the light is on a network, it will set its
+COMMISSIONING_STATUS_LED. When the light starts identifying as a find and bind
+target, it will blink its COMMISSIONING_STATUS_LED. The light will start
+identifying as a find and bind target automatically when it brings its network
+up, but users can reopen the find and bind target window by pushing either button
+on the light at any time when it is on a network.
+
+The switch provides a simple application interface to the user. When the switch
+is not on a network, it can initiate network steering to join a network using
+button 0. The switch can also initiate touchlink commissioning using button 1.
+After the switch has successfully joining a network, it will perform the finding
+and binding procedure for an initiator. After this takes place, the switch
+should have at least two bindings to the light in its binding table: one for the
+On/Off cluster and one for the Level Control cluster. While the switch is
+performing its network commissioning, it will blink its
+COMMISSIONING_STATUS_LED. When the switch is active on the network, it will
+set its COMMISSIONING_STATUS_LED. Once the switch has finished finding and
+binding, users can use buttons 0 and 1 to send On/Off Toggle and Level Control
+Move to Level commands to the light, respectively.
+
+This application also demonstrates functionality of a Green Power proxy
+application.
+
+The current debug printing settings in these applications are only for the
+purpose of aiding users in understanding and debugging this sample scenario.
+Debug printing should be turned off in order to save code size on a final
+product.
+\}
+}
+{setupId:macros
+COMMISSIONING_STATUS_LED=BOARDLED2
+LED_BLINK_PERIOD_MS=2000
+TRANSITION_TIME_DS=20
+FINDING_AND_BINDING_DELAY_MS=3000
+}
+{setupId:mpsi
+- mappings
+- custom messages
+}
+{setupId:quizz
+}
+{setupId:rf4ce
+nodeCapabilities=0
+vendorId=65521
+vendorString=
+userString=
+deviceTypes=[254]
+profileIds=[0]
+power=3
+}
+{setupId:rf4ceMso
+}
+{setupId:rf4ceZrc
+}
+{setupId:serial
+useHwConfigurator=true
+}
+{setupId:template
+simeepromSize=8192
+}
+{setupId:token
+}
+#  The name of the set of Command Line Interface (CLI) commands that are
+#  compiled into the application by default.
+CliCommandSet:Full
+
+#  These are the various Command Line Interface (CLI) commands that can be
+#  included, or excluded (if they are included by default), in the application.
+CliCommands:compile,zcl poll-control long
+
+CliCommands:compile,zcl poll-control short
+
+CliCommands:compile,zcl poll-control stop
+
+#  Plugin configuration
+appPlugin:adc,true
+
+appPlugin:address-table,false
+appPlugin:aes-cmac,false
+appPlugin:antenna,false
+appPlugin:antenna-stub,true
+
+appPlugin:barrier-control-server,false
+appPlugin:basic,true
+
+appPlugin:battery-monitor,false
+appPlugin:battery-monitor-stub,false
+appPlugin:binding-table-library,true
+
+appPlugin:ble,false
+appPlugin:ble-psstore-library,false
+appPlugin:bulb-pwm-cli,false
+appPlugin:bulb-pwm-driver,false
+appPlugin:bulb-ui,false
+appPlugin:button-interface,false
+appPlugin:button-interface-stub,false
+appPlugin:button-joining,false
+appPlugin:calendar-client,true
+
+appPlugin:calendar-common,false
+appPlugin:calendar-server,true
+
+appPlugin:cbke-163k1-library,false
+appPlugin:cbke-283k1-library,false
+appPlugin:cbke-library-core,false
+appPlugin:cbke-library-dsa-sign,false
+appPlugin:cbke-library-dsa-verify,false
+appPlugin:cbke-library-dsa-verify-283k1,false
+appPlugin:cjson,false
+appPlugin:coexistence,true
+
+appPlugin:coexistence-stub,false
+appPlugin:color-control,true
+
+appPlugin:color-control-server,false
+appPlugin:command-relay,false
+appPlugin:comms-hub-function,false
+appPlugin:comms-hub-function-sub-ghz,false
+appPlugin:concentrator,false
+appPlugin:configuration-server,false
+appPlugin:connection-manager,false
+appPlugin:counters,true
+
+appPlugin:custom-network-find,false
+appPlugin:debug-basic-library,true
+
+appPlugin:debug-extended-library,false
+appPlugin:debug-jtag,true
+
+appPlugin:debug-jtag-stub,false
+appPlugin:device-database,false
+appPlugin:device-management-client,false
+appPlugin:device-management-server,false
+appPlugin:device-query-service,false
+appPlugin:device-table,false
+appPlugin:diagnostic-server,true
+
+appPlugin:dmp-demo-ui,false
+appPlugin:dmp-ui-demo,false
+appPlugin:dmp-ui-demo-stub,false
+appPlugin:door-lock-server,false
+appPlugin:drlc,true
+
+appPlugin:drlc-server,false
+appPlugin:ecc-library-163k1,false
+appPlugin:ecc-library-283k1,false
+appPlugin:eeprom,true
+
+appPlugin:eeprom-powerdown,false
+appPlugin:electrical-measurement-server,false
+appPlugin:em4,false
+appPlugin:ember-minimal-printf,true
+
+appPlugin:end-device-bind-library,false
+appPlugin:end-device-support,true
+
+appPlugin:esi-management,true
+
+appPlugin:events-client,false
+appPlugin:events-server,false
+appPlugin:ezmode-commissioning,false
+appPlugin:fem-control,false
+appPlugin:find-and-bind-initiator,true
+
+appPlugin:find-and-bind-target,false
+appPlugin:form-and-join,true
+
+appPlugin:fragmentation,false
+appPlugin:gas-proxy-function,false
+appPlugin:gbcs-compatibility,false
+appPlugin:gbcs-device-log,false
+appPlugin:gbcs-gas-meter,false
+appPlugin:gbz-message-controller,false
+appPlugin:general-response-commands,false
+appPlugin:generic-interrupt-control,false
+appPlugin:generic-interrupt-control-stub,false
+appPlugin:glib,false
+appPlugin:gp-library,false
+appPlugin:gpio-sensor,false
+appPlugin:gpio-sensor-stub,false
+appPlugin:green-power-client,false
+appPlugin:green-power-common,false
+appPlugin:green-power-server,false
+appPlugin:green-power-test-device,false
+appPlugin:groups-client,true
+
+appPlugin:groups-server,true
+
+appPlugin:hal-library,true
+
+appPlugin:hc-11073-tunnel,true
+
+appPlugin:heartbeat,true
+
+appPlugin:humidity-si7021,false
+appPlugin:humidity-si7021-stub,false
+appPlugin:i2c-driver,false
+appPlugin:i2c-driver-stub,false
+appPlugin:ias-zone-client,false
+appPlugin:ias-zone-server,false
+appPlugin:identify,true
+
+appPlugin:identify-feedback,false
+appPlugin:idle-sleep,true
+
+appPlugin:illuminance-measurement-server,false
+appPlugin:illuminance-si1141,false
+appPlugin:illuminance-si1141-stub,false
+appPlugin:install-code-library,true
+
+appPlugin:interpan,true
+
+appPlugin:key-establishment,true
+
+appPlugin:led-blink,false
+appPlugin:led-blink-stub,false
+appPlugin:led-dim-pwm,false
+appPlugin:led-rgb-pwm,false
+appPlugin:led-temp-pwm,false
+appPlugin:level-control,true
+
+appPlugin:libcoap,false
+appPlugin:linked-list,false
+appPlugin:low-voltage-shutdown,false
+appPlugin:mac-address-filtering,false
+appPlugin:manufacturing-library,false
+appPlugin:manufacturing-library-cli,false
+appPlugin:manufacturing-library-ota,false
+appPlugin:mbedtls,false
+appPlugin:messaging-client,true
+
+appPlugin:messaging-server,true
+
+appPlugin:meter-mirror,false
+appPlugin:meter-snapshot-client,false
+appPlugin:meter-snapshot-server,false
+appPlugin:meter-snapshot-storage,false
+appPlugin:metering-server,false
+appPlugin:micrium-rtos,false
+appPlugin:mn-price-passthrough,false
+appPlugin:mpsi,false
+appPlugin:mpsi-ipc,false
+appPlugin:mpsi-storage,false
+appPlugin:multi-network-library,false
+appPlugin:network-creator,false
+appPlugin:network-creator-security,false
+appPlugin:network-find,false
+appPlugin:network-find-sub-ghz,false
+appPlugin:network-steering,true
+
+appPlugin:nvm3,false
+appPlugin:occupancy-pyd1698,false
+appPlugin:occupancy-pyd1698-cli,false
+appPlugin:occupancy-pyd1698-stub,false
+appPlugin:occupancy-sensor-server,false
+appPlugin:on-off,true
+
+appPlugin:ota-bootload,true
+
+appPlugin:ota-client,true
+
+appPlugin:ota-client-policy,true
+
+appPlugin:ota-common,true
+
+appPlugin:ota-server,true
+
+appPlugin:ota-server-policy,true
+
+appPlugin:ota-storage-common,false
+appPlugin:ota-storage-posix-filesystem,false
+appPlugin:ota-storage-simple,false
+appPlugin:ota-storage-simple-eeprom,false
+appPlugin:ota-storage-simple-ram,false
+appPlugin:packet-validate-library,true
+
+appPlugin:paho.mqtt.c,false
+appPlugin:partner-link-key-exchange,true
+
+appPlugin:permit-join-manager,false
+appPlugin:poll-control-client,true
+
+appPlugin:poll-control-server,true
+
+appPlugin:power-configuration-server,false
+appPlugin:power-consumption-model,false
+appPlugin:power-meter-cs5463,false
+appPlugin:power-meter-cs5463-stub,false
+appPlugin:prepayment-client,false
+appPlugin:prepayment-server,false
+appPlugin:prepayment-snapshot-storage,false
+appPlugin:price-client,true
+
+appPlugin:price-common,false
+appPlugin:price-server,true
+
+appPlugin:psstore,false
+appPlugin:rail-library,true
+
+appPlugin:rail-library-mp,false
+appPlugin:relative-humidity-measurement-server,false
+appPlugin:reporting,false
+appPlugin:sb1-gesture-sensor,false
+appPlugin:sb1-gesture-sensor-stub,false
+appPlugin:scan-dispatch,true
+
+appPlugin:scenes,true
+
+appPlugin:scenes-client,true
+
+appPlugin:security-library-core,true
+
+appPlugin:security-link-keys-library,false
+appPlugin:security-sensor,false
+appPlugin:serial,true
+
+appPlugin:silabs-device-ui,false
+appPlugin:sim-eeprom1,true
+
+appPlugin:sim-eeprom2,false
+appPlugin:sim-eeprom2-1to2-upgrade,false
+appPlugin:sim-eeprom2-1to2-upgrade-stub,false
+appPlugin:sim-eeprom2-to-nvm3-upgrade,false
+appPlugin:sim-eeprom2-to-nvm3-upgrade-stub,false
+appPlugin:simple-clock,false
+appPlugin:simple-main,true
+
+appPlugin:simple-metering-client,true
+
+appPlugin:simple-metering-server,true
+
+appPlugin:sleepy-message-queue,false
+appPlugin:slot-manager,false
+appPlugin:smart-energy-registration,false
+appPlugin:stack-diagnostics,false
+appPlugin:standalone-bootloader-client,false
+appPlugin:standalone-bootloader-common,false
+appPlugin:standalone-bootloader-server,false
+appPlugin:standard-printf-support,false
+appPlugin:sub-ghz-client,false
+appPlugin:sub-ghz-server,false
+appPlugin:tamper-switch,false
+appPlugin:tamper-switch-stub,false
+appPlugin:temperature-measurement-server,false
+appPlugin:temperature-si7021,false
+appPlugin:temperature-si7053,false
+appPlugin:temperature-si7053-stub,false
+appPlugin:test-harness,false
+appPlugin:test-harness-z3,false
+appPlugin:throughput,false
+appPlugin:time-server,true
+
+appPlugin:transport-mqtt,false
+appPlugin:trust-center-backup,false
+appPlugin:trust-center-keepalive,false
+appPlugin:trust-center-nwk-key-update-broadcast,false
+appPlugin:trust-center-nwk-key-update-periodic,false
+appPlugin:trust-center-nwk-key-update-unicast,false
+appPlugin:tunneling-client,true
+
+appPlugin:tunneling-server,true
+
+appPlugin:update-ha-tc-link-key,false
+appPlugin:update-tc-link-key,true
+
+appPlugin:wstk-display,false
+appPlugin:xmodem-sender,false
+appPlugin:zigbee-event-logger-stub,false
+appPlugin:zigbee-pro-bc-table-mbedtls-library,false
+appPlugin:zigbee-pro-leaf-library,true
+
+appPlugin:zigbee-pro-library,true
+
+appPlugin:zigbee-r22-support-library,false
+appPlugin:zll-commissioning,true
+
+appPlugin:zll-identify-server,true
+
+appPlugin:zll-level-control-server,true
+
+appPlugin:zll-library,true
+
+appPlugin:zll-on-off-server,true
+
+appPlugin:zll-scenes-client,true
+
+appPlugin:zll-scenes-server,true
+
+appPlugin:zll-utility-client,true
+
+appPlugin:zll-utility-server,false
+#  Plugin specific options
+AppPluginOption(EFR32MG1P233F256GM48+BRD4150A+iar):EMBER_AF_PLUGIN_NETWORK_COMMISSIONER_TOUCHLINK_COMMISSIONING,TRUE
+
+AppPluginOption(EFR32MG1P233F256GM48+BRD4150A+iar):EMBER_AF_PLUGIN_NETWORK_COMMISSIONER_NETWORK_FORMATION,FALSE
+
+AppPluginOption(EFR32MG1P233F256GM48+BRD4150A+iar):EMBER_BINDING_TABLE_SIZE,10
+
+AppPluginOption(EFR32MG1P233F256GM48+BRD4150A+iar):EMBER_AF_PLUGIN_END_DEVICE_SUPPORT_ENHANCED_SLEEP_SUPPORT,TRUE
+
+AppPluginOption(EFR32MG1P233F256GM48+BRD4150A+iar):EMBER_AF_PLUGIN_ZLL_COMMISSIONING_LINK_INITIATOR,TRUE
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar):EMBER_AF_PLUGIN_IDLE_SLEEP_BACKOFF_SLEEP_MS,1000
+

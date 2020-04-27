@@ -19,6 +19,7 @@ This repo demonstrates some of the applications that can be built on top of the 
 
 - Two Zigbee Applications on one SoC
 - Optimizing Boot-up Rejoin
+- Asynchronous Sleepy-End-Device Communication
 
 ## Documentation ##
 

@@ -21,6 +21,7 @@ This repo demonstrates some of the applications that can be built on top of the 
 - Optimizing Boot-up Rejoin
 - Asynchronous Sleepy-End-Device Communication
 - Switching Between Two Zigbee Applications Using Slot Manager
+- ZigBee Virtual UART example
 
 ## Documentation ##
 

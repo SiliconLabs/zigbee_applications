@@ -1,4 +1,4 @@
-# Green Power Gateway example
+# Green Power gateway example
 ## 1. Summary
 This project was made for the Green Power Gateway KBA. //insert link here to the KBA when posted on the forums
 ## 2. Gecko SDK version

@@ -8,7 +8,7 @@ Three or more Wireless Starter Kit Main Boards and three or more EFR32MG12 2.4 G
 ## 4. Connections Required
 Connect the radio boards to the WSTK mainboards. Connect your desired gateway device to a computer with Linux operating system (you can also use Linux-like environment in Windows, like [Cygwin](https://www.silabs.com/community/wireless/zigbee-and-thread/knowledge-base.entry.html/2017/04/13/setting_up_cygwinfo-CA2n "Cygwin")).
 ## 5. Setup
-Build and flash the GP_Gateway_NCP application to your board. On your Linux, build the GP_Gateway_Host application. Open a terminal and run the host application.
+Build and flash the GP_Gateway_NCP application to your board. On your Linux, build the GP_Gateway_Host project. Open a terminal and run the host application.
 
 Build and flash a Green Power On/Off Switch application to one of your boards.
 

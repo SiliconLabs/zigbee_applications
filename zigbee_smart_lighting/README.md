@@ -2,7 +2,7 @@
 
 ## Summary ##
 
-This project demostrates how to integrate the OccupancySensorExp sensor board with Zigbee.
+This project demostrates the smart lighting or alarm systems in home automation. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
 
 
 ## Gecko SDK version ##

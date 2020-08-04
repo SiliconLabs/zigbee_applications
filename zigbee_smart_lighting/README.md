@@ -4,6 +4,9 @@
 
 This project demostrates the smart lighting or alarm systems in home automation. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
 
+![zigbee](doc/Model.png)
+
+In figure above, node 1 is the Zigbee Gateway. Node 2 is the motion sensor. Node 3 is the light. Upon motion detection, node 2 will notify the gateway and turn on the light.
 
 ## Gecko SDK version ##
 
@@ -11,13 +14,13 @@ v2.7.3
 
 ## Hardware Required ##
 
-For the sensor device:
+For the sensor node (Node 2):
 
 - BRD4001A WSTK board
 - BRD4162A Radio board with EFR32MG12
 - BRD8030A Occupancy sensor EXP board
 
-For the light device:
+For the light node (Node 3):
 
 - BRD4001A WSTK board
 - BRD4162A Radio board with EFR32MG12
@@ -35,11 +38,13 @@ The example application provides a simple UI that depicts the state of the devic
 On the sensor device:
 
 LED #0 shows the overall state of the device and its connectivity. Four states are depicted:
+
 - Off: Not joined to a Zigbee Network.
 - Rapid Even Flashing (100ms on/100ms off): Device joining the Network.
 - Solid On: Device connected to the Zigbee Network.
 
 LED D1 on Occupancy Sensor Kit shows the state of motion detected. Two states are depicted:
+
 - Solid On: The motion is detected.
 - Off: The motion isn’t detected or the sensor is disabled.
 

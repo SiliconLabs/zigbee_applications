@@ -2,7 +2,7 @@
 
 ## Summary ##
 
-This project shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC of ZGM130S to take periodic measurements. CRYOTIMER is set to signal the ADC using PRS. The Op-Amp is configured to use the external one on the board. A simple motion detection algorithm is implemented to post-process ADC samples. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
+This demo shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC of ZGM130S to take periodic measurements. CRYOTIMER is set to signal the ADC using PRS. The Op-Amp is configured to use the external one on the board. A simple motion detection algorithm is implemented to post-process ADC samples. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
 
 ![zigbee](doc/Model.png)
 
@@ -31,13 +31,13 @@ For the light node (Node 3):
 
 ## Setup ##
 
-On the sensor node: Connect the occupancy sensor EXP board to the WSTK board through the expansion header. Then, you should program the EFR32MG12 with the Zigbee_SmartLight_Switch_ZR.sls project.
+On the sensor node: Connect the occupancy sensor EXP board to the WSTK board through the expansion header. Then, you should program the EFR32MG12 with the Zigbee_SmartLight_Sensor_ZR.sls project.
 
 On the light node: Program the EFR32MG12 with Zigbee_SmartLight_Light_ZC.sls project.
 
 ## How It Works ##
 
-The example application provides a simple UI that depicts the state of the device and offers basic user control. This UI is implemented via the general-purpose LEDs, LCD and buttons built in to the EFR32 WSTK development board.
+The demo provides a simple UI that depicts the state of the device and offers basic user control. This UI is implemented via the general-purpose LEDs, LCD and buttons built in to the EFR32 WSTK development board.
 
 On the sensor device:
 
@@ -73,7 +73,9 @@ LED #1 is used as a light. The state of light is depended on state of motion sen
 The implemention of PIR sensor driver on this demo bases on two bellow links:
 
 - Z-Wave Motion Sensor PIR Example:
+
 <https://github.com/SiliconLabs/z_wave_applications_staging/tree/master/z_wave_motion_sensor_pir_application>
 
 - Silicon Labs Occupancy Sensor EXP:
+
 <https://github.com/SiliconLabs/occupancy-sensor-exp.git>

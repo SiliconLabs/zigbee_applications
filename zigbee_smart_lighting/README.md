@@ -15,6 +15,7 @@ The figure below illustrates the working flow of this demo.
 ## Gecko SDK version ##
 
 v2.7.3
+
 v3.0.0
 
 ## Hardware Required ##

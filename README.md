@@ -22,6 +22,7 @@ This repo demonstrates some of the applications that can be built on top of the 
 - Asynchronous Sleepy-End-Device Communication
 - Switching Between Two Zigbee Applications Using Slot Manager
 - ZigBee Virtual UART example
+- Manufacturing Library Extension
 
 ## Documentation ##
 

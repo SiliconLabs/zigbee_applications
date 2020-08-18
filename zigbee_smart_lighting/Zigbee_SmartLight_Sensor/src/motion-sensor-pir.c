@@ -35,15 +35,24 @@
 #include "pir_config.h"
 #include "pir.h"
 
+#include EMBER_AF_API_NETWORK_STEERING
+#include EMBER_AF_API_FIND_AND_BIND_INITIATOR
+
 /****************************************************************************/
 /*                      PRIVATE TYPES and DEFINITIONS                       */
 /****************************************************************************/
 #define LCD_MAX_CHARACTER_LEN	( 16 + 1 )
 #define QUEUE_LENGTH       		12
-
+#define SWITCH_ENDPOINT 		(1)
 /******************************************************************************/
 /*                              PRIVATE DATA                                  */
 /******************************************************************************/
+static bool commissioning = false;
+
+EmberEventControl commissioningEventControl;
+EmberEventControl ledEventControl;
+EmberEventControl findingAndBindingEventControl;
+
 static GLIB_Context_t glibContext;
 static bool pirStart = false;
 static pir_sample_t pirQueue[QUEUE_LENGTH];
@@ -106,22 +115,18 @@ void pirMotionDetectCallback(bool motionOn)
 		GPIO_PinOutClear(MOTION_B_PORT, MOTION_B_PIN);
 
 		emberAfFillCommandOnOffClusterOn()
-			emberAfCorePrintln("Command is zcl on-off ON");
+		emberAfCorePrintln("Command is zcl on-off ON");
 	} else {
 		GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
 
 		emberAfFillCommandOnOffClusterOff()
-			emberAfCorePrintln("Command is zcl on-off OFF");
+		emberAfCorePrintln("Command is zcl on-off OFF");
 	}
 
-	emberAfSetCommandEndpoints(emberAfPrimaryEndpoint(),1);
-	status=emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, 0x0000);
-
-	if(status == EMBER_SUCCESS){
-		emberAfCorePrintln("Command is successfully sent");
-	}else{
-		emberAfCorePrintln("Failed to send");
-		emberAfCorePrintln("Status code: 0x%x",status);
+	if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
+		emberAfGetCommandApsFrame()->sourceEndpoint = SWITCH_ENDPOINT;
+		status = emberAfSendCommandUnicastToBindings();
+		emberAfCorePrintln("%p: 0x%X", "Send to bindings", status);
 	}
 }
 
@@ -196,6 +201,96 @@ void lcdInit(void)
 }
 
 /**
+ * @brief 	Handler function for starting motion detection algorithm.
+ *  	  	The event is triggered in pirADCIRQCallback
+ * @param   None
+ * @return  None
+ */
+void emberAfApplicationAdcPirEventHandler(void)
+{
+	/* Sets emberAfApplicationAdcPirEventControl as inactive */
+	emberEventControlSetInactive( emberAfApplicationAdcPirEventControl );
+
+	/* Run motion detection algorithm */
+	pir_detect_motion();
+}
+
+/**
+ * @brief 	Handler function for event ledEventControl
+ * @param   None
+ * @return  None
+ */
+void ledEventHandler(void)
+{
+  emberEventControlSetInactive(ledEventControl);
+
+  if (commissioning) {
+    halToggleLed(COMMISSIONING_STATUS_LED);
+    emberEventControlSetDelayMS(ledEventControl, LED_BLINK_PERIOD_MS);
+  } else if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
+    halSetLed(COMMISSIONING_STATUS_LED);
+  }
+}
+
+/**
+ * @brief 	Handler function for event findingAndBindingEventControl
+ * @param   None
+ * @return  None
+ */
+void findingAndBindingEventHandler(void)
+{
+  emberEventControlSetInactive(findingAndBindingEventControl);
+  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(SWITCH_ENDPOINT);
+  emberAfCorePrintln("Find and bind initiator %p: 0x%X", "start", status);
+}
+
+/**
+ * @brief 	scheduleFindingAndBindingForInitiator() function. Used to set
+ * 			findingAndBindingEventControl event for finding&binding process
+ * @param   None
+ * @return  None
+ */
+void scheduleFindingAndBindingForInitiator(void)
+{
+  emberEventControlSetDelayMS(findingAndBindingEventControl,
+                              FINDING_AND_BINDING_DELAY_MS);
+}
+
+/**
+ * @brief 	Handler function for event commissioningEventControl
+ * @param   None
+ * @return  None
+ */
+void commissioningEventHandler(void)
+{
+  EmberStatus status;
+
+  emberEventControlSetInactive(commissioningEventControl);
+
+  if (emberAfNetworkState() != EMBER_JOINED_NETWORK) {
+    status = emberAfPluginNetworkSteeringStart();
+    emberAfCorePrintln("%p network %p: 0x%X",
+                       "Join",
+                       "start",
+                       status);
+    emberEventControlSetActive(ledEventControl);
+    commissioning = true;
+  } else {
+	if(!commissioning) {
+		scheduleFindingAndBindingForInitiator();
+		emberAfCorePrintln("%p %p",
+		                       "FindAndBind",
+		                       "start");
+		emberEventControlSetActive(ledEventControl);
+		commissioning = true;
+	} else {
+		emberAfCorePrintln("Already in commissioning mode");
+	}
+  }
+}
+
+
+/**
  * @brief 	Override for emberAfMainInitCallback() function
  * @param   None
  * @return  None
@@ -209,19 +304,26 @@ void emberAfMainInitCallback(void)
 	pirInit();
 }
 
-/**
- * @brief 	Handler function for starting motion detection algorithm.
- *  	  	The event is triggered in pirADCIRQCallback
- * @param   None
- * @return  None
+/** @brief Stack Status
+ *
+ * This function is called by the application framework from the stack status
+ * handler.  This callbacks provides applications an opportunity to be notified
+ * of changes to the stack status and take appropriate action.  The return code
+ * from this callback is ignored by the framework.  The framework will always
+ * process the stack status after the callback returns.
+ *
+ * @param status   Ver.: always
  */
-void emberAfApplicationAdcPirEventHandler(void)
+bool emberAfStackStatusCallback(EmberStatus status)
 {
-	/* Sets emberAfApplicationAdcPirEventControl as inactive */
-	emberEventControlSetInactive( emberAfApplicationAdcPirEventControl );
+  if (status == EMBER_NETWORK_DOWN) {
+    halClearLed(COMMISSIONING_STATUS_LED);
+  } else if (status == EMBER_NETWORK_UP) {
+    halSetLed(COMMISSIONING_STATUS_LED);
+  }
 
-	/* Run motion detection algorithm */
-	pir_detect_motion();
+  // This value is ignored by the framework.
+  return false;
 }
 
 /**
@@ -254,6 +356,50 @@ void emberAfPluginButtonInterfaceButton0PressedShortCallback(uint16_t timePresse
  */
 void emberAfPluginButtonInterfaceButton1PressedShortCallback(uint16_t timePressedMs)
 {
-	emberAfCorePrintln("Button1 is pressed for %d milliseconds",timePressedMs);
+	emberAfCorePrintln("Enter commissioning mode");
+	emberEventControlSetActive(commissioningEventControl);
+}
 
+/** @brief Complete
+ *
+ * This callback is fired when the Network Steering plugin is complete.
+ *
+ * @param status On success this will be set to EMBER_SUCCESS to indicate a
+ * network was joined successfully. On failure this will be the status code of
+ * the last join or scan attempt. Ver.: always
+ * @param totalBeacons The total number of 802.15.4 beacons that were heard,
+ * including beacons from different devices with the same PAN ID. Ver.: always
+ * @param joinAttempts The number of join attempts that were made to get onto
+ * an open Zigbee network. Ver.: always
+ * @param finalState The finishing state of the network steering process. From
+ * this, one is able to tell on which channel mask and with which key the
+ * process was complete. Ver.: always
+ */
+void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
+                                                  uint8_t totalBeacons,
+                                                  uint8_t joinAttempts,
+                                                  uint8_t finalState)
+{
+  emberAfCorePrintln("%p network %p: 0x%X", "Join", "complete", status);
+
+  if (status != EMBER_SUCCESS) {
+    commissioning = false;
+  } else {
+    scheduleFindingAndBindingForInitiator();
+  }
+}
+
+/** @brief Complete
+ *
+ * This callback is fired by the initiator when the Find and Bind process is
+ * complete.
+ *
+ * @param status Status code describing the completion of the find and bind
+ * process Ver.: always
+ */
+void emberAfPluginFindAndBindInitiatorCompleteCallback(EmberStatus status)
+{
+  emberAfCorePrintln("Find and bind initiator %p: 0x%X", "complete", status);
+
+  commissioning = false;
 }

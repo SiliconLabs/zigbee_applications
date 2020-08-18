@@ -43,7 +43,7 @@
 /****************************************************************************/
 #define LCD_MAX_CHARACTER_LEN	( 16 + 1 )
 #define QUEUE_LENGTH       		12
-#define SWITCH_ENDPOINT 		(1)
+#define SENSOR_ENDPOINT 		  (1)
 /******************************************************************************/
 /*                              PRIVATE DATA                                  */
 /******************************************************************************/
@@ -78,16 +78,16 @@ static void pirADCIRQCallback();
  */
 void pirInit(void)
 {
-	pir_init_t pirInit = PIR_INIT_DEFAULT;
-	pirInit.opamp_mode = pir_opamp_mode_external;
-	pirInit.motion_detection_callback = pirMotionDetectCallback;
-	pirInit.sample_queue_size = QUEUE_LENGTH;
-	pirInit.sample_queue = pirQueue;
-	pirInit.use_timestamp = false;
-	pirInit.adc_irq_callback = pirADCIRQCallback;
-	pir_init(&pirInit, true);
+  pir_init_t pirInit = PIR_INIT_DEFAULT;
+  pirInit.opamp_mode = pir_opamp_mode_external;
+  pirInit.motion_detection_callback = pirMotionDetectCallback;
+  pirInit.sample_queue_size = QUEUE_LENGTH;
+  pirInit.sample_queue = pirQueue;
+  pirInit.use_timestamp = false;
+  pirInit.adc_irq_callback = pirADCIRQCallback;
+  pir_init(&pirInit, true);
 
-	GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
+  GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
 }
 
 /**
@@ -100,34 +100,34 @@ void pirInit(void)
 
 void pirMotionDetectCallback(bool motionOn)
 {
-	static bool currentMotionOn = false;
-	EmberStatus status;
+  static bool currentMotionOn = false;
+  EmberStatus status;
 
-	if(currentMotionOn == motionOn) {
-		return;
-	}
+  if(currentMotionOn == motionOn) {
+      return;
+  }
 
-	currentMotionOn = motionOn;
+  currentMotionOn = motionOn;
 
-	emberAfCorePrintln("Motion detected state: %s",motionOn?"ON":"OFF");
+  emberAfCorePrintln("Motion detected state: %s",motionOn?"ON":"OFF");
 
-	if(motionOn) {
-		GPIO_PinOutClear(MOTION_B_PORT, MOTION_B_PIN);
+  if(motionOn) {
+      GPIO_PinOutClear(MOTION_B_PORT, MOTION_B_PIN);
 
-		emberAfFillCommandOnOffClusterOn()
-		emberAfCorePrintln("Command is zcl on-off ON");
-	} else {
-		GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
+      emberAfFillCommandOnOffClusterOn()
+      emberAfCorePrintln("Command is zcl on-off ON");
+  } else {
+      GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
 
-		emberAfFillCommandOnOffClusterOff()
-		emberAfCorePrintln("Command is zcl on-off OFF");
-	}
+      emberAfFillCommandOnOffClusterOff()
+      emberAfCorePrintln("Command is zcl on-off OFF");
+  }
 
-	if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
-		emberAfGetCommandApsFrame()->sourceEndpoint = SWITCH_ENDPOINT;
-		status = emberAfSendCommandUnicastToBindings();
-		emberAfCorePrintln("%p: 0x%X", "Send to bindings", status);
-	}
+  if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
+      emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
+      status = emberAfSendCommandUnicastToBindings();
+      emberAfCorePrintln("%p: 0x%X", "Send to bindings", status);
+  }
 }
 
 /**
@@ -137,8 +137,8 @@ void pirMotionDetectCallback(bool motionOn)
  */
 void pirADCIRQCallback(void)
 {
-	/* Notify emberAfApplicationAdcPirEventControl event to trigger detecting motion */
-	emberEventControlSetActive( emberAfApplicationAdcPirEventControl );
+  /* Notify emberAfApplicationAdcPirEventControl event to trigger detecting motion */
+  emberEventControlSetActive( emberAfApplicationAdcPirEventControl );
 }
 
 
@@ -149,19 +149,19 @@ void pirADCIRQCallback(void)
  */
 void lcdDisplayState(bool state)
 {
-	char str[LCD_MAX_CHARACTER_LEN];
+  char str[LCD_MAX_CHARACTER_LEN];
 
-	GLIB_clear(&glibContext);
-	GLIB_setFont(&glibContext, (GLIB_Font_t *)&GLIB_FontNormal8x8);
-	snprintf(str, LCD_MAX_CHARACTER_LEN, "    ZIGBEE    ");
-	GLIB_drawString(&glibContext, str, strlen(str), 5, 10, 0);
-	snprintf(str, LCD_MAX_CHARACTER_LEN, "OCCUPANCY SENSOR");
-	GLIB_drawString(&glibContext, str, strlen(str), 0, 25, 0);
-	snprintf(str, LCD_MAX_CHARACTER_LEN, "     SENSOR   ");
-	GLIB_drawString(&glibContext, str, strlen(str), 0, 60, 0);
-	snprintf(str, LCD_MAX_CHARACTER_LEN, state==true?"     ENABLE   ":"    DISABLE    ");
-	GLIB_drawString(&glibContext, str, strlen(str), 1, 75, 0);
-	DMD_updateDisplay();
+  GLIB_clear(&glibContext);
+  GLIB_setFont(&glibContext, (GLIB_Font_t *)&GLIB_FontNormal8x8);
+  snprintf(str, LCD_MAX_CHARACTER_LEN, "    ZIGBEE    ");
+  GLIB_drawString(&glibContext, str, strlen(str), 5, 10, 0);
+  snprintf(str, LCD_MAX_CHARACTER_LEN, "OCCUPANCY SENSOR");
+  GLIB_drawString(&glibContext, str, strlen(str), 0, 25, 0);
+  snprintf(str, LCD_MAX_CHARACTER_LEN, "     SENSOR   ");
+  GLIB_drawString(&glibContext, str, strlen(str), 0, 60, 0);
+  snprintf(str, LCD_MAX_CHARACTER_LEN, state==true?"     ENABLE   ":"    DISABLE    ");
+  GLIB_drawString(&glibContext, str, strlen(str), 1, 75, 0);
+  DMD_updateDisplay();
 }
 
 /**
@@ -171,33 +171,33 @@ void lcdDisplayState(bool state)
  */
 void lcdInit(void)
 {
-	EMSTATUS status;
+  EMSTATUS status;
 
-	/* Initialize the display module. */
-	status = DISPLAY_Init();
-	if (DISPLAY_EMSTATUS_OK != status) {
-		emberAfCorePrintln("DISPLAY_Init error");
-		return ;
-	}
+  /* Initialize the display module. */
+  status = DISPLAY_Init();
+  if (DISPLAY_EMSTATUS_OK != status) {
+      emberAfCorePrintln("DISPLAY_Init error");
+      return ;
+  }
 
-	/* Initialize the DMD module for the DISPLAY device driver. */
-	status = DMD_init(0);
-	if (DMD_OK != status) {
-		emberAfCorePrintln("DMD_init error");
-		return ;
-	}
+  /* Initialize the DMD module for the DISPLAY device driver. */
+  status = DMD_init(0);
+  if (DMD_OK != status) {
+      emberAfCorePrintln("DMD_init error");
+      return ;
+  }
 
-	/* Initialize the glib context */
-	status = GLIB_contextInit(&glibContext);
-	if (GLIB_OK != status) {
-		emberAfCorePrintln("GLIB_contextInit error");
-		return;
-	}
+  /* Initialize the glib context */
+  status = GLIB_contextInit(&glibContext);
+  if (GLIB_OK != status) {
+      emberAfCorePrintln("GLIB_contextInit error");
+      return;
+  }
 
-	glibContext.backgroundColor = White;
-	glibContext.foregroundColor = Black;
+  glibContext.backgroundColor = White;
+  glibContext.foregroundColor = Black;
 
-	lcdDisplayState(false);
+  lcdDisplayState(false);
 }
 
 /**
@@ -208,11 +208,11 @@ void lcdInit(void)
  */
 void emberAfApplicationAdcPirEventHandler(void)
 {
-	/* Sets emberAfApplicationAdcPirEventControl as inactive */
-	emberEventControlSetInactive( emberAfApplicationAdcPirEventControl );
+  /* Sets emberAfApplicationAdcPirEventControl as inactive */
+  emberEventControlSetInactive( emberAfApplicationAdcPirEventControl );
 
-	/* Run motion detection algorithm */
-	pir_detect_motion();
+  /* Run motion detection algorithm */
+  pir_detect_motion();
 }
 
 /**
@@ -225,10 +225,10 @@ void ledEventHandler(void)
   emberEventControlSetInactive(ledEventControl);
 
   if (commissioning) {
-    halToggleLed(COMMISSIONING_STATUS_LED);
-    emberEventControlSetDelayMS(ledEventControl, LED_BLINK_PERIOD_MS);
+      halToggleLed(COMMISSIONING_STATUS_LED);
+      emberEventControlSetDelayMS(ledEventControl, LED_BLINK_PERIOD_MS);
   } else if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
-    halSetLed(COMMISSIONING_STATUS_LED);
+      halSetLed(COMMISSIONING_STATUS_LED);
   }
 }
 
@@ -240,7 +240,7 @@ void ledEventHandler(void)
 void findingAndBindingEventHandler(void)
 {
   emberEventControlSetInactive(findingAndBindingEventControl);
-  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(SWITCH_ENDPOINT);
+  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(SENSOR_ENDPOINT);
   emberAfCorePrintln("Find and bind initiator %p: 0x%X", "start", status);
 }
 
@@ -268,24 +268,24 @@ void commissioningEventHandler(void)
   emberEventControlSetInactive(commissioningEventControl);
 
   if (emberAfNetworkState() != EMBER_JOINED_NETWORK) {
-    status = emberAfPluginNetworkSteeringStart();
-    emberAfCorePrintln("%p network %p: 0x%X",
-                       "Join",
-                       "start",
-                       status);
-    emberEventControlSetActive(ledEventControl);
-    commissioning = true;
+      status = emberAfPluginNetworkSteeringStart();
+      emberAfCorePrintln("%p network %p: 0x%X",
+                         "Join",
+                         "start",
+                         status);
+      emberEventControlSetActive(ledEventControl);
+      commissioning = true;
   } else {
-	if(!commissioning) {
-		scheduleFindingAndBindingForInitiator();
-		emberAfCorePrintln("%p %p",
-		                       "FindAndBind",
-		                       "start");
-		emberEventControlSetActive(ledEventControl);
-		commissioning = true;
-	} else {
-		emberAfCorePrintln("Already in commissioning mode");
-	}
+      if(!commissioning) {
+          scheduleFindingAndBindingForInitiator();
+          emberAfCorePrintln("%p %p",
+                             "FindAndBind",
+                             "start");
+          emberEventControlSetActive(ledEventControl);
+          commissioning = true;
+      } else {
+          emberAfCorePrintln("Already in commissioning mode");
+      }
   }
 }
 
@@ -297,11 +297,11 @@ void commissioningEventHandler(void)
  */
 void emberAfMainInitCallback(void)
 {
-	/* Initialize lcd */
-	lcdInit();
+  /* Initialize lcd */
+  lcdInit();
 
-	/* Initialize Pir sensor*/
-	pirInit();
+  /* Initialize Pir sensor*/
+  pirInit();
 }
 
 /** @brief Stack Status
@@ -317,9 +317,9 @@ void emberAfMainInitCallback(void)
 bool emberAfStackStatusCallback(EmberStatus status)
 {
   if (status == EMBER_NETWORK_DOWN) {
-    halClearLed(COMMISSIONING_STATUS_LED);
+      halClearLed(COMMISSIONING_STATUS_LED);
   } else if (status == EMBER_NETWORK_UP) {
-    halSetLed(COMMISSIONING_STATUS_LED);
+      halSetLed(COMMISSIONING_STATUS_LED);
   }
 
   // This value is ignored by the framework.
@@ -333,21 +333,21 @@ bool emberAfStackStatusCallback(EmberStatus status)
  */
 void emberAfPluginButtonInterfaceButton0PressedShortCallback(uint16_t timePressedMs)
 {
-	emberAfCorePrintln("Button0 is pressed for %d milliseconds",timePressedMs);
+  emberAfCorePrintln("Button0 is pressed for %d milliseconds",timePressedMs);
 
-	if (pirStart) {
-		GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
+  if (pirStart) {
+      GPIO_PinOutSet(MOTION_B_PORT, MOTION_B_PIN);
 
-		pirStart = false;
-		emberAfCorePrintln("Disable sensor");
-		pir_stop();
-		lcdDisplayState(false);
-	} else {
-		pirStart = true;
-		emberAfCorePrintln("Enable sensor");
-		pir_start();
-		lcdDisplayState(true);
-	}
+      pirStart = false;
+      emberAfCorePrintln("Disable sensor");
+      pir_stop();
+      lcdDisplayState(false);
+  } else {
+      pirStart = true;
+      emberAfCorePrintln("Enable sensor");
+      pir_start();
+      lcdDisplayState(true);
+  }
 }
 
 /**
@@ -356,8 +356,8 @@ void emberAfPluginButtonInterfaceButton0PressedShortCallback(uint16_t timePresse
  */
 void emberAfPluginButtonInterfaceButton1PressedShortCallback(uint16_t timePressedMs)
 {
-	emberAfCorePrintln("Enter commissioning mode");
-	emberEventControlSetActive(commissioningEventControl);
+  emberAfCorePrintln("Enter commissioning mode");
+  emberEventControlSetActive(commissioningEventControl);
 }
 
 /** @brief Complete
@@ -383,9 +383,9 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
   emberAfCorePrintln("%p network %p: 0x%X", "Join", "complete", status);
 
   if (status != EMBER_SUCCESS) {
-    commissioning = false;
+      commissioning = false;
   } else {
-    scheduleFindingAndBindingForInitiator();
+      scheduleFindingAndBindingForInitiator();
   }
 }
 

@@ -20,32 +20,37 @@ NA
 ## Setup ##
 
 ### Setup a Sleepy Z3Switch sample based on the BRD4162A  
-1. Generate a Z3SwitchSoc sample for BRD4162A.
-2. Change the device type to Sleepy end device.
-3. Enable the EEPROM POWERDOWN Plugin to power down the external flash 
-4. Select the Local storage bootloader. otherwise the code used to power down the external flash will not take effect.  
+1. Create a Z3Switch example project for BRD4162A.
+2. Change the device type to sleepy end device.
+3. Enable the EEPROM POWERDOWN plugin to power down SPI Flash. 
+4. Select "Local storage" under bootloader configuration, otherwise the code used to power down SPI Flash will not take effect.  
 ![zigbee](doc/change_bootloader_config.png)  
 5. Disable the uart print funtion
-    1. Set the "Port for application serial communication " to None, and disable the USART0.  
+    1. Set "Port for application serial communication" to "None", and disable USART0.  
     ![zigbee](doc/disable_serial_comm.png)  
-    2. Disable the "Enable Command Line For Legacy CLI" in ZCL Framework Core Plugin  
-    3. Disable the "debug print" and "Command Set".  
+    2. Disable "Enable Command Line For Legacy CLI" in the ZCL Framework Core plugin.  
+    3. Un-check the "Enable debug printing" checkbox and change the "Use Command Set" option to "None".  
     ![zigbee](doc/disable_debug_printing.png)  
 6. Peripherals configuration
-    1. Configurate the CMU,choose the LFXO as the LFA/B/E clock source.  
+    1. Configurate CMU, choose "LFXO" as the LFA/B/E clock source.  
     ![zigbee](doc/change_cmu_clock_sources.png)
-    2. Enable the DCDC, set the "Bypass DCDC" to False  
-    3. Enable the EMU and set the "EM2/3 voltage scaling level" to Low Power
-    4. Enable the SPI Flash, otherwise you will see the compile error after enabling EEPROM POWERDOWN Plugin.
-    5. And then disable all of the unused Peripherals.  
+    2. Enable DCDC, set the "Bypass DCDC" option to "False".  
+    3. Enable EMU and set the "EM2/3 voltage scaling level" option to "Low Power".
+    4. Enable SPI Flash, otherwise compile errors after enabling the EEPROM POWERDOWN plugin are expected to occur.
+    5. Disable all of the unused peripherals.  
     ![zigbee](doc/enable_emu.png)  
-7. Enable the Main Init callback in Callbacks Tab, and calling EMU_PeripheralRetention(emuPeripheralRetention_ALL, false); to enable "allow power down of the peripherals during EM2".  
-For more information about the EM23 Peripheral Retention Disable, please refer to EFR32MG12 Reference Manual, Chapter 10.3.10 EM23 Peripheral Retention Disable.  
-void emberAfMainInitCallback(void)  
-{  
-  EMU_PeripheralRetention(emuPeripheralRetention_ALL, false);  
-}  
-8. Generate the project and build.  
+7. Enable the "Main Init" callback in the callbacks tab, add function call "EMU_PeripheralRetention(emuPeripheralRetention_ALL, false)" in order to enable "allow power down of the peripherals during EM2".  
+For more information about the disable of EM23 Peripheral Retention, please refer to Chapter 10.3.10 from the EFR32MG12 reference manual.  
+```
+#include "em_emu.h"
+```
+```
+void emberAfMainInitCallback(void)
+{
+  EMU_PeripheralRetention(emuPeripheralRetention_ALL, false);
+}
+```
+8. Generate and build the project.  
 
 ## How It Works ##
 

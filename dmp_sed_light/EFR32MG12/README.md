@@ -80,6 +80,9 @@ According to the screenshot provided above, no other events can be observed.
 
 ## Special Notes ##
 
+3. The application built from the sls project provided requires a correct bootloader to work.
+4. The generation directory of the imported project may need to be changed to comply with the destination path. Save and generate after the change.  
+![dmp](doc/change_generation_directory.png)  
 1. There exists other tactics to further optimize the EM2 current consumption, such as initializing DCDC, disabling watchdog, disabling "Virtual COM Port" and other unnecessary peripherals. For more detailed information, please refer to *Optimization on EM2 Current Consumption of the Sleepy Z3Swtich Example Project*.
 2. For functional tests, please refer to [QSG155: Getting Started with the Silicon Labs Dynamic Multiprotocol Demonstration Applications in GSDK v2.x](https://www.silabs.com/documents/public/quick-start-guides/qsg155-dynamic-multiprotocol-demo-quick-start-guide.pdf)
 1. After a reset, the SED light automatically starts to identify if it successfully (re)joins a network, which prevents it from entering EM2. Short press PB1 on the main board of the SED light to stop identifying.  

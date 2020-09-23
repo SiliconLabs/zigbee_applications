@@ -112,5 +112,10 @@ The screenshot below contains an event that an ON command was sent to the light.
 
 ## Special Notes ##
 
+1. For functional tests, PB0 on the switch can be used to start to join a network. A centralized network other than a decentralized one is required.
+2. The switch only tries to pair with a light right after it joins a new network.
+3. The application built from the sls project provided requires a correct bootloader to work.
+4. The generation directory of the imported project may need to be changed to comply with the destination path. Save and generate after the change.  
+![zigbee](doc/change_generation_directory.png)  
 1. Thanks to a technical bug of Simplicity Studio version 5.0.0.0, the current measured may stay at about 80 uA. In such situation, a re-flash of the .s37 firmware before a reset is needed to recover. This issue is expected to be fixed upon future releases, please refer to UID 519744 in future release notes.  
 2. The EM2 current may stay at about 3 mA after flashing the firmware, keep capturing and slide the power source to BAT then back to AEM on the bottom left of the main board.   

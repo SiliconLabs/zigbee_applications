@@ -38,12 +38,12 @@ Since the SPI flash has a significant impact on the EM2 current, it is necessary
 ### Remaining Active Events  
 We investigated the remaining active events. The intervals of the following events have been changed very long or *cancelled* in order to find out whether there exists other events.  
 
-Active Events | Default Interval (s)
---- | ---
-Reporting Plugin Tick | 30
-End Device Support Plugin Polling NWK 0 | 3
-Bluetooth Advertiser | 0.16
-*Poll CLI* | 0.25
+Active Events | Default Interval (s) | Changed To (s)
+--- | --- | ---
+Reporting Plugin Tick | 30 | 65535
+End Device Support Plugin Polling NWK 0 | 3 | 300
+Bluetooth Advertiser | 0.16 | 65.535
+*Poll CLI* | 0.25 | *cancelled*
 
 ### Steps to Change the Intervals or Disable Unnecessary Events  
 1. To change the interval of "Reporting Plugin Tick":  
@@ -65,7 +65,9 @@ Bluetooth Advertiser | 0.16
 
 This is intended for current tests only. For functional tests, it is highly recommended NOT to change the intervals of the events.
 Energy Profiler is used to implement the EM2 current test. In accordance with "AEM Accuracy and Performance" section from [UG172](https://www.silabs.com/documents/public/user-guides/ug172-brd4320a-user-guide.pdf), when measuring currents below 250 uA, the accuracy is 1 uA. For more precise results, it is necessary to measure the current using a high-accuracy DC analyzer.  
-Go to Energy Profiler and start energy capture. The screenshot below provides a sample result. The average EM2 current is about 3.4 uA.  
+Go to Energy Profiler and start energy capture. The screenshot below provides a sample result before changing intervals of the events.  
+![dmp](doc/test_result.png)  
+The screenshot below provides a sample result after changing intervals of the events. The average EM2 current is about 3.4 uA.  
 ![dmp](doc/test_result_no_event.png)  
 According to the screenshot provided above, no other events can be observed.  
 

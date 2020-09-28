@@ -82,6 +82,7 @@ According to the screenshot provided above, no other events can be observed.
 
 ## Special Notes ##
 
+1. The intervals of the active events are not changed in the provided sls project file.
 1. The application built from the sls project provided requires a correct bootloader to work.
 2. The generation directory of the imported project may need to be changed to comply with the destination path. Save and generate after the change.  
 ![dmp](doc/change_generation_directory.png)  

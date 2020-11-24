@@ -1,6 +1,6 @@
-# Overview
+# Tutorial Overview
 
-This example is intended for SiLabs Zigbee users who are already familiar with the Light and Switch example, but have not progressed further into the domain. As the Zigbee Light/Switch example has network creation and joining built in, it does not provide the user with context on how to create a network application. Using the ZigbeeMinimalSoc project, this example builds a Zigbee application showing how to create a network from scratch. The example will also demonstrate some generic application code to use with the network.
+This tutorial is intended for Silicon Labs Zigbee users who are already familiar with the Light and Switch example, but have not progressed further into the domain. As the Zigbee Light/Switch example has network creation and joining built in, it does not provide the user with context on how to create a Zigbee application. Using the ZigbeeMinimalSoc project, this example builds a Zigbee application showing how to create a network from scratch. The example will also demonstrate some generic application code to use with the network.
 
 This example assumes the reader is already familiar with the Light and Switch example, as well as basic EmberZNet functionalities such as callbacks and tokens.
 

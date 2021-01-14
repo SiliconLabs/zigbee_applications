@@ -5,7 +5,7 @@ The following article will demonstrate how to create a Green Power gateway using
 ![alt text](doc/GreenPowerKbaSchematic.png "Outline")
 
 ## 2. Gecko SDK version
-Gecko SDK Suite 2.7.6 or later
+Gecko SDK Suite 2.7.8 or later
 ## 3. Hardware Required
 * 3x Wireless Starter Kit Main Board 
 * 3x BRD4162A
@@ -30,9 +30,12 @@ Create a **Z3Gateway** sample application and make the following modifications:
     * Disable **EZ-Mode Commissioning** plugin, and use **Find-and-Bind Initiator** plugin instead. The gateway will send the toggle messages through binding table. We are going to make bindings with this plugin.
 * On the Callbacks tab – under **Plugin Specific Callbacks** check **Green Power Cluster GP Notification Forward Callback.
 * Generate your project.
-* Find the #define EMBER_GP_SINK_TABLE_SIZE 0 macro in your projectname.h file. Here, change the sink table size to the same value you used in your NCP application. 
-* In your projectname_callback.c file, you have to implement the emberAfGreenPowerClusterGpNotificationForwardCallback function, which is being called whenever the gateway receives a Green Power message. When this function is being called, you should forward the message by sending a toggle command to the selected node, acting like a normal On/Off Switch. If the target devices are already in the gateway's binding table you only need their nodeID to send the command. (If you are not using binding table, you also need to know (and set) the targets' endpoint number with On/Off cluster.) Before sending the message, the nodeID can be set with an e.g. custom CLI command. The implemented callback function and the custom CLI command that sets the target can be found in the GP_Gateway_Host_callbacks.c file included with this README.
-* Build your project.
+* Change the sink table size to the same value you used in your NCP application by modifying the following macro in your projectname.h file.
+```C
+#define EMBER_GP_SINK_TABLE_SIZE 0
+```
+* In your *projectname_callback.c* file, you have to implement the *emberAfGreenPowerClusterGpNotificationForwardCallback()* function, which is being called whenever the gateway receives a Green Power message. When this function is being called, you should forward the message by sending a toggle command to the selected node, acting like a normal On/Off Switch. If the target devices are already in the gateway's binding table you only need their nodeID to send the command. (If you are not using binding table, you also need to know (and set) the targets' endpoint number with On/Off cluster.) Before sending the message, the nodeID can be set with an e.g. custom CLI command. The implemented callback function and the custom CLI command that sets the target can be found in the *GP_Gateway_Host_callbacks.c* file included with this README.
+* Build your project. (Note: As of this writing, there is a known build issue with the Z3Gateway Green Power configuration, see section 10, Appendix for workaround)
 
 This Gateway configuration is demonstrated in the GP_Gateway_Host.sls file.
 
@@ -45,16 +48,44 @@ Build and flash the Z3Light sample application to the rest of your boards.
 
 ## Using the Application
 * Form a network on your gateway by issuing the plugin network-creator start 1 CLI command.
-* Commission your GP switch to the gateway by running the following command on the Gateway plugin green-power-server commission 9 0 0 1
-and then on the GP switch, press PB0 4 times, waiting one second between each press, to pair
-* Open the gateway's network by issuing the plugin network-creator-security open-network CLI command.
-* Join the lights to the gateway's ZigBee network. Before joining, make the lights to leave their network by sending network leave. Joining can be done by sending plugin network-steering start 0 command in the lights' CLI.
-* Make the binding process: in the lights' CLI send plugin find-and-bind target 1 and in the gateway's CLI send plugin find-and-bind initiator 1.
-* Now you are able to set the target of the Green Power message by sending the custom command custom set-target <0xnodeid> in the gateway's CLI. You can use the command network id to find the node ID to use.
-* Sending toggle commands with your GPD and observe the lights.
+* Commission your GP switch to the gateway by running the following command on the Gateway 
+```
+plugin green-power-server commission 9 0 0 1
+```
+
+* Then, on the GP switch, press PB0 4 times, waiting one second between each press, this will commission the device.
+* Open the gateway's network by issuing the following command 
+```
+plugin network-creator-security open-network
+```
+* Prepare to join the lights to the gateway's ZigBee network. Before joining, make the lights leave their network by running the following command
+```
+network leave
+```
+* Now joining can be done by running the following command on the Z3Light devices 
+```
+plugin network-steering start 0
+```
+* Perform the find-and-bind process: in the lights' CLI run the following command 
+```
+plugin find-and-bind target 1
+``` 
+* In the gateway's CLI run the command
+```
+plugin find-and-bind initiator 1
+```
+* Now you are able to set the target of the Green Power message by running the following custom command in the gateway's CLI
+```
+custom set-target <0xnodeid>
+```
+* To find the node ID to use, you can use the command 
+```
+network id
+```
+* Sending toggle commands with your GPD by using PB1 and observe the lights turning on/off.
 
 ## Use with Other Clusters
-The gateway can be configured to work with other clusters. Ensure there is an endpoint with the desired cluster, modify the emberAfGreenPowerClusterGpNotificationForwardCallback function to send the cluster-specific command. You can even use Green Power messages with payload, since the function gets the payload as an input parameter. You can also use multiple clusters at the same time.
+The gateway can be configured to work with other clusters. Ensure there is an endpoint with the desired cluster, modify the *emberAfGreenPowerClusterGpNotificationForwardCallback()* function to send the cluster-specific command. You can even use Green Power messages with payload, since the function gets the payload as an input parameter. You can also use multiple clusters at the same time.
 
 ## 7. .sls Projects Used
 Project | Comment
@@ -67,3 +98,15 @@ Open GP_Gateway_NCP's .isc file. On General tab, click „Edit Architecture” a
 [UG103.15: Silicon Labs Green Power Fundamentals](https://www.silabs.com/documents/public/user-guides/ug103-15-green-power-fundamentals.pdf "UG103.15: Silicon Labs Green Power Fundamentals")
 
 [UG392: Using Silicon Labs Green Power with EmberZNet PRO](https://www.silabs.com/documents/public/user-guides/ug392-using-sl-green-power-with-ezp.pdf "UG392: Using Silicon Labs Green Power with EmberZNet PRO")
+
+## 10. Appendix
+You will need to download the following files from the GNU Lib Github. Note that these are third-party files and Silicon Labs does not support them, this is only a workaround.
+
+* rijndael-alg-fst.c: https://github.com/coreutils/gnulib/blob/master/lib/rijndael-alg-fst.c
+* rijndael-api-fst.c: https://github.com/coreutils/gnulib/blob/master/lib/rijndael-api-fst.c
+
+Copy them into the following SDK directory:
+
+C:\SiliconLabs\SimplicityStudio\v4\developer\sdks\gecko_sdk_suite\v2.7\platform\base\hal\micro\generic\aes
+
+The build should now be functional.

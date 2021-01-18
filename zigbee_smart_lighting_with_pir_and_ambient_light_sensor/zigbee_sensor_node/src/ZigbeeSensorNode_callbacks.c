@@ -56,8 +56,11 @@
 
 
 #define SENSOR_ENDPOINT                    (1)
-#define LIGHT_THRESHOLD                    200
 #define TIME_DELAY_TURN_OFF_LIGHT_MS       5000
+
+/* 200 is a threshold number between light and dark based on some reseaches
+ * see Readme.md for more details */
+#define LIGHT_THRESHOLD                    200
 
 /*******************************************************************************
  ******************************  LOCAL FUNCTION  *******************************
@@ -66,16 +69,16 @@ static void gpio_init(void);
 static void motion_detection_callback(bool motion);
 static void get_lux_completed_callback(uint16_t enter_lux_value);
 
-static uint16_t swap_two_byte(uint16_t value_16bit);
+static uint16_t convert_endian(uint16_t value_16bit);
 static void button_irq_handler(uint8_t pin);
 
 /*******************************************************************************
  ******************************  LOCAL VARIABLE  *******************************
  ******************************************************************************/
 static bool appStart = false;
-static bool findAndBindSuccsess = false;
-static uint8_t motion_detected = 0;
-static volatile uint16_t lux_value = 0;
+static uint8_t occupancy = 0;
+static uint16_t lux_value = 0;
+static EmberAfOccupancySensorType occupancy_sensor_type = EMBER_ZCL_OCCUPANCY_SENSOR_TYPE_PIR;
 
 EmberEventControl appStartEventControl;
 EmberEventControl motionDetectedEventControl;
@@ -84,10 +87,10 @@ EmberEventControl initSensorEventControl;
 
 
 /***************************************************************************//**
- * @brief swapByte
- * @param value: 16 bits value need to swap two byte
+ * @brief convert from big endian to little endian for 16 bits variable
+ * @param value: 16 bits variable need to convert
  ******************************************************************************/
-uint16_t swap_two_byte(uint16_t value_16bit)
+uint16_t convert_endian(uint16_t value_16bit)
 {
   uint16_t return_val;
 
@@ -149,12 +152,21 @@ void appStartEventHandler()
  */
 void initSensorEventHandler()
 {
+  EmberAfStatus status;
+
   emberEventControlSetInactive(initSensorEventControl);
   emberAfCorePrintln("Init ambient light sensor \n");
   als_init(&get_lux_completed_callback);
 
   emberAfCorePrintln("Init pir sensor \n");
   pir_init(&motion_detection_callback);
+
+  /* set occupancy sensor type to PIR sensor type */
+  status = emberAfWriteServerAttribute(SENSOR_ENDPOINT,
+                                       ZCL_OCCUPANCY_SENSING_CLUSTER_ID,
+                                       ZCL_OCCUPANCY_SENSOR_TYPE_ATTRIBUTE_ID,
+                                       &occupancy_sensor_type,
+                                       ZCL_BITMAP8_ATTRIBUTE_TYPE);
 }
 
 /** @brief handler for motionDetectedEventControl
@@ -164,10 +176,10 @@ void initSensorEventHandler()
 void motionDetectedEventHandler(void)
 {
   EmberAfStatus status;
-  uint16_t lux_swap = 0;
+  uint16_t illum_measured_value = 0;
 
   /* update motion status */
-  motion_detected = 1;
+  occupancy = 1;
 
   emberEventControlSetInactive(motionDetectedEventControl);
   emberAfCorePrintln("Motion detected \n");
@@ -176,42 +188,39 @@ void motionDetectedEventHandler(void)
   status = emberAfWriteServerAttribute(SENSOR_ENDPOINT,
                                        ZCL_OCCUPANCY_SENSING_CLUSTER_ID,
                                        ZCL_OCCUPANCY_ATTRIBUTE_ID,
-                                       &motion_detected,
+                                       &occupancy,
                                        ZCL_BITMAP8_ATTRIBUTE_TYPE);
   emberAfCorePrintln( "Write attribute: %d \n", status);
 
   /* print lux value */
   emberAfCorePrintln("Lux: %d hex: %X \n", lux_value, lux_value);
 
-
   /* if there is motion and lux is less than LIGHT_THRESHOLD value, turn on the light */
   if(lux_value <= LIGHT_THRESHOLD){
       //turn on the light
-      if(findAndBindSuccsess){
-          emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
-          status = emberAfFillCommandOnOffClusterOn();
-          emberAfCorePrintln( "Turn on the light : %d \n", status);
-          status = emberAfSendCommandUnicastToBindings();
-          emberAfCorePrintln( "Send to bindings: %d \n", status);
-      }
+      emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
+      status = emberAfFillCommandOnOffClusterOn();
+      emberAfCorePrintln( "Turn on the light : %d \n", status);
+      status = emberAfSendCommandUnicastToBindings();
+      emberAfCorePrintln( "Send to bindings: %d \n", status);
   }
   else{
       //turn off the light
-            if(findAndBindSuccsess){
-                emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
-                status = emberAfFillCommandOnOffClusterOff();
-                emberAfCorePrintln( "Turn off the light : %d \n", status);
-                status = emberAfSendCommandUnicastToBindings();
-                emberAfCorePrintln( "Send to bindings: %d \n", status);
-            }
+      emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
+      status = emberAfFillCommandOnOffClusterOff();
+      emberAfCorePrintln( "Turn off the light : %d \n", status);
+      status = emberAfSendCommandUnicastToBindings();
+      emberAfCorePrintln( "Send to bindings: %d \n", status);
   }
 
-  /* update lux attribute */
-  lux_swap = swap_two_byte(lux_value);
+  /* update illuminance measured value attribute */
+  /* the  illuminance measured value attribute storage lux value in little-endian,
+   * so that why the lux value need to convert endian before write to attribute */
+  illum_measured_value = convert_endian(lux_value);
   status = emberAfWriteServerAttribute(SENSOR_ENDPOINT,
                                        ZCL_ILLUM_MEASUREMENT_CLUSTER_ID,
                                        ZCL_ILLUM_MEASURED_VALUE_ATTRIBUTE_ID,
-                                       &lux_swap,
+                                       &illum_measured_value,
                                        ZCL_INT16U_ATTRIBUTE_TYPE);
   emberAfCorePrintln( "Write attribute: %d \n", status);
 
@@ -228,7 +237,7 @@ void motionOffEventHandler(void)
   EmberAfStatus status;
 
   /* update motion status */
-  motion_detected = 0;
+  occupancy = 0;
 
   emberEventControlSetInactive(motionOffEventControl);
   emberAfCorePrintln("Motion off \n");
@@ -237,18 +246,16 @@ void motionOffEventHandler(void)
   status = emberAfWriteServerAttribute(SENSOR_ENDPOINT,
                                        ZCL_OCCUPANCY_SENSING_CLUSTER_ID,
                                        ZCL_OCCUPANCY_ATTRIBUTE_ID,
-                                       &motion_detected,
+                                       &occupancy,
                                        ZCL_BITMAP8_ATTRIBUTE_TYPE);
   emberAfCorePrintln( "Write attribute: %d \n", status);
 
   /* turn off the light */
-  if(findAndBindSuccsess){
-      emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
-      status = emberAfFillCommandOnOffClusterOff();
-      emberAfCorePrintln( "Turn off the light : %d \n", status);
-      status = emberAfSendCommandUnicastToBindings();
-      emberAfCorePrintln( "Send to bindings: %d \n", status);
-  }
+  emberAfGetCommandApsFrame()->sourceEndpoint = SENSOR_ENDPOINT;
+  status = emberAfFillCommandOnOffClusterOff();
+  emberAfCorePrintln( "Turn off the light : %d \n", status);
+  status = emberAfSendCommandUnicastToBindings();
+  emberAfCorePrintln( "Send to bindings: %d \n", status);
 }
 
 
@@ -259,9 +266,7 @@ void motionOffEventHandler(void)
 void motion_detection_callback(bool motion)
 {
   if(motion){
-      if(findAndBindSuccsess){
-            emberEventControlSetActive(motionDetectedEventControl);
-        }
+      emberEventControlSetActive(motionDetectedEventControl);
   }
 }
 
@@ -356,14 +361,13 @@ void emberAfPluginFindAndBindInitiatorCompleteCallback(EmberStatus status)
 {
   emberAfCorePrintln("Find and bind initiator %p: 0x%X", "complete", status);
   if(status == EMBER_SUCCESS){
-      findAndBindSuccsess = true;
       emberEventControlSetActive(initSensorEventControl);
   }
 }
 
 /***************************************************************************//**
  * @brief button_IRQHandler
- *        PB0 Start application.
+ *        push PB0 to Start application.
  ******************************************************************************/
 void button_irq_handler(uint8_t pin)
 {

@@ -482,7 +482,8 @@ void delay_10ms(void)
 }
 
 /***************************************************************************//**
- * @brief sensor_int_IRQHandler Si1115's data is ready to read
+ * @brief sensor_int_IRQHandler: Si1115's data is ready to read
+ *        PF7 is used for sensor interrupt
  ******************************************************************************/
 void sensor_int_irq_handler(uint8_t pin)
 {

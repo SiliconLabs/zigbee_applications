@@ -24,10 +24,12 @@
 #include "app/framework/include/af.h"
 
 #define DOOR_LOCK_ENDPOINT 1 // We will use endpoint 1 for this example
+#define DOOR_LOCK_PIN_STRING_MIN_LENGTH 4 // Set min pin length to 4
 
 // ZCL Attributes
 #define DOOR_LOCK_TYPE_DEAD_BOLT 0x00 // Per ZCL, dead bolt is 0x00
 #define DOOR_LOCK_ACTUATOR_DISABLED FALSE // Per ZCL, actuator disabled is FALSE
+
 
 boolean checkDoorLockPin(int8u* PIN); // Helper function to check the pin
 
@@ -160,34 +162,46 @@ boolean emberAfDoorLockClusterSetPinCallback(int16u userId,
                                              int8u userType,
                                              int8u* pin)
 {
+  uint8_t sendPinOverTheAirRead;
   bool sendPinOverTheAir;
 
   // Check if the pin can be sent over the air
   emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
                                        ZCL_DOOR_LOCK_CLUSTER_ID,
-                                       ZCL_LOCK_STATE_ATTRIBUTE_ID,
-                                       &sendPinOverTheAir,
-                                       sizeof(sendPinOverTheAir));
+                                       ZCL_SEND_PIN_OVER_THE_AIR_ATTRIBUTE_ID,
+                                       &sendPinOverTheAirRead,
+                                       sizeof(sendPinOverTheAirRead));
 
+  uint8_t maxPinLength;
+  uint8_t minPinLength;
 
-  if (sendPinOverTheAir == TRUE)
+  sendPinOverTheAir = (bool) sendPinOverTheAirRead;
+
+  //Get the max pin length
+  emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
+                             ZCL_DOOR_LOCK_CLUSTER_ID,
+                             ZCL_MAX_PIN_LENGTH_ATTRIBUTE_ID,
+                             &maxPinLength,
+                             sizeof(maxPinLength));
+
+  //Get the min pin length
+  emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
+                             ZCL_DOOR_LOCK_CLUSTER_ID,
+                             ZCL_MIN_PIN_LENGTH_ATTRIBUTE_ID,
+                             &minPinLength,
+                             sizeof(minPinLength));
+
+  if ((sendPinOverTheAir == TRUE) && (pin[0] <= maxPinLength) && (pin[0] >= minPinLength))
   {
-      doorLockPin_t newPin;
       boolean isPinInUse = TRUE;
 
-      // Copy the received pin into a local variable
-      memcpy((char*)(newPin.code), (char*)pin, DOOR_LOCK_PIN_STRING_LENGTH);
-
       // Set the pin tokens
-      halCommonSetToken(TOKEN_DOOR_LOCK_PIN, &newPin);
+      halCommonSetToken(TOKEN_DOOR_LOCK_PIN, pin);
       halCommonSetToken(TOKEN_DOOR_LOCK_PIN_IN_USE, &isPinInUse);
 
       // If the pin is incorrect, send a Set Pin Response with status success
       emberAfFillCommandDoorLockClusterSetPinResponse(EMBER_ZCL_STATUS_SUCCESS);
       emberAfSendResponse();
-
-
-      isPinInUse = TRUE;
   }
   else
   {
@@ -213,7 +227,7 @@ boolean emberAfDoorLockClusterGetPinCallback(int16u userId)
 {
 
 
-  bool sendPinOverTheAir;
+  uint8_t sendPinOverTheAir;
   bool isPinInUse = FALSE;
 
   halCommonGetToken(&isPinInUse, TOKEN_DOOR_LOCK_PIN_IN_USE);
@@ -221,7 +235,7 @@ boolean emberAfDoorLockClusterGetPinCallback(int16u userId)
   // Check if the pin can be sent over the air
   emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
                                        ZCL_DOOR_LOCK_CLUSTER_ID,
-                                       ZCL_LOCK_STATE_ATTRIBUTE_ID,
+                                       ZCL_SEND_PIN_OVER_THE_AIR_ATTRIBUTE_ID,
                                        &sendPinOverTheAir,
                                        sizeof(sendPinOverTheAir));
 
@@ -229,7 +243,7 @@ boolean emberAfDoorLockClusterGetPinCallback(int16u userId)
   {
       if (sendPinOverTheAir == TRUE)
       {
-        doorLockPin_t storedPin[DOOR_LOCK_PIN_STRING_LENGTH];
+          doorLockPin_t storedPin;
 
         // Put the stored pin into a buffer to send
         halCommonGetToken(&storedPin, TOKEN_DOOR_LOCK_PIN);
@@ -238,7 +252,7 @@ boolean emberAfDoorLockClusterGetPinCallback(int16u userId)
         emberAfFillCommandDoorLockClusterGetPinResponse(0,
                                                         0,
                                                         0,
-                                                        storedPin->code);
+                                                        storedPin);
         emberAfSendResponse();
       }
       else
@@ -266,24 +280,19 @@ boolean emberAfDoorLockClusterGetPinCallback(int16u userId)
  */
 boolean emberAfDoorLockClusterClearPinCallback(int16u userId)
 {
-  bool sendPinOverTheAir;
+  uint8_t sendPinOverTheAir;
 
   // Check if the pin can be sent over the air
   emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
                                        ZCL_DOOR_LOCK_CLUSTER_ID,
-                                       ZCL_LOCK_STATE_ATTRIBUTE_ID,
+                                       ZCL_SEND_PIN_OVER_THE_AIR_ATTRIBUTE_ID,
                                        &sendPinOverTheAir,
                                        sizeof(sendPinOverTheAir));
 
   if ((sendPinOverTheAir == TRUE) && (userId == 0))
   {
-      doorLockPin_t newPin;
+      doorLockPin_t newPin = DOOR_LOCK_DEFAULT_PIN;
       boolean isPinInUse = FALSE;
-
-      int8u code[DOOR_LOCK_PIN_STRING_LENGTH] = { 'X', 'X', 'X', 'X' };
-
-      memcpy(newPin.code, code, DOOR_LOCK_PIN_STRING_LENGTH);
-      newPin.length = DOOR_LOCK_PIN_STRING_LENGTH;
 
       // Set the pin tokens
       halCommonSetToken(TOKEN_DOOR_LOCK_PIN, &newPin);
@@ -292,7 +301,6 @@ boolean emberAfDoorLockClusterClearPinCallback(int16u userId)
       // If the pin is incorrect, send a Clear Pin Response with status success
       emberAfFillCommandDoorLockClusterClearPinResponse(EMBER_ZCL_STATUS_SUCCESS);
       emberAfSendResponse();
-
   }
   else
   {
@@ -323,9 +331,10 @@ void emberAfClusterInitCallback(int8u endpoint,
   if (clusterId == ZCL_DOOR_LOCK_CLUSTER_ID)
     {
       uint8_t lockType = DOOR_LOCK_TYPE_DEAD_BOLT;
-      boolean actuatorEnabled = DOOR_LOCK_ACTUATOR_DISABLED;
-      uint8_t pinLength = DOOR_LOCK_PIN_STRING_LENGTH;
-      boolean sendPinOverTheAir = TRUE;
+      uint8_t actuatorEnabled = DOOR_LOCK_ACTUATOR_DISABLED;
+      uint8_t maxPinLength = DOOR_LOCK_PIN_STRING_MAX_LENGTH;
+      uint8_t minPinLength = DOOR_LOCK_PIN_STRING_MIN_LENGTH;
+      uint8_t sendPinOverTheAir = TRUE;
 
       // Set the Lock Type to Dead Bolt
       emberAfWriteServerAttribute(DOOR_LOCK_ENDPOINT,
@@ -341,28 +350,26 @@ void emberAfClusterInitCallback(int8u endpoint,
                                            &actuatorEnabled,
                                            ZCL_BOOLEAN_ATTRIBUTE_TYPE);
 
-      // Set the Max Pin Length to DOOR_LOCK_PIN_STRING_LENGTH
+      // Set the Max Pin Length to DOOR_LOCK_PIN_STRING_MAX_LENGTH
       emberAfWriteServerAttribute(DOOR_LOCK_ENDPOINT,
                                            ZCL_DOOR_LOCK_CLUSTER_ID,
                                            ZCL_MAX_PIN_LENGTH_ATTRIBUTE_ID,
-                                           &pinLength,
+                                           &maxPinLength,
                                            ZCL_DATA8_ATTRIBUTE_TYPE);
 
       // Set the Min Pin Length to DOOR_LOCK_PIN_STRING_LENGTH
       emberAfWriteServerAttribute(DOOR_LOCK_ENDPOINT,
                                                  ZCL_DOOR_LOCK_CLUSTER_ID,
                                                  ZCL_MIN_PIN_LENGTH_ATTRIBUTE_ID,
-                                                 &pinLength,
+                                                 &minPinLength,
                                                  ZCL_DATA8_ATTRIBUTE_TYPE);
 
-      // Set the Send Pin Over the Air to DOOR_LOCK_PIN_STRING_LENGTH
+      // Set the Send Pin Over the Air to TRUE
       emberAfWriteServerAttribute(DOOR_LOCK_ENDPOINT,
                                                  ZCL_DOOR_LOCK_CLUSTER_ID,
-                                                 ZCL_MIN_PIN_LENGTH_ATTRIBUTE_ID,
+                                                 ZCL_SEND_PIN_OVER_THE_AIR_ATTRIBUTE_ID,
                                                  &sendPinOverTheAir,
                                                  ZCL_BOOLEAN_ATTRIBUTE_TYPE);
-
-
 
       doorLockState_t lockStatus;
 
@@ -397,24 +404,45 @@ boolean checkDoorLockPin(int8u* PIN)
 {
   bool isPinCorrect = FALSE;
   bool isPinInUse = FALSE;
+  uint8_t maxPinLength;
+  uint8_t minPinLength;
 
   halCommonGetToken(&isPinInUse, TOKEN_DOOR_LOCK_PIN_IN_USE);
 
   // If no pin is initialized, we will return TRUE
   if (isPinInUse == TRUE)
   {
-      doorLockPin_t storedPin[DOOR_LOCK_PIN_STRING_LENGTH];
+      //Get the max pin length
+      emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
+                                 ZCL_DOOR_LOCK_CLUSTER_ID,
+                                 ZCL_MAX_PIN_LENGTH_ATTRIBUTE_ID,
+                                 &maxPinLength,
+                                 sizeof(maxPinLength));
+
+      //Get the min pin length
+      emberAfReadServerAttribute(DOOR_LOCK_ENDPOINT,
+                                 ZCL_DOOR_LOCK_CLUSTER_ID,
+                                 ZCL_MIN_PIN_LENGTH_ATTRIBUTE_ID,
+                                 &minPinLength,
+                                 sizeof(minPinLength));
+
+      doorLockPin_t storedPin;
 
       // Get the Pin from the token
       halCommonGetToken(&storedPin, TOKEN_DOOR_LOCK_PIN);
 
-      // Check the input pin against the stored pin
-      int8_t result = memcmp(storedPin->code, PIN, DOOR_LOCK_PIN_STRING_LENGTH);
-
-      if (0 == result)
+      // First check that the PIN is not longer than the max length
+      if ((storedPin[0] <= maxPinLength) && (storedPin[0] >= minPinLength))
       {
-          isPinCorrect = TRUE;
+          // Check the input pin against the stored pin
+          int8_t result = memcmp(storedPin, PIN, storedPin[0]);
+
+          if (0 == result)
+          {
+              isPinCorrect = TRUE;
+          }
       }
+
   }
   else
   {

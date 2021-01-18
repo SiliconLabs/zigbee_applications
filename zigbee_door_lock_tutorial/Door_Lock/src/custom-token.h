@@ -13,23 +13,17 @@
 
 #if defined(DEFINETYPES)
 
-#define DOOR_LOCK_PIN_STRING_LENGTH 4
-#define DOOR_LOCK_DEFAULT_PIN "XXXX"
+#define DOOR_LOCK_PIN_STRING_MAX_LENGTH 9 // Set max length to 9 since first String character is length
+#define DOOR_LOCK_DEFAULT_PIN { 8, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' } // Set first character to '8' to specify String length of 8
 
-// Define a type to store the PIN, we will use a fixed length buffer
-typedef struct {
-  int8u code[DOOR_LOCK_PIN_STRING_LENGTH];
-  int length;
-} doorLockPin_t;
-
+typedef int8u doorLockPin_t[DOOR_LOCK_PIN_STRING_MAX_LENGTH];
 #endif //DEFINETYPES
-
 
 #ifdef DEFINETOKENS
 // Define the actual token storage information here
 DEFINE_BASIC_TOKEN(DOOR_LOCK_PIN,
                    doorLockPin_t,
-                   {DOOR_LOCK_DEFAULT_PIN, DOOR_LOCK_PIN_STRING_LENGTH})
+                   DOOR_LOCK_DEFAULT_PIN)
 
 DEFINE_BASIC_TOKEN(DOOR_LOCK_PIN_IN_USE,
                    boolean,

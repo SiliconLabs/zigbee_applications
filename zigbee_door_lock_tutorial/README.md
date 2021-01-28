@@ -49,7 +49,7 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 * Identify Cluster: Ember implementation of Identify cluster.
 
-* Note: if these options are greyed out, in the ZCL Clusters tab, under ZCL device type, select HA Home Gateway and the plugins will be available.
+Note: if these options are greyed out, in the ZCL Clusters tab, under ZCL device type, select HA Home Gateway and the plugins will be available.
 
 #### HAL
 
@@ -73,7 +73,7 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 #### Printing
 
-* EmberMinimalPrintf: Allows us to use debug printing to console in our application.
+* Ember Minimal Printf: Allows us to use debug printing to console in our application.
 
 #### RAIL
 
@@ -128,7 +128,7 @@ Finally, generate and build the Coordinator.
 ## Door Lock Controller
 Make a new ZigbeeMinimalSoc project as a base to work from, as you did for the Coordinator.
 
-Name your project Door Lock Controller.
+Name your project Door_Lock_Controller.
 
 In the ZCL Clusters tab, under ZCL device type, select HA Door Lock Controller.
 
@@ -162,13 +162,13 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 * Serial: Allows us to use the Serial interface to communicate with the board.
 
-### Network Form and Join
+#### Network Form and Join
 
 * Scan Dispatch: This plugin allows there to be multiple consumers of the stack 802.15.4 scan results.
 
 #### Printing
 
-* EmberMinimalPrintf: Allows us to use debug printing to console in our application.
+* Ember Minimal Printf: Allows us to use debug printing to console in our application.
 
 #### RAIL
 
@@ -176,7 +176,7 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 * Radio Coexistence Stub: Stub implementation of the radio coexistence API for devices that do not use coexistence.
 
-### Stack Libraries
+#### Stack Libraries
 
 * Binding Table Library: Implements the binding table for us instead of having to do it manually.
 
@@ -197,8 +197,6 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 #### Utility
 
 * CCM* Encryption: Provides encryption through mbed TLS framework.
-
-* Concentrator Support: Code that handles periodically broadcasting a many-to-one-route-request (MTORR) so that the device will act as a concentrator (sink) in the network.
 
 * Simple Main: Supplies a main() function instead of having to define our own.
 
@@ -227,6 +225,8 @@ In the right-hand tab, ensure the following Command names are checked in the In 
 * SetPinResponse
 * GetPinResponse
 * ClearPinResponse
+
+![](./References/DoorLockController_Commands.png)
 
 Under the Callbacks tab, ensure that the following callbacks are enabled:
 
@@ -261,7 +261,7 @@ Finally, build the Door Lock Controller.
 ## Door Lock
 Make a new ZigbeeMinimalSoc project as a base to work from, as you did for the Coordinator.
 
-Name your project Door Lock Controller.
+Name your project Door_Lock.
 
 In the ZCL Clusters tab, under ZCL device type, select HA Door Lock
 
@@ -301,7 +301,7 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 #### Printing
 
-* EmberMinimalPrintf: Allows us to use debug printing to console in our application.
+* Ember Minimal Printf: Allows us to use debug printing to console in our application.
 
 #### RAIL
 
@@ -331,7 +331,7 @@ The following plugins will need to be enabled. Navigate to the plugins tab and a
 
 * CCM* Encryption: Provides encryption through mbed TLS framework.
 
-* Concentrator Support: Code that handles periodically broadcasting a many-to-one-route-request (MTORR) so that the device will act as a concentrator (sink) in the network.
+* End Device Support: Allows configuring of End Device polling.
 
 * Simple Main: Supplies a main() function instead of having to define our own.
 
@@ -360,8 +360,6 @@ The following callbacks will need to be enabled. Navigate to the callbacks tab a
 * Cluster Init
 
 * Stack Status
-
-* Closures
 
 #### Closures: Door Lock Cluster
 
@@ -405,6 +403,8 @@ Enable the following by checking the box on in the left-hand column:
 
 You will notice check boxes appear on the right for each attribute as you enable them, leave these unchecked. 
 
+![](./References/DoorLock_Attributes.png)
+
 ## Enabling the Commands
 
 In the ZCL Clusters tab, select the Closures: Door Lock cluster. In the right hand tab, select Commands. You should see that LockDoorResponse and UnlockDoorResponse are enabled. Select the following in the Out column:
@@ -413,15 +413,17 @@ In the ZCL Clusters tab, select the Closures: Door Lock cluster. In the right ha
 * GetPinResponse
 * ClearPinResponse
 
+![](./References/DoorLock_Commands.png)
+
 ## Setting up the Door Lock
 
 First, you should generate the code for the Door Lock, in the upper-right on the project settings. This will generate the source files necessary, and we will continue the implementations in these files.
 
 ### Tokens
 
-Add a file on the Door Lock named custom-token.h. Note that this file has been included with this project as an example.
+Add a file on the Door Lock named custom-token.h. Note that this file has been included with this project as an example. _The final contents of the file can be seen in the custom-token.h file in the example at Door_Lock/src._
 
-In the Door_Lock.isc, in the includes tab, you will need to add the file to the "Custom app token header" field.
+In the Door_Lock.isc, in the includes tab, you will need to add the file to the "Custom app token header" field. It's best to use a "Relative to project" path to facilitate future reuse. 
 
 ![](./References/CustomAppToken.png)
 
@@ -431,7 +433,7 @@ In the file you, will need to define the types used for the tokens. Before filli
 
 In order to store the Door Lock Pin through the life of the application and through power cycles, we will define a token to store the value of the PIN.
 
-First, we need to define the actual token
+First, we need to define the actual token at the beginning of the file
 
 ```C
 #define NVM3KEY_DOOR_LOCK_PIN (NVM3KEY_DOMAIN_USER | 0x0001)
@@ -439,14 +441,14 @@ First, we need to define the actual token
 
 This will tell EmberZNet to allocate a token named DOOR_LOCK_PIN in the user domain.
 
-We must therefore define our pin length and the default pin. As the pin will not be used until the user specifies the value of the pin, this doesn't matter, so we can set it to an initializer list placeholder for for now. (This is technically a valid pin, but we will consider it as a placeholder until the user specifies a 4-to-8 digit numeric PIN). Again, in the defined(DEFINETYPES) preprocessor block we can add the following.
+We must therefore define our pin length and the default pin. As the pin will not be used until the user specifies the value of the pin, this doesn't matter, so we can set it to an initializer list placeholder for for now. (This is technically a valid pin, but we will consider it as a placeholder until the user specifies a 4-to-8 digit numeric PIN). In the defined(DEFINETYPES) preprocessor block we can add the following.
 
 ```C
 #define DOOR_LOCK_PIN_STRING_MAX_LENGTH 9 // Set max length to 9 since first String character is length
 #define DOOR_LOCK_DEFAULT_PIN { 8, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' } // Set first character to '8' to specify String length of 8
 ```
 
-Next, we can define our pin type. For simplicity's sake, we will just define an int8u array as our pin:
+Next, we can define our pin type. For simplicity's sake, we will just define an int8u array as our pin (in the defined(DEFINETYPES) preprocessor block):
 
 ```C
 typedef int8u doorLockPin_t[DOOR_LOCK_PIN_STRING_MAX_LENGTH];
@@ -465,24 +467,25 @@ This will tell EmberZNet to define a token named DOOR_LOCK_PIN of type doorLockP
 
 #### Door Lock Pin In Use
 
-We will also need to store a boolean variable as a flag to determine if the pin should be used or not. We will define the Door Lock Pin In Use for this purpose. As above, we first define the token in the user domain.
+We will also need to store a boolean variable as a flag to determine if the pin should be used or not. We will define the Door Lock Pin In Use for this purpose. As above, we first define the token in the user domain. This declaration should be at the line after the definition of NVM3KEY_DOOR_LOCK_PIN.
 
 ```C
 #define NVM3KEY_DOOR_LOCK_PIN_IN_USE  (NVM3KEY_DOMAIN_USER | 0x0002)
 ```
 
-Finally, since no typedef is needed, we will directly define the token and assign a default value of FALSE.
+Finally, since no typedef is needed, we will directly define the token in the DEFINETOKENS preprocessor block and assign a default value of FALSE.
 
 ```C
 DEFINE_BASIC_TOKEN(DOOR_LOCK_PIN_IN_USE,
                    boolean,
                    FALSE)
 ```
+
 ### Utilities
 
 #### Check Door Lock Pin Helper Function
 
-The only helper function we will need is a function to verify the PIN. This function will take as input an int8u array (the input pin) and it will check it against the stored pin token. This function should also check the value of isPinInUse to ensure that the pin has been set by the user. If it has not, the function will return TRUE no matter what the input PIN is. We can define the function as below. This should be added to the Door_Lock_Callbacks.c file.
+The only helper function we will need is a function to verify the PIN. This function will take as input an int8u array (the input pin) and it will check it against the stored pin token. This function should also check the value of isPinInUse to ensure that the pin has been set by the user. If it has not, the function will return TRUE no matter what the input PIN is. We can define the function as below. This should be added to the Door_Lock_Callbacks.c file, don't forget to add the function prototype at the beginning of the file.
 
 ```C
 /** @brief Check Door Lock Pin
@@ -1085,7 +1088,7 @@ You will need to run the script twice in total, once to program the install code
 ## Deriving the Network Link Keys
 Once you have successfully programmed the two install codes, we can now derive the link keys.
 
-First, we will need to provide the install codes to the coordinator. We will execute the following command on the coordinator: Note that the 2-byte CRC is in big endian, i.e. the byte order will need to be reversed from the console output, so 0xB5C3 will become C3 B5.
+First, we will need to provide the install codes to the coordinator. To connect to the CLI, right click on your device in the "Debug Adapters" tab, and click "Launch Console", select the "Serial 1" tab. We will execute the following command on the coordinator: Note that the 2-byte CRC is in big endian, i.e. the byte order will need to be reversed from the console output, so 0xB5C3 will become C3 B5.
 
 
 ```
@@ -1097,7 +1100,7 @@ The EUI64 value can be found by executing the "info" command on the given node.
 
 ![](./References/EUI64.png)
 
-In the case of the nodes used for this example, first we provide the Door Lock install code:
+In the case of the nodes used for this example, first we provide the Door Lock install code (example, you will need to replace the EUI64 with that of your device for all commands requiring EUI64 as an argument):
 
 ```
 option install-code 0 { 84 2E 14 FF FE 90 59 11 } { 83 FE D3 40 7A 93 97 23 A5 C6 39 B2 69 16 D5 05 C3 B5 }
@@ -1142,7 +1145,7 @@ network id
 
 Before proceeding, note that it's a good idea to turn on Network Analyzer here, as it will be easier to obtain the network key and analyze the network in real-time. If you don't you'll have to get the network key from the keys print command and it in manually to Network Analyzer.
 
-Once the Coordinator has created the network, we can join the Door Lock and Door Lock Controller. To be sure that we start from fresh network settings, or that the devices are not already on a network, run the following command on both devices:
+Once the Coordinator has created the network, we can join the Door Lock and Door Lock Controller. To be sure that we start from fresh network settings, or that the devices are not already on a network, run the following command on both devices (launch the CLI console similar to how you did on the Coordinator):
 
 ```
 network leave
@@ -1151,7 +1154,7 @@ network leave
 Now we can open the network to specific link keys using the following command:
 
 ```
-plugin network-creator-security open-with-key {eui64} {linkkey}
+plugin network-creator-security open-with-key {eui64 of your device} {linkkey}
 ```
 
 You'll have to do this sequence:
@@ -1160,7 +1163,7 @@ You'll have to do this sequence:
 * Open the network for the Door Lock Controller
 * Join the Door Lock Controller
 
-On the Coordinator:
+On the Coordinator (example, you will need to replace the EUI64 with that of your device for all commands requiring EUI64 as an argument):
 
 ```
 plugin network-creator-security open-with-key { 84 2E 14 FF FE 90 59 11 }  {66 B6 90 09 81 E1 EE 3C A4 20 6B 6B 86 1C 02 BB}

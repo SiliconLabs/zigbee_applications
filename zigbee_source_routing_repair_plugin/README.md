@@ -26,6 +26,8 @@ Gecko SDK Suite 3.1
 2. Lanuch the Simplicity Studio V5 and generate a Zigbee project.
 3. Source Routing Repair plugin will be shown in Plugins window.
 ![zigbee](doc/source-routing-repair-plugin.PNG)
+4. Enable the plugin, you will observe the following packet trace after the concentrator power up.
+![trace](doc/packet-trace.PNG)
 
 ## Reference ##
 [Zigbee Routing KBAs](https://www.silabs.com/community/wireless/zigbee-and-thread/knowledge-base.entry.html/2020/04/02/_03_zigbee_routing-u5tT) 

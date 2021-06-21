@@ -62,20 +62,25 @@ void customPluginSourceRoutingRepairInitCallback(void)
 #ifdef EMBER_AF_PLUGIN_CONCENTRATOR
   RepairState = SOURCE_ROUTING_REPAIR_STATE_MTO;
   emberEventControlSetActive(emberAfPluginSourceRoutingRepairMyEventControl);
+  //emberAfCorePrintln("Source Routing Repair Plugin Init");
 #endif
 }
 
 void emberAfPluginSourceRoutingRepairMyEventHandler(void)
 {
   emberEventControlSetInactive(emberAfPluginSourceRoutingRepairMyEventControl);
-  if(RepairState==SOURCE_ROUTING_REPAIR_STATE_MTO)
-    {
-      emberSendManyToOneRouteRequest(EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE, EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS);
-      RepairState = SOURCE_ROUTING_REPAIR_STATE_BROADCAST;
-      emberEventControlSetDelayMS(emberAfPluginSourceRoutingRepairMyEventControl, EMBER_AF_PLUGIN_SOURCE_ROUTING_REPAIR_BROADCAST_DELAY);
-    }
-  else if(RepairState==SOURCE_ROUTING_REPAIR_STATE_BROADCAST)
-    {
-      SendBroadcastMessage();
-    }
+  if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
+	  if(RepairState==SOURCE_ROUTING_REPAIR_STATE_MTO)
+		{
+		  emberSendManyToOneRouteRequest(EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE, EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS);
+		  //emberAfCorePrintln("Source Routing Repair Plugin Sending Many-To-One Request");
+		  RepairState = SOURCE_ROUTING_REPAIR_STATE_BROADCAST;
+		  emberEventControlSetDelayMS(emberAfPluginSourceRoutingRepairMyEventControl, EMBER_AF_PLUGIN_SOURCE_ROUTING_REPAIR_BROADCAST_DELAY);
+		}
+	  else if(RepairState==SOURCE_ROUTING_REPAIR_STATE_BROADCAST)
+		{
+		  SendBroadcastMessage();
+		  //emberAfCorePrintln("Source Routing Repair Plugin Sending Broadcast Message");
+		}
+  }
 }

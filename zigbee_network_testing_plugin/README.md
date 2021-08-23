@@ -37,6 +37,6 @@ Gecko SDK Suite 3.2
 2. Lanuch the Simplicity Studio V5 and generate a Zigbee project.
 3. Network Testing plugin will be shown in Plugins window.
 ![zigbee](doc/network_testing_plugin.PNG)
-4. Enable the plugin, you will see the following cli commands
+4. Enable the plugin, you will see the following cli commands.
 ![cli](doc/cli.PNG)
 

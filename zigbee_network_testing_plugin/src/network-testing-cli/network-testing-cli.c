@@ -31,11 +31,11 @@ void emberAfPluginNetworkTestingTableSendCommand(void)
 {
   uint8_t endpoint = (uint8_t)emberUnsignedCommandArgument(0);
   uint16_t round = (uint16_t)emberUnsignedCommandArgument(1);
-	setDestEndpoint(endpoint);
-	setDeviceIndex(0);
-	setTestRound(round);
-	setTestCommandType(ZclCommand);
-	emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+  setDestEndpoint(endpoint);
+  setDeviceIndex(0);
+  setTestRound(round);
+  setTestCommandType(ZclCommand);
+  emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 }
 
 void emberAfPluginNetworkTestingTableBindCommand(void)

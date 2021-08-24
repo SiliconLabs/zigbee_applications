@@ -1,4 +1,4 @@
-# Zigbee Source Routing Repair Plugin #
+# Zigbee Network Testing Plugin #
 
 ## Summary ##
 This plugin provide the cli commands for network testing.

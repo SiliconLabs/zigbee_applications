@@ -28,13 +28,14 @@
 #include "app/framework/plugin/device-table/device-table.h"
 #include "app/framework/plugin/concentrator/concentrator-support.h"
 #include "stack/include/zigbee-device-stack.h"
-#include "app/framework/plugin/network-testing-cli/network-testing.h"
+#include "app/framework/plugin-host/network-testing-cli/network-testing.h"
 #include "app/util/zigbee-framework/zigbee-device-common.h"
 
 extern EmberApsFrame globalApsFrame;
 extern uint8_t appZclBuffer[];
 extern uint16_t appZclBufferLen;
-
+EmberEventControl emberAfPluginNetworkTestingCliReceivedAckEventControl;
+EmberEventControl emberAfPluginNetworkTestingCliSendPacketEventControl;
 static boolean receiveAck;
 static CommandType testCommandType;
 static uint16_t deviceIndex,currentDeviceIndex,bindClusterId,testRound;
@@ -68,7 +69,7 @@ void setTestRound(uint16_t round)
 {
   testRound = round;
 }
-static uint16_t getTestRound(void)
+uint16_t getTestRound(void)
 {
   return testRound;
 }
@@ -87,20 +88,21 @@ bool emAfPluginNetworkTestPreZDOMessageReceivedCallback(EmberNodeId emberNodeId,
                                                 uint8_t* message,
                                                 uint16_t length)
 {
-  switch (apsFrame->clusterId) {
-    case BIND_RESPONSE:
-    if(emberNodeId==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
-    {
-      receiveAck = 1;
-      emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-      emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+    switch (apsFrame->clusterId) {
+      case BIND_RESPONSE:
+        if(emberNodeId==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
+        {
+          receiveAck = TRUE;
+          emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
+            emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+        }
+        emberAfCorePrintln("BIND_RESPONSE: %2x:  ", emberNodeId);
+        break;
+      default:
+        break;
     }
-    emberAfCorePrintln("BIND_RESPONSE: %2x:  ", emberNodeId);
-    break;
-    default:
-    break;
-  }
-  return false;
+    return false;
+
 }
 
 static void sendMessageSentCallback(EmberOutgoingMessageType type,
@@ -111,13 +113,13 @@ static void sendMessageSentCallback(EmberOutgoingMessageType type,
                                             EmberStatus status)
 {
   if (status == EMBER_SUCCESS) {
-    emberAfCorePrintln("Received Ack %2x", indexOrDestination);
-    if(indexOrDestination==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
-    {
-      receiveAck = 1;
-      emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-        emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-    }
+	  	emberAfCorePrintln("Received Ack %2x", indexOrDestination);
+	if(indexOrDestination==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
+	{
+		receiveAck = TRUE;
+		emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
+	    emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+	}
   }
 }
 
@@ -169,70 +171,70 @@ static void emberAfDeviceTableCommandIndexBindRequest(uint16_t index)
 
 void emberAfPluginNetworkTestingCliSendPacketEventHandler(void)
 {
-  if(getTestRound()>0)
-  {
-    emberEventControlSetInactive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-    while((EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID==emberAfDeviceTableGetNodeIdFromIndex(getDeviceIndex()))||(getDestEndpoint() !=emAfDeviceTableGetFirstEndpointFromIndex(getDeviceIndex())))
-    {
-      setDeviceIndex(getDeviceIndex()+1);
-      if((getDeviceIndex() > EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)||(getDeviceIndex() == EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE))
-      {
-        break;
-      }
-    }
-    if(getDeviceIndex() < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)
-    {
-      currentDeviceIndex = getDeviceIndex();
-      emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
+	if(getTestRound()>0)
+	{
+		emberEventControlSetInactive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+		while((EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID==emberAfDeviceTableGetNodeIdFromIndex(getDeviceIndex()))||(getDestEndpoint() !=emAfDeviceTableGetFirstEndpointFromIndex(getDeviceIndex())))
+		{
+			setDeviceIndex(getDeviceIndex()+1);
+			if((getDeviceIndex() >= EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE))
+			{
+				break;
+			}
+		}
+		if(getDeviceIndex() < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)
+		{
+			currentDeviceIndex = getDeviceIndex();
+			emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
 
-      switch (testCommandType) {
-        case ZclCommand:
-             emberAfDeviceTableCommandIndexSendWithCallback(currentDeviceIndex,sendMessageSentCallback);
-          break;
-          case ZdoBindRequest:
+	    switch (testCommandType) {
+	      case ZclCommand:
+	           emberAfDeviceTableCommandIndexSendWithCallback(currentDeviceIndex,sendMessageSentCallback);
+	        break;
+        case ZdoBindRequest:
              emberAfDeviceTableCommandIndexBindRequest(currentDeviceIndex);
           break;
-        default:
-          emberAfCorePrintln("Unsupported Test Command Type  %2x", testCommandType);
-          break;
-      }
-          setDeviceIndex(getDeviceIndex()+1);
-      receiveAck = 0;
-      emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliReceivedAckEventControl,5000);
-    }
-    else
-    {
-      setDeviceIndex(0);
-      setTestRound(getTestRound()-1);
-      if(getTestRound()>0)
-        emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-    }
-  }
+	      default:
+	        emberAfCorePrintln("Unsupported Test Command Type  %2x", testCommandType);
+	        break;
+	    }
+	    setDeviceIndex(getDeviceIndex()+1);
+			receiveAck = FALSE;
+			emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliReceivedAckEventControl,5000);
+		}
+		else
+		{
+			setDeviceIndex(0);
+			setTestRound(getTestRound()-1);
+			if(getTestRound()>0)
+				emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+		}
+	}
 }
 
 void emberAfPluginNetworkTestingCliReceivedAckEventHandler(void)
 {
-  emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-  if(receiveAck == 0)
-  {
-    emberSendManyToOneRouteRequest(EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE, EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS);
-    emberIeeeAddressRequestToTarget(emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex),
-                    false,   // report kids?
-                    0,       // child start index
-                    EMBER_APS_OPTION_NONE,
-                    EMBER_BROADCAST_ADDRESS);
-    emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliSendPacketEventControl,3000);
-  }
-  else
-  {
-    emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-  }
+	emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
+	if(receiveAck == FALSE)
+	{
+		emberSendManyToOneRouteRequest(EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE, EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS);
+		emberIeeeAddressRequestToTarget(emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex),
+										false,   // report kids?
+										0,       // child start index
+										EMBER_APS_OPTION_NONE,
+										EMBER_BROADCAST_ADDRESS);
+		emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliSendPacketEventControl,3000);
+	}
+	else
+	{
+		emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+	}
 }
 
 static uint64_t Eui64ToUint64(EmberEUI64 eui64)
 {
   uint64_t eui64Temp=0;
-  for (uint16_t i = 0; i < 8-1; i++)
+  for (uint16_t i = 0; i < EUI64_SIZE; i++)
     eui64Temp += (uint64_t)eui64[i] << (i*8);
   return eui64Temp;
 }
@@ -242,8 +244,7 @@ void emberAfDeviceTableSortByEui64(void)
   EmberAfPluginDeviceTableEntry temp;
   EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
 
-  for (uint16_t i = 0; i < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE-1; i++)
-    {
+  for (uint16_t i = 0; i < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE-1; i++){
        for (uint16_t j = 0; j < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE-1-i; j++) {
             if (Eui64ToUint64(deviceTable[j].eui64) > Eui64ToUint64(deviceTable[j+1].eui64)) {
                MEMCOPY(&temp, &deviceTable[j+1], sizeof(EmberAfPluginDeviceTableEntry));

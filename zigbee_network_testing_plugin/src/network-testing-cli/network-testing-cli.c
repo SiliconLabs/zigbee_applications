@@ -23,19 +23,31 @@
 
 
 
-#include "app/framework/plugin/network-testing-cli/network-testing.h"
+#include "app/framework/plugin-host/network-testing-cli/network-testing.h"
 #include "app/framework/util/common.h"
 #include "af.h"
+
+extern bool zclCmdIsBuilt;
 
 void emberAfPluginNetworkTestingTableSendCommand(void)
 {
   uint8_t endpoint = (uint8_t)emberUnsignedCommandArgument(0);
   uint16_t round = (uint16_t)emberUnsignedCommandArgument(1);
-  setDestEndpoint(endpoint);
-  setDeviceIndex(0);
-  setTestRound(round);
-  setTestCommandType(ZclCommand);
-  emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+
+  // check that cmd is built
+  if (zclCmdIsBuilt == false) {
+    emberAfCorePrintln("no cmd");
+    return;
+  }
+  if (getTestRound() > 0) {
+    emberAfCorePrintln("Testing is already running");
+    return;
+  }
+	setDestEndpoint(endpoint);
+	setDeviceIndex(0);
+	setTestRound(round);
+	setTestCommandType(ZclCommand);
+	emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 }
 
 void emberAfPluginNetworkTestingTableBindCommand(void)

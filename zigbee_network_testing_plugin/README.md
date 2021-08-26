@@ -1,7 +1,7 @@
 # Zigbee Network Testing Plugin #
 
 ## Summary ##
-This plugin provide the cli commands for network testing.
+This plugin provides the cli commands for network testing on Host application. it is not avaiable on SOC project.
 
 plugin network-testing-cli... 
 
@@ -33,8 +33,8 @@ Gecko SDK Suite 3.2
 
 
 ## How to use ##
-1. Place the network-testing-cli folder to C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v3.2\protocol\zigbee\app\framework\plugin.
-2. Lanuch the Simplicity Studio V5 and generate a Zigbee project.
+1. Copy the network-testing-cli folder to C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v3.2\protocol\zigbee\app\framework\plugin-host.
+2. Lanuch the Simplicity Studio V5 and generate a Z3GatewayHost project.
 3. Network Testing plugin will be shown in Plugins window.
 ![zigbee](doc/network_testing_plugin.PNG)
 4. Enable the plugin, you will see the following cli commands.                

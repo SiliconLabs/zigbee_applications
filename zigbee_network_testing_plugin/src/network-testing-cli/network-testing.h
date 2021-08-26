@@ -25,8 +25,8 @@
 
 
 #include "app/framework/include/af.h"
-EmberEventControl emberAfPluginNetworkTestingCliReceivedAckEventControl;
-EmberEventControl emberAfPluginNetworkTestingCliSendPacketEventControl;
+extern EmberEventControl emberAfPluginNetworkTestingCliReceivedAckEventControl;
+extern EmberEventControl emberAfPluginNetworkTestingCliSendPacketEventControl;
 enum {
   ZclCommand             = 0x00,
   ZdoBindRequest         = 0x01,
@@ -37,6 +37,7 @@ void setDeviceIndex(uint16_t index);
 void setDestEndpoint(uint8_t endpoint);
 void setBindClusterId(uint16_t clusterId);
 void setTestRound(uint16_t round);
+uint16_t getTestRound(void);
 void setTestCommandType(CommandType commandType);
 void emberAfDeviceTableSortByEui64(void);
 

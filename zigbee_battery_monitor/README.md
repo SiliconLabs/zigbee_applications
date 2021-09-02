@@ -5,13 +5,28 @@ EmberZnet SDK has provided a plugin "Battery Monitor" to simplify the developmen
 
 This project will provide an updated plugin "Battery Monitor V2" which supports both series 1 SoCs and series 2 SoCs. The detailed steps will also be provided to implement a Zigbee battery monitor application with this plugin.
 
+Here is how the plugin works:
+<div align="center">
+    <img src="doc/rac-prs-gpio.png">
+</div>
+<br>
+
+1. We use the PRS to associate the radio signal `Radio Tx Complete` to a GPIO pin. So that when a packet is sent to the air, the GPIO pin will go high.
+2. Then we configure the GPIO to generate an interrupt when the level goes high.
+3. When serving the interrupt, an event is activated. Then we start to read the ADC or IADC.
+4. The PRS channel and the GPIO pin used here are both configurable.
+
+
 ## Gecko SDK version ##
 Gecko SDK Suite 3.2.
 
 ## Hardware Required ##
-- 2pcs Wireless Starter Kit Main Board (BRD4001)
-- 1pcs EFR32MG12 2.4GHz 19 dBm Radio Board (BRD4161A Rev A01)
-- 1pcs EFR32xG21 2.4GHz 10 dBm Radio Board (BRD4181A)
+
+Kit | Radio Board | Purpose
+---------|----------|---------
+ BRD4001 <p>Wireless Starter Kit Main Board | BRD4161A <p>EFR32MG12 2.4GHz 19 dBm Radio Board | Demonstrate the battery monitor application on series 1
+ BRD4001 <p>Wireless Starter Kit Main Board | BRD4181A <p>EFR32xG21 2.4GHz 10 dBm Radio Board | Demonstrate the battery monitor application on EFR32MG21
+ BRD4001 <p>Wireless Starter Kit Main Board | BRD4182A <p>EFR32xG22 2.4 GHz 6 dBm Radio Board | Demonstrate the battery monitor application on EFR32MG22
 
 ## Connections Required ##
 NA

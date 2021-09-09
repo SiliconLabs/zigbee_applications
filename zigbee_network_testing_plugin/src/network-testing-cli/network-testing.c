@@ -88,21 +88,19 @@ bool emAfPluginNetworkTestPreZDOMessageReceivedCallback(EmberNodeId emberNodeId,
                                                 uint8_t* message,
                                                 uint16_t length)
 {
-    switch (apsFrame->clusterId) {
-      case BIND_RESPONSE:
-        if(emberNodeId==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
-        {
+  switch (apsFrame->clusterId) {
+     case BIND_RESPONSE:
+        if(emberNodeId==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex)){
           receiveAck = TRUE;
           emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-            emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+          emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
         }
         emberAfCorePrintln("BIND_RESPONSE: %2x:  ", emberNodeId);
-        break;
-      default:
-        break;
-    }
-    return false;
-
+      break;
+    default:
+      break;
+  }
+  return false;
 }
 
 static void sendMessageSentCallback(EmberOutgoingMessageType type,
@@ -113,13 +111,12 @@ static void sendMessageSentCallback(EmberOutgoingMessageType type,
                                             EmberStatus status)
 {
   if (status == EMBER_SUCCESS) {
-	  	emberAfCorePrintln("Received Ack %2x", indexOrDestination);
-	if(indexOrDestination==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex))
-	{
-		receiveAck = TRUE;
-		emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-	    emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-	}
+	  emberAfCorePrintln("Received Ack %2x", indexOrDestination);
+    if(indexOrDestination==emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex)){
+      receiveAck = TRUE;
+      emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
+      emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+    }
   }
 }
 
@@ -129,7 +126,6 @@ static void emberAfDeviceTableCommandIndexSendWithCallback(uint16_t index, Ember
   EmberStatus status;
   uint8_t endpoint = emAfDeviceTableGetFirstEndpointFromIndex(index);
   EmberNodeId nodeId = emberAfDeviceTableGetNodeIdFromIndex(index);
-
   globalApsFrame.sourceEndpoint = emberAfPrimaryEndpoint();
   globalApsFrame.destinationEndpoint = endpoint;
   status = emberAfSendUnicastWithCallback(EMBER_OUTGOING_DIRECT,
@@ -152,11 +148,8 @@ static void emberAfDeviceTableCommandIndexBindRequest(uint16_t index)
   uint8_t sourceEndpoint = emAfDeviceTableGetFirstEndpointFromIndex(index);
   uint8_t destinationEndpoint = emberAfPrimaryEndpoint();;
   uint16_t clusterId = getBindClusterId();
-
   emberAfDeviceTableGetEui64FromNodeId(target, sourceEui);
   emberAfGetEui64(destEui);
-
-
   status = emberBindRequest(target,           // who gets the bind req
                             sourceEui,       // source eui IN the binding
                             sourceEndpoint,
@@ -185,7 +178,7 @@ void emberAfPluginNetworkTestingCliSendPacketEventHandler(void)
 		if(getDeviceIndex() < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)
 		{
 			currentDeviceIndex = getDeviceIndex();
-			emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
+			//emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
 
 	    switch (testCommandType) {
 	      case ZclCommand:
@@ -255,5 +248,3 @@ void emberAfDeviceTableSortByEui64(void)
    }
   emAfDeviceTableSave();
 }
-
-

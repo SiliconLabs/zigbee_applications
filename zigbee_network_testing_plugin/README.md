@@ -1,7 +1,7 @@
 # Zigbee Network Testing Plugin #
 
 ## Summary ##
-This plugin provides the cli commands for network testing on Host application. it is not avaiable on SOC project.
+This plugin provides the cli commands for network testing on Host application. It is not avaiable on SOC project.
 
 plugin network-testing-cli... 
 
@@ -12,7 +12,7 @@ plugin network-testing-cli...
     
     <uint16_t>  Cluster Id
 	
-*  table-send - Send command to all the devices in the device table. the command payload can be filled with [zcl cli command](https://docs.silabs.com/zigbee/6.10/zigbee-af-api/zcl-global)
+*  table-send - Send command to all the devices in the device table. Test Round means the number of times the messages are sent. the command payload can be filled with [zcl cli command](https://docs.silabs.com/zigbee/6.10/zigbee-af-api/zcl-global)
 
     <uint8_t>  destination endpoint
 
@@ -34,9 +34,12 @@ Gecko SDK Suite 3.2
 
 ## How to use ##
 1. Copy the network-testing-cli folder to C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v3.2\protocol\zigbee\app\framework\plugin-host.
-2. Lanuch the Simplicity Studio V5 and generate a Z3GatewayHost project.
+2. Launch the Simplicity Studio V5 and generate a Z3GatewayHost project.
 3. Network Testing plugin will be shown in Plugins window.
 ![zigbee](doc/network_testing_plugin.PNG)
 4. Enable the plugin, you will see the following cli commands.                
 ![cli](doc/cli.PNG)
-
+5. Send the toggle command to the devices in device table will following cli commands.
+    
+    * zcl on-off toggle
+    * plugin network-testing-cli table-send  1 1

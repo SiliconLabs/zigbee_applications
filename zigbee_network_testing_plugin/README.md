@@ -39,7 +39,7 @@ Gecko SDK Suite 3.2
 ![zigbee](doc/network_testing_plugin.PNG)
 4. Enable the plugin, you will see the following cli commands.                
 ![cli](doc/cli.PNG)
-5. Send the toggle command to the devices in device table will following cli commands.
+5. Send the toggle command to the devices in device table with following cli commands.
     
     * zcl on-off toggle
     * plugin network-testing-cli table-send  1 1

@@ -45,30 +45,37 @@ void setDeviceIndex(uint16_t index)
 {
   deviceIndex = index;
 }
+
 static uint16_t getDeviceIndex(void)
 {
   return deviceIndex;
 }
+
 void setDestEndpoint(uint8_t endpoint)
 {
   destEndpoint = endpoint;
 }
+
 static uint8_t getDestEndpoint(void)
 {
   return destEndpoint;
 }
+
 void setBindClusterId(uint16_t clusterId)
 {
   bindClusterId = clusterId;
 }
+
 static uint16_t getBindClusterId(void)
 {
   return bindClusterId;
 }
+
 void setTestRound(uint16_t round)
 {
   testRound = round;
 }
+
 uint16_t getTestRound(void)
 {
   return testRound;
@@ -78,6 +85,7 @@ void setTestCommandType(CommandType commandType)
 {
   testCommandType = commandType;
 }
+
 CommandType getTestCommandType(void)
 {
   return testCommandType;
@@ -119,7 +127,6 @@ static void sendMessageSentCallback(EmberOutgoingMessageType type,
     }
   }
 }
-
 
 static void emberAfDeviceTableCommandIndexSendWithCallback(uint16_t index, EmberAfMessageSentFunction callback)
 {	
@@ -164,45 +171,40 @@ static void emberAfDeviceTableCommandIndexBindRequest(uint16_t index)
 
 void emberAfPluginNetworkTestingCliSendPacketEventHandler(void)
 {
-	if(getTestRound()>0)
-	{
-		emberEventControlSetInactive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-		while((EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID==emberAfDeviceTableGetNodeIdFromIndex(getDeviceIndex()))||(getDestEndpoint() !=emAfDeviceTableGetFirstEndpointFromIndex(getDeviceIndex())))
-		{
-			setDeviceIndex(getDeviceIndex()+1);
-			if((getDeviceIndex() >= EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE))
-			{
-				break;
-			}
-		}
-		if(getDeviceIndex() < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)
-		{
-			currentDeviceIndex = getDeviceIndex();
-			//emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
+  if(getTestRound()>0){
+    emberEventControlSetInactive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+    while((EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID==emberAfDeviceTableGetNodeIdFromIndex(getDeviceIndex()))||(getDestEndpoint() !=emAfDeviceTableGetFirstEndpointFromIndex(getDeviceIndex()))){
+      setDeviceIndex(getDeviceIndex()+1);
+      if((getDeviceIndex() >= EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE)){
+        break;
+      }
+    }
+    if(getDeviceIndex() < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE){
+      currentDeviceIndex = getDeviceIndex();
+      //emberAfCorePrintln("currentDeviceIndex %d", currentDeviceIndex);
 
-	    switch (testCommandType) {
-	      case ZclCommand:
-	           emberAfDeviceTableCommandIndexSendWithCallback(currentDeviceIndex,sendMessageSentCallback);
-	        break;
+      switch (testCommandType) {
+        case ZclCommand:
+             emberAfDeviceTableCommandIndexSendWithCallback(currentDeviceIndex,sendMessageSentCallback);
+          break;
         case ZdoBindRequest:
              emberAfDeviceTableCommandIndexBindRequest(currentDeviceIndex);
           break;
-	      default:
-	        emberAfCorePrintln("Unsupported Test Command Type  %2x", testCommandType);
-	        break;
-	    }
-	    setDeviceIndex(getDeviceIndex()+1);
-			receiveAck = FALSE;
-			emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliReceivedAckEventControl,5000);
-		}
-		else
-		{
-			setDeviceIndex(0);
-			setTestRound(getTestRound()-1);
-			if(getTestRound()>0)
-				emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
-		}
-	}
+        default:
+          emberAfCorePrintln("Unsupported Test Command Type  %2x", testCommandType);
+          break;
+      }
+      setDeviceIndex(getDeviceIndex()+1);
+      receiveAck = FALSE;
+      emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliReceivedAckEventControl,5000);
+    }
+    else{
+      setDeviceIndex(0);
+      setTestRound(getTestRound()-1);
+      if(getTestRound()>0)
+        emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+    }
+  }
 }
 
 void emberAfPluginNetworkTestingCliReceivedAckEventHandler(void)

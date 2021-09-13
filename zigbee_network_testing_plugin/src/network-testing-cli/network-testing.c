@@ -210,8 +210,7 @@ void emberAfPluginNetworkTestingCliSendPacketEventHandler(void)
 void emberAfPluginNetworkTestingCliReceivedAckEventHandler(void)
 {
 	emberEventControlSetInactive(emberAfPluginNetworkTestingCliReceivedAckEventControl);
-	if(receiveAck == FALSE)
-	{
+	if(receiveAck == FALSE){
 		emberSendManyToOneRouteRequest(EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE, EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS);
 		emberIeeeAddressRequestToTarget(emberAfDeviceTableGetNodeIdFromIndex(currentDeviceIndex),
 										false,   // report kids?
@@ -220,8 +219,7 @@ void emberAfPluginNetworkTestingCliReceivedAckEventHandler(void)
 										EMBER_BROADCAST_ADDRESS);
 		emberAfEventControlSetDelayMS(&emberAfPluginNetworkTestingCliSendPacketEventControl,3000);
 	}
-	else
-	{
+	else{
 		emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 	}
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<cli>
+  <group id="plugin-network-testing-cli" name="Plugin Commands: Plugin Test Cli">
+    <description>
+      Cli commands can be used for zigbee network testing.
+    </description>
+  </group>
+  <command cli="plugin network-testing-cli table-send" functionName="emberAfPluginNetworkTestingTableSendCommand" group="plugin-network-testing-cli">
+    <description>
+      Send command to all the devices in the device table. 
+    </description>
+    <arg name="destEndpoint"  type="INT8U" description="destination endpoint"/>
+	<arg name="testRound"  type="INT16U" description="Test Round"/>
+  </command>
+  <command cli="plugin network-testing-cli table-bind" functionName="emberAfPluginNetworkTestingTableBindCommand" group="plugin-network-testing-cli">
+	<description>
+	  Send zdo bind command to all the devices in the device table. 
+	</description>
+	<arg name="destEndpoint"  type="INT8U" description="endpoint of the device"/>
+	<arg name="bindClusterId"  type="INT16U" description="Cluster Id"/>
+  </command>
+  <command cli="plugin network-testing-cli table-sort" functionName="emberAfPluginDeviceTableSortByEui64Command" group="plugin-network-testing-cli">
+	<description>
+	 Sort device table by Eui64. 
+	</description>
+  </command>
+</cli>

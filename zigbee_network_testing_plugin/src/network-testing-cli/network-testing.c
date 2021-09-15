@@ -33,7 +33,7 @@
 
 // Enable DISCOVER_DEVICES_MANUALLY option needs to comment out emberAfTrustCenterJoinCallback() and
 // comment out the content of emAfPluginDeviceTablePreZDOMessageReceived() in device-table-discovery.c
-#define DISCOVER_DEVICES_MANUALLY
+//#define DISCOVER_DEVICES_MANUALLY
 
 //for simple descriptor response
 #define SIMPLE_DESCRIPTOR_RESPONSE_ENDPOINT_OFFSET                           \

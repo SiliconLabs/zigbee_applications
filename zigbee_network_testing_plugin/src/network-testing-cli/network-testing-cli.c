@@ -70,6 +70,7 @@ void emberAfPluginNetworkTestingTableActiveEndpointsCommand(void)
   setTestCommandType(ZdoActiveEndpointRequest);
   emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 }
+
 void emberAfPluginNetworkTestingTableSimpleDescriptorCommand(void)
 {
   uint8_t endpoint = (uint8_t)emberUnsignedCommandArgument(0);
@@ -79,6 +80,7 @@ void emberAfPluginNetworkTestingTableSimpleDescriptorCommand(void)
   setTestCommandType(ZdoSimpleDescriptorRequest);
   emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 }
+
 void emberAfPluginDeviceTableSortByEui64Command(void)
 {
   emberAfDeviceTableSortByEui64();

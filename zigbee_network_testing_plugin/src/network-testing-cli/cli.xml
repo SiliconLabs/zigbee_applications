@@ -18,7 +18,18 @@
 	</description>
 	<arg name="destEndpoint"  type="INT8U" description="endpoint of the device"/>
 	<arg name="bindClusterId"  type="INT16U" description="Cluster Id"/>
+  </command>  
+  <command cli="plugin network-testing-cli table-active" functionName="emberAfPluginNetworkTestingTableActiveEndpointsCommand" group="plugin-network-testing-cli">
+	<description>
+	  Send zdo active endpoint request command to the devices whose endpoint is 0 in the device table. 
+	</description>
   </command>
+    <command cli="plugin network-testing-cli table-simple" functionName="emberAfPluginNetworkTestingTableSimpleDescriptorCommand" group="plugin-network-testing-cli">
+	<description>
+	  Send zdo simple descriptor command to all the devices in the device table. 
+	</description>
+	<arg name="destEndpoint"  type="INT8U" description="endpoint of the device"/>
+  </command>  
   <command cli="plugin network-testing-cli table-sort" functionName="emberAfPluginDeviceTableSortByEui64Command" group="plugin-network-testing-cli">
 	<description>
 	 Sort device table by Eui64. 

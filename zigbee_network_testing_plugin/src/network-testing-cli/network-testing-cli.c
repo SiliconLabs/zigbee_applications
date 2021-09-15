@@ -62,6 +62,23 @@ void emberAfPluginNetworkTestingTableBindCommand(void)
   emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
 }
 
+void emberAfPluginNetworkTestingTableActiveEndpointsCommand(void)
+{
+  setTestRound(1);
+  setDeviceIndex(0);
+  setDestEndpoint(0);
+  setTestCommandType(ZdoActiveEndpointRequest);
+  emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+}
+void emberAfPluginNetworkTestingTableSimpleDescriptorCommand(void)
+{
+  uint8_t endpoint = (uint8_t)emberUnsignedCommandArgument(0);
+  setTestRound(1);
+  setDeviceIndex(0);
+  setDestEndpoint(endpoint);
+  setTestCommandType(ZdoSimpleDescriptorRequest);
+  emberEventControlSetActive(emberAfPluginNetworkTestingCliSendPacketEventControl);
+}
 void emberAfPluginDeviceTableSortByEui64Command(void)
 {
   emberAfDeviceTableSortByEui64();

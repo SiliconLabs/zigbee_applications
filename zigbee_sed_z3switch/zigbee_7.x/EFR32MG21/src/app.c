@@ -3,7 +3,7 @@
  * @brief Callbacks implementation and application specific code.
  *******************************************************************************
  * # License
- * <b>Copyright 2021 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * The licensor of this software is Silicon Laboratories Inc. Your use of this
@@ -21,20 +21,6 @@
 #include "zll-commissioning.h"
 #include "find-and-bind-initiator.h"
 
-#if defined(SL_CATALOG_LED0_PRESENT)
-#include "sl_led.h"
-#include "sl_simple_led_instances.h"
-#define led_turn_on(led) sl_led_turn_on(led)
-#define led_turn_off(led) sl_led_turn_off(led)
-#define led_toggle(led) sl_led_toggle(led)
-#define COMMISSIONING_STATUS_LED     (&sl_led_led0)
-#else // !SL_CATALOG_LED0_PRESENT
-#define led_turn_on(led)
-#define led_turn_off(led)
-#define led_toggle(led)
-#endif // SL_CATALOG_LED0_PRESENT
-
-#define LED_BLINK_PERIOD_MS          2000
 #define TRANSITION_TIME_DS           20
 #define FINDING_AND_BINDING_DELAY_MS 3000
 #define BUTTON0                      0
@@ -46,7 +32,6 @@ static bool leaveNetwork = false;
 static uint8_t lastButton;
 
 static sl_zigbee_event_t commissioning_event;
-static sl_zigbee_event_t led_event;
 static sl_zigbee_event_t finding_and_binding_event;
 
 //---------------
@@ -54,43 +39,28 @@ static sl_zigbee_event_t finding_and_binding_event;
 
 static void commissioning_event_handler(sl_zigbee_event_t *event)
 {
-  EmberStatus status;
+
 
   if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
     emberAfGetCommandApsFrame()->sourceEndpoint = SWITCH_ENDPOINT;
     if (lastButton == BUTTON0) {
       emberAfFillCommandOnOffClusterToggle();
     }
-    status = emberAfSendCommandUnicastToBindings();
+    emberAfSendCommandUnicastToBindings();
   } else {
 
       if (!leaveNetwork){
       emberLeaveNetwork();
       leaveNetwork = true;
   }
-  status = emberAfPluginNetworkSteeringStart();
+  emberAfPluginNetworkSteeringStart();
   }
 }
 
-
-static void led_event_handler(sl_zigbee_event_t *event)
-{
-  if (commissioning) {
-    if (emberAfNetworkState() != EMBER_JOINED_NETWORK) {
-      led_toggle(COMMISSIONING_STATUS_LED);
-      sl_zigbee_event_set_delay_ms(&led_event, LED_BLINK_PERIOD_MS << 1);
-    } else {
-      led_turn_on(COMMISSIONING_STATUS_LED);
-    }
-  } else if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
-    led_turn_on(COMMISSIONING_STATUS_LED);
-  }
-}
 
 static void finding_and_binding_event_handler(sl_zigbee_event_t *event)
 {
-  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(SWITCH_ENDPOINT);
-  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%02X\n", "start", status);
+  emberAfPluginFindAndBindInitiatorStart(SWITCH_ENDPOINT);
 }
 
 //----------------------
@@ -99,27 +69,10 @@ static void finding_and_binding_event_handler(sl_zigbee_event_t *event)
 void emberAfMainInitCallback(void)
 {
   sl_zigbee_event_init(&commissioning_event, commissioning_event_handler);
-  sl_zigbee_event_init(&led_event, led_event_handler);
   sl_zigbee_event_init(&finding_and_binding_event, finding_and_binding_event_handler);
-
   halInternalDisableWatchDog (MICRO_DISABLE_WATCH_DOG_KEY);
 }
 
-/** @brief Stack Status
- *
- * This function is called by the application framework from the stack status
- * handler.  This callbacks provides applications an opportunity to be notified
- * of changes to the stack status and take appropriate action. The framework
- * will always process the stack status after the callback returns.
- */
-void emberAfStackStatusCallback(EmberStatus status)
-{
-  if (status == EMBER_NETWORK_DOWN) {
-    led_turn_off(COMMISSIONING_STATUS_LED);
-  } else if (status == EMBER_NETWORK_UP) {
-    led_turn_on(COMMISSIONING_STATUS_LED);
-  }
-}
 
 /** @brief Complete network steering.
  *
@@ -153,6 +106,7 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                  FINDING_AND_BINDING_DELAY_MS);
   }
 }
+
 
 /** @brief Touch Link Complete
  *
@@ -207,7 +161,6 @@ void emberAfPluginZllCommissioningClientTouchLinkFailedCallback(EmberAfZllCommis
 void emberAfPluginFindAndBindInitiatorCompleteCallback(EmberStatus status)
 {
   sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%02X\n", "complete", status);
-
   commissioning = false;
 }
 

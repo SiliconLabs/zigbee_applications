@@ -1,4 +1,4 @@
-# Optimization on EM2 Current Consumption of the Sleepy Z3Switch Example Project Migration to EmberZNet 7.0 #
+# Optimization on EM2 Current Consumption of the Sleepy Z3Switch Example Project in EmberZNet 7.0 #
 
 ## Summary ##
 
@@ -13,13 +13,9 @@ Gecko SDK Suite 4.0.
 * Wireless Starter Kit Main Board (BRD4001)
 * EFR32xG21 2.4GHz 10 dBm Radio Board (BRD4180B)
 
-## Connections Required ##
-
-NA
-
 ## Setup ##
 
-### Build a Z3Switch Project  
+### Build a Z3Switch Project ###
 1. Create a "Z3Switch" example for EFR32xG21 (BRD4180B).
 
 ![zigbee](doc/create_z3switch_project.png)
@@ -42,7 +38,7 @@ NA
 
 ![zigbee](doc/uninstall_z3switch_led0.png)
 
-6. Uninstall instance "btn1" in Platform -> Driver -> Simple Button component:
+6. Uninstall instance "btn1" in Platform -> Driver -> Button -> Simple Button component:
 
 ![zigbee](doc/gpio_z3switch_button.png)
 
@@ -73,7 +69,9 @@ NA
     
     ```
       void emberAfMainInitCallback (void)
-      {
+      {  
+        sl_zigbee_event_init(&commissioning_event, commissioning_event_handler);
+        sl_zigbee_event_init(&finding_and_binding_event, finding_and_binding_event_handler);
         halInternalDisableWatchDog (MICRO_DISABLE_WATCH_DOG_KEY);
       } 
     ```
@@ -88,7 +86,7 @@ NA
         if (lastButton == BUTTON0) {
           emberAfFillCommandOnOffClusterToggle();
         }
-        status = emberAfSendCommandUnicastToBindings();
+        emberAfSendCommandUnicastToBindings();
 
       } else {
 
@@ -100,13 +98,17 @@ NA
       }
     }
     ```
-*Note: Define static bool leavenetwork = false;*
 
+    *Note: define and initialize the variable leaveNetwork to false.*
+
+    ```
+   static bool leaveNetwork = false;
+    ```
 
 ## How It Works ##
 
 Energy Profiler is used to implement the EM2 current test. In accordance with "AEM Accuracy and Performance" section from [UG172](https://www.silabs.com/documents/public/user-guides/ug172-brd4320a-user-guide.pdf), when measuring currents below 250 uA, the accuracy is 1 uA. For more precise results, it is necessary to measure the current using a high-accuracy DC analyzer.  
-Before current measurement, it is recommended to let the switch join a centralized network and pair with a light, furthermore, use command "aem calibrate" to run AEM calibration first.
+Before current measurement, it is recommended to let the switch join a centralized network with a light, furthermore, use command "aem calibrate" to run AEM calibration first.
 
 ![zigbee](doc/aem_calibrate.png) 
 
@@ -124,8 +126,9 @@ The EM2 current of the switch in the screenshot below is about  4.83uA.
 
 ## Special Notes ##
 
-1. For functional tests, BTN0 on the switch can be used to start to join a network. A centralized network other than a decentralized one is required. 
+1. For functional tests, btn0 on the switch can be used to start to join a network. A centralized network is required. 
 2. The switch only tries to pair with a light right after it joins a new network.
 3. The application built from the .sls project provided requires a correct bootloader to work. For general information about bootloaders check Section 4.6 About Bootloaders in [QSG180](https://www.silabs.com/documents/public/quick-start-guides/qsg180-zigbee-emberznet-7x-quick-start-guide.pdf). 
 4. The EM2 current may stay at about 3 mA after flashing the firmware, keep capturing and slide the power source to BAT then back to AEM on the bottom left of the main board.
-5. BTN0 and BTN1 connect to PD02 and PD03 on BRD4181A, seperately. Pins on port C and port D do not have EM2/3 wake functionality. Thus, it is impossible to use BTN0 on the switch to control the light, when the switch stays in EM2. Please change to another pin that connects to port A or B for such function. For further information, please refer to the schematic of BRD4181A. 
+5. btn0 and btn1 connect to PD02 and PD03 on BRD4181A, seperately. Pins on port C and port D do not have EM2/3 wake functionality. Thus, it is impossible to use btn0 on the switch to control the light, when the switch stays in EM2. Please change to another pin that connects to port A or B for such function. For further information, please refer to the schematic of BRD4181A. 
+6. The app.c file has had all the led references removed. Since the led components have been uninstalled, calls to led have no functionality. 

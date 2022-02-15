@@ -156,6 +156,7 @@ static void parseActiveEndpointsResponse(EmberNodeId emberNodeId,
          index = emAfDeviceTableFindFreeDeviceTableIndex();
          if (index == EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_INDEX) {
            emberAfCorePrintln("Error: Device Table Full");
+           break；
          }
          else{
            deviceTable[index].nodeId = emberNodeId;

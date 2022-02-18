@@ -48,11 +48,11 @@ Gecko SDK Suite 3.2
     * plugin network-testing-cli table-send  1 1
 
 ### How to use DISCOVER\_DEVICES\_MANUALLY macro###
-Network Testing Plugin depends on the device table plugin. device table plugin will send the actice endpoint request and simple descriptor request to the joining device to discover the active endpoints and clusters after the device join the network. it easily result in missing packet if many devices join the network simultaneously. To aovid this issue, DISCOVER\_DEVICES\_MANUALLY macro is designed to discover the active endpoints and clusters manually with the CLI command. 
+Network Testing Plugin depends on the device table plugin. device table plugin will send the active endpoint request and simple descriptor request to the joining device to discover the active endpoints and clusters after the device join the network. it easily results in missing packet if many devices join the network simultaneously. To avoid this issue, DISCOVER\_DEVICES\_MANUALLY macro is designed to discover the active endpoints and clusters manually with the CLI command. 
 
 DISCOVER\_DEVICES\_MANUALLY macro is commented out by default. to enable this macro, you also have to comment out emberAfTrustCenterJoinCallback() and comment out the content of emAfPluginDeviceTablePreZDOMessageReceived() in device-table-discovery.c
 
-After all of devices join the network. issue the following CLI command to discover the active endpoints and clusters for all devices in the device table. Please note "plugin network-testing-cli table-active" only avaiable to check the devices whose enpoint is 0 in device table.
+After all of devices join the network. issue the following CLI command to discover the active endpoints and clusters for all devices in the device table. Please note "plugin network-testing-cli table-active" is only available to check the devices whose endpoint is 0 in device table.
   
   * plugin network-testing-cli table-active
   * plugin network-testing-cli table-simple "uint8_t  endpoint of the device"

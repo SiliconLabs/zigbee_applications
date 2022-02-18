@@ -30,6 +30,8 @@ extern EmberEventControl emberAfPluginNetworkTestingCliSendPacketEventControl;
 enum {
   ZclCommand             = 0x00,
   ZdoBindRequest         = 0x01,
+  ZdoActiveEndpointRequest     = 0x02,
+  ZdoSimpleDescriptorRequest   = 0x03,
 };
 typedef uint8_t CommandType;
 

@@ -2,7 +2,8 @@
 
 ## 1. Summary ##
 
-While there is a currently function manufacturing library plugin, the following code extends this library with more functionality and commands. Sending and receiving packets, PER test, manipulating tokens, configuring GPIO settings, and changing the power to deci dBm are among the added functionality of this code. This project was built and tested on the Wireless Starter Kit Main Board (BRD4001) and EFR32MG21 2.4 GHz 10 dBm Radio Board (BRD4181A) in Studio v5 with UC. This tutorial assumes these are the boards being used. This code can be built on any EFR32 board but may require adjustments. 
+While there is a currently function manufacturing library plugin, the following code extends this library with more functionality and commands. Sending and receiving packets, PER test, manipulating tokens, configuring GPIO settings, and changing the power to deci dBm are among the added functionality of this code. This project was built and tested on the Wireless Starter Kit Main Board (BRD4001) and EFR32MG21 2.4 GHz 10 dBm Radio Board (BRD4181A) in Studio v5 with SDK 7.x. This tutorial assumes these are the boards being used. This code can be built on any EFR32 board but may require adjustments. 
+
 
 | Command  	| Command Description 	| API Function  | Argument: 	|  	|  		|  
 | ------------- | ------------- 	| ------ 	|  ----- 	| --- 	| --- 		|
@@ -53,7 +54,7 @@ receive-mode modes
 
 ## 2. Gecko SDK versions ##
 
- Gecko SDK Suite v4.0.2
+ Gecko SDK Suite v4.0.2  
  EmberZNet v7.0.2.0
 
 ## 3. Hardware Required ##
@@ -76,57 +77,111 @@ Refer to QSG 180 for a more detailed description. https://www.silabs.com/documen
 
 ## 5. Software Setup ##
 
-The simplest way to create this project is to import the .sls file. Pull or download the file to your computer. Then in Simplicity Studio, go to File --> import and open the file. Build the file and then flash to your device. Note that this will only work if you have the same hardware. If you want to make changes and need to regenerate the .isc, copy the code in the manufacturing-library-cli.c and sl_cli_command_table.c files first. The following steps describe how to extend mfglib capabilities in an existing project.
+The following steps describe how to extend mfglib capabilities in an sample project provided from the SDK. Similarly, you can extend the mfglib capabilities from any of your existing project with the steps below. 
 
 1. Create a "Z3Switch" example for specific part number. In Simplicity Studio, go to new→ Silicon Labs Project Wizard...
 ![zigbee](doc/CreateZ3Switch.png)
 
-2. Install mfglib related components through SOFTWARE COMPONENTS tab under .slcp file. Typing "manufaturing" on the search bar in the upper right corner can filter out the software components.
+
+2. Install mfglib related components through SOFTWARE COMPONENTS tab under .slcp file. Typing "manufacturing" on the search bar in the upper right corner can filter out the software components.
 ![zigbee](doc/InstallComponents.png)
 
 	- Zigbee → Utility → Manufacturing library
 
 	- Zigbee → Utility → Manufacturing Library CLI
 
-	Save the .slcp file, Simplicity Studio automatically update the required project files when you make changes to the project configuration
+	Install these two components mentioned above. Save the .slcp file, Simplicity Studio automatically update the required project files when you make changes to the project configuration. Till now, you will be able to check the mfglib related CLI from sl_cli_command_table.c under autogen folder from the project. 
+	
+	To extend the mfglib capabilities, it is not recommended to add Command Lines in this sl_cli_command_table.c directly, as changes made through Project Configurator will update and overwrite the files under the autogen folder. User can add the customized CLI groups to extend the CLI functions. For more details, please refer to https://docs.silabs.com/gecko-platform/4.0/service/cli/overview.
+
+	In this example, in order to make it compatible with the mfglib extension example in former SDK version, we modify the source code in the SDK to extend the mfglib CLI. 
+	
+	Open zigbee_manufacturing_library_cli.slcc with text editor under SimplicityStudio\SDKs\gecko_sdk\protocol\zigbee\app\framework\component. Add the following definition for various mfgilb extension under template_contribution section. 
+
+	```C
+	- name: cli_command
+		value:
+		group: mfglib
+		name: clear-rx-packets
+		handler: emAfMfglibClearPackets
+		help: Reset the number of received packets to 0.
+	- name: cli_command
+		value:
+		group: mfglib
+		name: set-deci-dbm
+		handler: emAfMfglibSetPower
+		help: Sets the power of radio transmissions(deci-dBm).
+		argument:
+		- type: int32
+			help: The power level.
+
+		...
+
+	- name: cli_command
+		value:
+		group: mfglib
+		name: get-tx-packets
+		handler: emAfMfglibGetPackets
+		help: Prints packet Counter(number of transmitted packets).
+	```
+
+	The "..." indicates that there are additional codes between the snippets. To get all the code, please copy it from the zigbee_manufacturing_library_cli.slcc file attached in the example. The simplest way is to copy it and overwrite the source file proivded by the SDK.
+
+	To make it functions, please close the Simplicity Studio and re-open it, you can check that the extension mfglib CLI are added to the sl_cli_command_table.c now.
 
 3. Add additional codes to extend manufacturing library plugin
+
+	The complete modified source file is attached in the example as well, you can copy it from manufacturing-library-cli-soc.c and overwrite the default source file.
 
 	```Note: When modifying the shared file in the SDK, it will prompt up a warning tab to indicate that a shared file is being modified. Please select "Make a Copy" to prevent these file are changed in SDK.```  
 	![zigbee](doc/warning.png)
 
-- manufacturing-library-cli-soc.c  
-	(project_name/gecko_sdk_4.x/protocol/zigbee/app/framework/plugin/manufacturing-library-cli)
+	A step-by-step guideline about how to make changes in manufacturing-library-cli-soc.c is provided as below.
+	Find the manufacturing-library-cli-soc.c source file under project_name/gecko_sdk_4.x/protocol/zigbee/app/framework/plugin/manufacturing-library-cli, add the following code at the beginning of the file. This block of code has includes, defines, and variables definitions.  
 
-	Add the following code after the includes. This block of code has includes, defines, and variables.  
-	The "..." indicates that there is additional code between the snippets. To get all the code, please copy it from the manufacturing-library-cli-soc.c file.
 	```C
-	////MFG UPDATED CODE START-------------------------------------------------------
+	//MFG UPDATED CODE START-------------------------------------------------------
 	#include "rail.h"
 
-	uint8_t txData[504] = { 0x0F, 0x0E, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
-		0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, };
-	uint16_t txDataLen = 16;
-	// Data Management
-	RAIL_DataConfig_t railDataConfig = { .txSource = TX_PACKET_DATA, .rxSource =
-		RX_PACKET_DATA, .txMethod = PACKET_MODE, .rxMethod = PACKET_MODE, };
+	#define MY_DELAY_IN_MS 1000 //1000 ms = 1 second
+	static int packetCounter = 0; //used for sent packets
+	static boolean contPacket = FALSE;
+	static boolean MODE1 = FALSE;
+	static boolean MODE2 = FALSE;
+	static boolean PERtest = FALSE;
 
-	uint32_t rxOverflowDelay = 10 * 1000000; // 10 seconds
-	RAIL_CsmaConfig_t *csmaConfig = NULL;
+	static int8_t tempThresh = 0;
+	static uint16_t expectedPackets = 0;
+
+	typedef uint8_t SleepModes;
+	enum
+	{
+	SLEEPMODE_RUNNING = 0U,
+	SLEEPMODE_IDLE = 1U,
+	SLEEPMODE_WAKETIMER = 2U,
+	SLEEPMODE_MAINTAINTIMER = 3U,
+	SLEEPMODE_NOTIMER = 4U,
+	SLEEPMODE_HIBERNATE = 5U,
+
+	//The following SleepModes are deprecated on EM2xx and EM3xx chips.  Each
+	//micro's halSleep() function will remap these modes to the appropriate
+	//replacement, as necessary.
+	SLEEPMODE_RESERVED = 6U,
+	SLEEPMODE_POWERDOWN = 7U,
+	SLEEPMODE_POWERSAVE = 8U,
+	};
 
 	extern RAIL_Handle_t emPhyRailHandle;
 
-	...
-
 	void halSleep(SleepModes sleepMode);
 	void halInternalSleep(SleepModes sleepMode);
+	void packetSendHandler(void);
 
 	sl_zigbee_event_t packetSend;
-	void packetSendHandler(void);
-	////MFG UPDATED CODE END-------------------------------------------------------
+	//MFG UPDATED CODE END-------------------------------------------------------
 	```  
 
-	Event configuration functionality is no longer in the Simplicity Studio interface in SDK v7.x, but now is done in the Zigbee stack event system, by initializing the events in code. 
+	Event configuration functionality is no longer in the Simplicity Studio interface in EmberZNet v7.x, but now is done in the Zigbee stack event system, by initializing the events in code. 
 
 	In this example, the custom event is initialized in manufacturing-library-cli-soc.c file. Add the following code in emAfPluginManufacturingLibraryCliInitCallback function.
 
@@ -136,43 +191,44 @@ The simplest way to create this project is to import the .sls file. Pull or down
 
   	... 
 
-	////MFG UPDATED CODE START -------------------------------------------------------
+	//MFG UPDATED CODE START -------------------------------------------------------
 	slxu_zigbee_event_init(&packetSend, packetSendHandler);
-	////MFG UPDATED CODE START -------------------------------------------------------
+	//MFG UPDATED CODE START -------------------------------------------------------
 	}
 	```  
 
-	Copy paste this function over the existing mfglibRxHandler function.
+	Copy paste this function over the existing mfglibRxHandler function.  
+	
 	```C
 	//MFG UPDATED CODE START-------------------------------------------------------
-	static void mfglibRxHandler(uint8_t * packet, uint8_t linkQuality, int8_t rssi) {
+	static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi) {
 
-	// This increments the total packets for the whole mfglib session
-	// this starts when mfglibStart is called and stops when mfglibEnd
-	// is called.
-	// additional code for emAfMfglibreceivePER
+		// This increments the total packets for the whole mfglib session
+		// this starts when mfglibStart is called and stops when mfglibEnd
+		// is called.
+		// additional code for emAfMfglibreceivePER
+		mfgTotalPacketCounter++;
+		mfgCurrentPacketCounter++;
+		if (MODE1) {
+			emberAfCorePrintln("Packet Received");
+		}
+		if (MODE2) {
+			// It is expected to get packet number from offset 5,
+			// as 1 byte for length and 4 bytes for the "test" string.
+			emberAfCorePrintln(
+					"Received message: %s, link Quality: %u, RSSI: %d",
+					packet + 5, linkQuality, rssi);
+		}
 
-	mfgTotalPacketCounter++;
-	mfgCurrentPacketCounter++;
-	if (MODE1) {
-		emberAfCorePrintln("Packet Received");
-	}
-	if (MODE2) {
-		emberAfCorePrintln(
-				"Received message: %s, link Quality: %u, RSSI: %d",
-				packet + 5, linkQuality, rssi);
-
-	}
-
-	// If this is the first packet of a transmit group then save the information
-	// of the current packet. Don't do this for every packet, just the first one.
+		// If this is the first packet of a transmit group then save the information
+		// of the current packet. Don't do this for every packet, just the first one.
 		if (!inReceivedStream) {
-		inReceivedStream = TRUE;
-		mfgCurrentPacketCounter = 1;
-		savedRssi = rssi;
-		savedLinkQuality = linkQuality;
-		savedPktLength = *packet;
-		MEMMOVE(savedPkt, (packet + 1), savedPktLength);
+			inReceivedStream = TRUE;
+			mfgCurrentPacketCounter = 1;
+			savedRssi = rssi;
+			savedLinkQuality = linkQuality;
+			savedPktLength = *packet;
+			MEMMOVE(savedPkt, (packet + 1), savedPktLength);
 		}
 	}
 	//MFG UPDATED CODE END-------------------------------------------------------
@@ -199,112 +255,21 @@ The simplest way to create this project is to import the .sls file. Pull or down
 	//MFG UPDATED CODE END-------------------------------------------------------
 	```
 
-
-- sl_cli_command_table.c  
-	(project_name/autogen)
-
-	Add the following function declaration for extension manufaturing library.
-	```C
-	////MFG UPDATED CODE START-------------------------------------------------------
-	void emAfMfglibClearPackets(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetPower(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetPower(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetCcaThresholdReg(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetCcaThresholdReg(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetCtuneValueReg(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetCtuneValueReg(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetCcaThresholdTok(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetCcaThresholdTok(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetCtuneValueTok(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetCtuneValueTok(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSetGpio(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetGpio(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGpioHelp(sl_cli_command_arg_t *arguments);
-	void emAfMfglibTokDump(sl_cli_command_arg_t *arguments);
-	void emAfMfglibSleepTest(sl_cli_command_arg_t *arguments);
-	void emAfMfglibEnterBootloader(sl_cli_command_arg_t *arguments);
-	void emAfMfglibPERTest(sl_cli_command_arg_t *arguments);
-	void emAfMfglibContinuousPacket(sl_cli_command_arg_t *arguments);
-	void emAfMfglibStopContinuous(sl_cli_command_arg_t *arguments);
-	void emAfMfglibReceiveMode(sl_cli_command_arg_t *arguments);
-	void emAfMfglibReceiveStart(sl_cli_command_arg_t *arguments);
-	void emAfMfglibReceiveStop(sl_cli_command_arg_t *arguments);
-	void emAfMfglibClearPacketCounter(sl_cli_command_arg_t *arguments);
-	void emAfMfglibGetPackets(sl_cli_command_arg_t *arguments);
-	////MFG UPDATED CODE END-------------------------------------------------------
-	```
-
-	Add the following command structs for extension manufaturing library. please get the complete code from sl_cli_command_table.c file.
-	```C
-	////MFG UPDATED CODE START-------------------------------------------------------
-
-	static const sl_cli_command_info_t cli_cmd_mfglib_clear_hyphen_rx_hyphen_packets = \
-	SL_CLI_COMMAND(emAfMfglibClearPackets,
-					"reset the number of received packets to 0",
-					"",
-					{SL_CLI_ARG_END, });
-
-	static const sl_cli_command_info_t cli_cmd_mfglib_set_hyphen_deci_hyphen_dbm = \
-	SL_CLI_COMMAND(emAfMfglibSetPower,
-					"Sets the power of radio transmissions(deci-dBm)",
-					"The power level" SL_CLI_UNIT_SEPARATOR,
-					{SL_CLI_ARG_INT32, SL_CLI_ARG_END, });
-
-	...
-
-	static const sl_cli_command_info_t cli_cmd_mfglib_get_hyphen_tx_hyphen_packets = \
-	SL_CLI_COMMAND(emAfMfglibGetPackets,
-					"Prints packet Counter(number of transmitted packets)",
-					"",
-					{SL_CLI_ARG_END, });
-
-	////MFG UPDATED CODE END-------------------------------------------------------
-	```
-
-	Add the following CLI defintion for extension manufaturing library to the existing mfglib_group_table.
-	```C
-	////MFG UPDATED CODE START-------------------------------------------------------
-	{ "clear-rx-packets", &cli_cmd_mfglib_clear_hyphen_rx_hyphen_packets, false },
-	{ "set-deci-dbm", &cli_cmd_mfglib_set_hyphen_deci_hyphen_dbm, false },
-	{ "get-deci-dbm", &cli_cmd_mfglib_get_hyphen_deci_hyphen_dbm, false },
-	{ "set-cca", &cli_cmd_mfglib_set_hyphen_cca, false },
-	{ "get-cca", &cli_cmd_mfglib_get_hyphen_cca, false },
-	{ "get-ctune-reg", &cli_cmd_mfglib_get_hyphen_ctune_hyphen_reg, false },
-	{ "set-ctune-reg", &cli_cmd_mfglib_set_hyphen_ctune_hyphen_reg, false },
-	{ "get-cca-tok", &cli_cmd_mfglib_get_hyphen_cca_hyphen_tok, false },
-	{ "set-cca-tok", &cli_cmd_mfglib_set_hyphen_cca_hyphen_tok, false },
-	{ "get-ctune-tok", &cli_cmd_mfglib_get_hyphen_ctune_hyphen_tok, false },
-	{ "set-ctune-tok", &cli_cmd_mfglib_set_hyphen_ctune_hyphen_tok, false },
-	{ "set-gpio", &cli_cmd_mfglib_set_hyphen_gpio, false },
-	{ "get-gpio", &cli_cmd_mfglib_get_hyphen_gpio, false },
-	{ "gpio-help", &cli_cmd_mfglib_gpio_hyphen_help, false },
-	{ "tok-dump", &cli_cmd_mfglib_tok_hyphen_dump, false },
-	{ "set-sleep", &cli_cmd_mfglib_set_hyphen_sleep, false },
-	{ "enter-bl", &cli_cmd_mfglib_enter_hyphen_bl, false },
-	{ "per-test", &cli_cmd_mfglib_per_hyphen_test, false },
-	{ "contPack-start", &cli_cmd_mfglib_contPack_hyphen_start, false },
-	{ "contPack-stop", &cli_cmd_mfglib_contPack_hyphen_stop, false },
-	{ "receive-mode", &cli_cmd_mfglib_receive_hyphen_mode, false },
-	{ "receivePER-start", &cli_cmd_mfglib_receivePER_hyphen_start, false },
-	{ "receivePER-stop", &cli_cmd_mfglib_receivePER_hyphen_stop, false },
-	{ "clear-tx-packets", &cli_cmd_mfglib_clear_hyphen_tx_hyphen_packets, false },
-	{ "get-tx-packets", &cli_cmd_mfglib_get_hyphen_tx_hyphen_packets, false },
-	////MFG UPDATED CODE END-------------------------------------------------------
-	```
-
-Finally, build the project. All functions should be ready to use.
-Flash project to preferred board and go to network analyzer to use functions.
+Finally, build the project and flash it to preferred board. All functions should be ready to use.
 To flash, in the Simplicity IDE perspective go to project_name and open binaries. Left click project_name.s37 and select "Flash to Device". Pick a board and then choose "Program".
+Launch Console to use these CLI, and you can capture the packets through Network Analyzer.
+
 
 ## 6. Examples ##
 
 ### 6.1 How to change packet print outs ###
 
-The "plugin mfglib receive-mode <int8_t>" allows the user to get different print outs for each packet. Some packets have messages attached, often numbers. Some do not or have random data, which will show up as scrambled characters. 
-Modes:
-	Mode 0: no printout
-	Mode 1: "Packet Received" printed for each received packet
-	Mode 2: "Received message: <string>:, link Quality: <int>, RSSI: <int>"
+The "plugin mfglib receive-mode <int8_t>" allows the user to get different print outs for each packet. Some packets have messages attached, often numbers. Some do not or have random data, which will show up as scrambled characters.   
+
+Modes:  
+	Mode 0: no printout  
+	Mode 1: "Packet Received" printed for each received packet  
+	Mode 2: "Received message: <string>:, link Quality: <int>, RSSI: <int>"  
 	
 Example: 
 	
@@ -319,7 +284,8 @@ When your board is set to receive packets, use the following commands:
 ```C
 plugin mfglib status //Will print out information, including the number of received packets
 plugin mfglib clear-rx-packets //Will clear the received packet Counter
-```
+```  
+ 
 When it is sent to send packets, use the following commands:
 
 ```C
@@ -356,7 +322,6 @@ Once you are done with the continuous packet test, enter this command in the tra
 ```C
 plugin mfglib contPack-stop
 ```
-
 
 See 6.2 for details on clearing and getting packet counts(both on transmitter and receiver sides)
 
@@ -412,7 +377,7 @@ During testing, you may want to frequently change the token. To set temporarily,
 plugin mfglib set-cca -75 //will set the temporary CCA Threshold value to -75
 plugin mfglib get-cca //will show what the current CCA Threshold is
 
-plugin mfglib set-ctune-reg 135 //will set the temporary Ctune value to 390
+plugin mfglib set-ctune-reg 135 //will set the temporary Ctune value to 135
 plugin mfglib get-ctune-reg //will show what the current Ctune value is
 
 ```
@@ -423,7 +388,7 @@ To set these values more permanently, you can set the token using the following 
 plugin mfglib set-cca-tok -75 //will set the CCA Threshold token to -75
 plugin mfglib get-cca-tok //will show what the CCA Threshold token value is
 
-plugin mfglib set-ctune-tok 135 //will set the Ctune token to 390
+plugin mfglib set-ctune-tok 135 //will set the Ctune token to 135
 plugin mfglib get-ctune-tok //will show what the Ctune token value is
 
 ```

@@ -25,69 +25,23 @@
 #endif
 // -----------------------------------------------------------------------------
 // Globals
-extern EmberStatus mfglibStart(void (*mfglibRxCallback)(uint8_t *packet, uint8_t linkQuality, int8_t rssi));
 
 //MFG UPDATED CODE START -----------------------------------------------------------------------------------------------------------------
-#include "rail.h"
+  #include "rail.h"
 
-uint8_t txData[504] = { 0x0F, 0x0E, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
-    0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, };
-uint16_t txDataLen = 16;
-// Data Management
-RAIL_DataConfig_t railDataConfig = { .txSource = TX_PACKET_DATA, .rxSource =
-    RX_PACKET_DATA, .txMethod = PACKET_MODE, .rxMethod = PACKET_MODE, };
+  #define MY_DELAY_IN_MS 1000 //1000 ms = 1 second
+  static int packetCounter = 0; //used for sent packets
+  static boolean contPacket = FALSE;
+  static boolean MODE1 = FALSE;
+  static boolean MODE2 = FALSE;
+  static boolean PERtest = FALSE;
 
-uint32_t rxOverflowDelay = 10 * 1000000; // 10 seconds
-RAIL_CsmaConfig_t *csmaConfig = NULL;
+  static int8_t tempThresh = 0;
+  static uint16_t expectedPackets = 0;
 
-extern RAIL_Handle_t emPhyRailHandle;
-
-
-#define MY_DELAY_IN_MS 1000 //1000 ms = 1 second
-static int packetCounter = 0; //used for sent packets
-static boolean contPacket = FALSE;
-static boolean MODE1 = FALSE;
-static boolean MODE2 = FALSE;
-static boolean PERtest = FALSE;
-
-static int8_t tempThresh = 0;
-static uint16_t expectedPackets = 0;
-
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
-
-/** @brief Enumerations for the possible microcontroller sleep modes.
- * - SLEEPMODE_RUNNING
- *     Everything is active and running.  In practice this mode is not
- *     used, but it is defined for completeness of information.
- * - SLEEPMODE_IDLE
- *     Only the CPU is idled.  The rest of the chip continues running
- *     normally.  The chip will wake from any interrupt.
- * - SLEEPMODE_WAKETIMER
- *     The sleep timer clock sources remain running.  The RC is always
- *     running and the 32kHz XTAL depends on the board header.  Wakeup
- *     is possible from both GPIO and the sleep timer.  System time
- *     is maintained.  The sleep timer is assumed to be configured
- *     properly for wake events.
- * - SLEEPMODE_MAINTAINTIMER
- *     The sleep timer clock sources remain running.  The RC is always
- *     running and the 32kHz XTAL depends on the board header.  Wakeup
- *     is possible from only GPIO.  System time is maintained.
- *       NOTE: This mode is not available on EM2XX chips.
- * - SLEEPMODE_NOTIMER
- *     The sleep timer clock sources (both RC and XTAL) are turned off.
- *     Wakeup is possible from only GPIO.  System time is lost.
- * - SLEEPMODE_HIBERNATE
- *     This maps to EM4 Hibernate on the EFM32/EFR32 devices. RAM is not
- *     retained in SLEEPMODE_HIBERNATE so waking up from this sleepmode
- *     will behave like a reset.
- *       NOTE: This mode is only available on EFM32/EFR32
- */
-enum SleepModes
-#else
-typedef uint8_t SleepModes;
-enum
-#endif
-{
+  typedef uint8_t SleepModes;
+  enum
+  {
   SLEEPMODE_RUNNING = 0U,
   SLEEPMODE_IDLE = 1U,
   SLEEPMODE_WAKETIMER = 2U,
@@ -101,16 +55,19 @@ enum
   SLEEPMODE_RESERVED = 6U,
   SLEEPMODE_POWERDOWN = 7U,
   SLEEPMODE_POWERSAVE = 8U,
-};
+  };
 
-void halSleep(SleepModes sleepMode);
-void halInternalSleep(SleepModes sleepMode);
+  extern RAIL_Handle_t emPhyRailHandle;
 
-sl_zigbee_event_t packetSend;
-void packetSendHandler(void);
+  void halSleep(SleepModes sleepMode);
+  void halInternalSleep(SleepModes sleepMode);
+  void packetSendHandler(void);
+
+  sl_zigbee_event_t packetSend;
 
 //MFG UPDATED CODE END--------------------------------------------------------------------------------------------------------------------
 
+extern EmberStatus mfglibStart(void (*mfglibRxCallback)(uint8_t *packet, uint8_t linkQuality, int8_t rssi));
 
 // The max packet size for 802.15.4 is 128, minus 1 byte for the length, and 2 bytes for the CRC.
 #define MAX_BUFFER_SIZE 125
@@ -152,6 +109,7 @@ EmberEventControl emberAfPluginManufacturingLibraryCliCheckSendCompleteEventCont
 static uint16_t savedPacketCount = 0;
 
 #define CHECK_SEND_COMPLETE_DELAY_QS 2
+
 
 // -----------------------------------------------------------------------------
 // Forward Declarations
@@ -198,6 +156,7 @@ void emAfPluginManufacturingLibraryCliInitCallback(SLXU_INIT_ARG)
 
   slxu_zigbee_event_init(checkSendCompleteEventControl,
                          emberAfPluginManufacturingLibraryCliCheckSendCompleteEventHandler);
+
   //MFG UPDATED CODE START -----------------------------------------------------------------------------------------------------------------
   slxu_zigbee_event_init(&packetSend, packetSendHandler);
   //MFG UPDATED CODE START -----------------------------------------------------------------------------------------------------------------
@@ -261,17 +220,17 @@ static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi) {
   // this starts when mfglibStart is called and stops when mfglibEnd
   // is called.
   // additional code for emAfMfglibreceivePER
-
   mfgTotalPacketCounter++;
   mfgCurrentPacketCounter++;
   if (MODE1) {
     emberAfCorePrintln("Packet Received");
   }
   if (MODE2) {
+    // It is expected to get packet number from offset 5,
+    // as 1 byte for length and 4 bytes for the "test" string.
     emberAfCorePrintln(
             "Received message: %s, link Quality: %u, RSSI: %d",
             packet + 5, linkQuality, rssi);
-
   }
 
   // If this is the first packet of a transmit group then save the information
@@ -719,7 +678,7 @@ void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) {
   uint16_t interval = sl_cli_get_argument_uint16(arguments, 1);
   char str[5];
   char sig[15] = "test";
-  EmberStatus status;
+  EmberStatus status = EMBER_SUCCESS;
   emberAfCorePrintln("per test started.");
 
   for (int i = 1; i <= numPackets; i++) {
@@ -727,8 +686,11 @@ void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) {
     halCommonDelayMilliseconds(interval);
     sprintf(str, "%d", i);
     strcat(sig, str);
-    sendBuff[0] = strlen(sig) + 2;
-    MEMMOVE(sendBuff + 1, sig, strlen(sig));
+    strcat(sig, '\0');
+    // length byte does not include itself, it includes data bytes to send,
+    // 2 bytes CRC and a NULL terminator.
+    sendBuff[0] = strlen(sig) + 1 + 2;
+    MEMMOVE(sendBuff + 1, sig, strlen(sig) + 1);
     status = mfglibSendPacket(sendBuff, 0);
     sig[4] = '\0';
     packetCounter++;
@@ -751,7 +713,7 @@ void emAfMfglibReceiveStop(void) {
   if (expectedPackets < mfgTotalPacketCounter) {
     lostPackets = 0;
   } else {
-    lostPackets = (expectedPackets - mfgTotalPacketCounter)*100; //multiply by 100 to get percentage
+    lostPackets = expectedPackets - mfgTotalPacketCounter;
   }
   //PER print out
   if (PERtest == TRUE){
@@ -759,7 +721,9 @@ void emAfMfglibReceiveStop(void) {
         mfgTotalPacketCounter);
     emberAfCorePrintln("Expected packets %d",
         expectedPackets);
-    emberAfCorePrintln("The Packet Error rate is %d.%d percent", lostPackets / expectedPackets, lostPackets % expectedPackets);
+    emberAfCorePrintln("The Packet Error rate is %d.%d percent",
+        lostPackets * 100 / expectedPackets, //multiply to get percentage
+        lostPackets * 1000 / expectedPackets % 10); //multiply to get percentage
     expectedPackets = 0;
   } else {
     emberAfCorePrintln("Error: PER test has not been started yet");
@@ -870,15 +834,14 @@ void packetSendHandler(void)
   sl_zigbee_event_set_inactive(&packetSend);
 
   if (contPacket) {
-
     packetCounter++;
     sprintf(str, "%d", packetCounter);
     strcat(sig, str);
-    sendBuff[0] = strlen(sig) + 2;
-    MEMMOVE(sendBuff + 1, sig, strlen(sig));
+    strcat(sig, '\0');
+    // length byte does not include itself, it includes data bytes to send and 2 bytes CRC
+    sendBuff[0] = strlen(sig) + 1 + 2;
+    MEMMOVE(sendBuff + 1, sig, strlen(sig) + 1);
     status = mfglibSendPacket(sendBuff, 0);
-    sig[4] = '\0';
-
     emberAfCorePrintln("%p send packet, status 0x%X", PLUGIN_NAME, status);
   }
 

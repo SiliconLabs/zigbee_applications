@@ -48,10 +48,6 @@
   SLEEPMODE_MAINTAINTIMER = 3U,
   SLEEPMODE_NOTIMER = 4U,
   SLEEPMODE_HIBERNATE = 5U,
-
-  //The following SleepModes are deprecated on EM2xx and EM3xx chips.  Each
-  //micro's halSleep() function will remap these modes to the appropriate
-  //replacement, as necessary.
   SLEEPMODE_RESERVED = 6U,
   SLEEPMODE_POWERDOWN = 7U,
   SLEEPMODE_POWERSAVE = 8U,
@@ -59,7 +55,6 @@
 
   extern RAIL_Handle_t emPhyRailHandle;
 
-  void halSleep(SleepModes sleepMode);
   void halInternalSleep(SleepModes sleepMode);
   void packetSendHandler(void);
 
@@ -214,8 +209,8 @@ static void fillBuffer(uint8_t* buff, uint8_t length, bool random)
 }
 
 //MFG UPDATED CODE START------------------------------------------------------------------------------------------------------------
-static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi) {
-
+static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi)
+{
   // This increments the total packets for the whole mfglib session
   // this starts when mfglibStart is called and stops when mfglibEnd
   // is called.
@@ -672,8 +667,8 @@ void emAfMfglibSetOptions(void)
 //MFG UPDATED CODE START -----------------------------------------------------------------------------------------------------------------
 
 //Send set number of packets(set from argument) with message indicating the number sent
-void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) {
-
+void emAfMfglibPERTest(sl_cli_command_arg_t *arguments)
+{
   uint16_t numPackets = sl_cli_get_argument_uint16(arguments, 0);
   uint16_t interval = sl_cli_get_argument_uint16(arguments, 1);
   char str[5];
@@ -699,7 +694,8 @@ void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) {
   emberAfCorePrintln("%p send message, status 0x%X", PLUGIN_NAME, status);
 }
 
-void emAfMfglibReceiveStart(sl_cli_command_arg_t *arguments) {
+void emAfMfglibReceiveStart(sl_cli_command_arg_t *arguments)
+{
   PERtest = TRUE;
   uint16_t expected = sl_cli_get_argument_uint16(arguments, 0);
   expectedPackets = expected;
@@ -707,7 +703,8 @@ void emAfMfglibReceiveStart(sl_cli_command_arg_t *arguments) {
   emberAfCorePrintln("Receive mode has been started, packets have been cleared.");
 }
 
-void emAfMfglibReceiveStop(void) {
+void emAfMfglibReceiveStop(void)
+{
   uint16_t lostPackets;
   //for calculating packets and handling errors
   if (expectedPackets < mfgTotalPacketCounter) {
@@ -716,7 +713,7 @@ void emAfMfglibReceiveStop(void) {
     lostPackets = expectedPackets - mfgTotalPacketCounter;
   }
   //PER print out
-  if (PERtest == TRUE){
+  if (PERtest == TRUE) {
     emberAfCorePrintln("Packet counter %d",
         mfgTotalPacketCounter);
     emberAfCorePrintln("Expected packets %d",
@@ -730,36 +727,41 @@ void emAfMfglibReceiveStop(void) {
   }
 }
 
-void emAfMfglibClearPackets(void) { // clear-packets
+void emAfMfglibClearPackets(void)  // clear-packets
+{
   mfgTotalPacketCounter = 0;
   emberAfCorePrintln("Packets cleared!");
 }
 
-void emAfMfglibSetPower(sl_cli_command_arg_t *arguments) { // set-power
+void emAfMfglibSetPower(sl_cli_command_arg_t *arguments)  // set-power
+{
   int32_t powerLevel = sl_cli_get_argument_int32(arguments, 0);
   int32_t actualPower = RAIL_SetTxPowerDbm(emPhyRailHandle, powerLevel);
-  if (actualPower == 0){
-      emberAfCorePrintln("The tx power has been set to %d.%d dBm.",
+  if (actualPower == 0) {
+    emberAfCorePrintln("The tx power has been set to %d.%d dBm.",
                          powerLevel / 10, powerLevel % 10);
   } else {
-      emberAfCorePrintln("Set power failed, error 0x%X", actualPower);
+    emberAfCorePrintln("Set power failed, error 0x%X", actualPower);
   }
 }
 
-void emAfMfglibGetPower(sl_cli_command_arg_t *arguments) { // get-power
+void emAfMfglibGetPower(sl_cli_command_arg_t *arguments)  // get-power
+{
   int32_t currPower = RAIL_GetTxPowerDbm(emPhyRailHandle);
   emberAfCorePrintln("The tx power is %d.%d dBm.", currPower / 10,
       currPower % 10);
 }
 
-void emAfMfglibSetCcaThresholdReg(sl_cli_command_arg_t *arguments) { // set-cca
+void emAfMfglibSetCcaThresholdReg(sl_cli_command_arg_t *arguments)  // set-cca
+{
   tempThresh = sl_cli_get_argument_int8(arguments, 0);
   RAIL_SetCcaThreshold(emPhyRailHandle, tempThresh);
   emberAfCorePrintln("The temporary CCA threshold has been set to %d.",
       tempThresh);
 }
 
-void emAfMfglibGetCcaThresholdReg(void) { // get-cca
+void emAfMfglibGetCcaThresholdReg(void)  // get-cca
+{
   if (tempThresh != 0) {
     emberAfCorePrintln("The temporary CCA threshold is %d.", tempThresh);
   } else {
@@ -767,19 +769,22 @@ void emAfMfglibGetCcaThresholdReg(void) { // get-cca
   }
 }
 
-void emAfMfglibGetCtuneValueReg(void) { // get-ctune-reg
+void emAfMfglibGetCtuneValueReg(void)  // get-ctune-reg
+{
   uint16_t val;
   val = halInternalGetCtune();
   emberAfCorePrintln("The temporary Ctune value is %d.", val);
 }
 
-void emAfMfglibSetCtuneValueReg(sl_cli_command_arg_t *arguments) { // set-ctune-reg
+void emAfMfglibSetCtuneValueReg(sl_cli_command_arg_t *arguments)  // set-ctune-reg
+{
   uint16_t tune = sl_cli_get_argument_uint16(arguments, 0);
   halInternalSetCtune(tune);
   emberAfCorePrintln("The temporary Ctune value has been set.");
 }
 
-void emAfMfglibGetCcaThresholdTok(void) { //get-cca-tok
+void emAfMfglibGetCcaThresholdTok(void)  //get-cca-tok
+{
   tokTypeMfgCTune threshold = 0xFFFF;
   halCommonGetMfgToken(&threshold, TOKEN_MFG_CCA_THRESHOLD);
   if (threshold != 0xFFFF) {
@@ -789,7 +794,8 @@ void emAfMfglibGetCcaThresholdTok(void) { //get-cca-tok
   }
 }
 
-void emAfMfglibSetCcaThresholdTok(sl_cli_command_arg_t *arguments) { // set-cca-tok
+void emAfMfglibSetCcaThresholdTok(sl_cli_command_arg_t *arguments)  // set-cca-tok
+{
   tokTypeMfgCTune threshold_new = sl_cli_get_argument_uint16(arguments, 0);
   tokTypeMfgCTune threshold_old = 0xFFFF;
   halCommonGetMfgToken(&threshold_old, TOKEN_MFG_CCA_THRESHOLD);
@@ -802,7 +808,8 @@ void emAfMfglibSetCcaThresholdTok(sl_cli_command_arg_t *arguments) { // set-cca-
   }
 }
 
-void emAfMfglibGetCtuneValueTok(void) { // get-ctune-tok
+void emAfMfglibGetCtuneValueTok(void)  // get-ctune-tok
+{
   tokTypeMfgCTune value = 0xFFFF;
   halCommonGetMfgToken(&value, TOKEN_MFG_CTUNE);
   if (value != 0xFFFF) {
@@ -812,7 +819,8 @@ void emAfMfglibGetCtuneValueTok(void) { // get-ctune-tok
   }
 }
 
-void emAfMfglibSetCtuneValueTok(sl_cli_command_arg_t *arguments) { // set-ctune-tok
+void emAfMfglibSetCtuneValueTok(sl_cli_command_arg_t *arguments)  // set-ctune-tok
+{
   tokTypeMfgCTune value_new = sl_cli_get_argument_uint16(arguments, 0);
   tokTypeMfgCTune value_old = 0xFFFF;
   halCommonGetToken(&value_old, TOKEN_MFG_CTUNE);
@@ -850,7 +858,8 @@ void packetSendHandler(void)
 }
 
 //Sends packets continuously, set in milliseconds
-void emAfMfglibContinuousPacket(void) {
+void emAfMfglibContinuousPacket(void)
+{
   if (!mfgLibRunning) {
     emberAfCorePrintln("mfglib test not started!");
     return;
@@ -865,7 +874,8 @@ void emAfMfglibContinuousPacket(void) {
 }
 
 //stops continuous packets
-void emAfMfglibStopContinuous(void) {
+void emAfMfglibStopContinuous(void)
+{
 
   if (!contPacket) {
     emberAfCorePrintln("Continuous test is not in progress.");
@@ -877,12 +887,14 @@ void emAfMfglibStopContinuous(void) {
 
 }
 
-void emAfMfglibClearPacketCounter(void) { //
+void emAfMfglibClearPacketCounter(void)
+{
   packetCounter = 0;
   emberAfCorePrintln("Packet Counter: %u", packetCounter);
 }
 
-void emAfMfglibGetPackets(void) { //
+void emAfMfglibGetPackets(void)
+{
   emberAfCorePrintln("Packet Counter: %u", packetCounter);
 }
 
@@ -907,7 +919,8 @@ void emAfMfglibReceiveMode(sl_cli_command_arg_t *arguments)
   }
 }
 
-void emAfMfglibSetGpio(sl_cli_command_arg_t *arguments) {
+void emAfMfglibSetGpio(sl_cli_command_arg_t *arguments)
+{
   /*
    * AVAILABLE PORTS:
    * Port A = 0
@@ -939,7 +952,8 @@ void emAfMfglibSetGpio(sl_cli_command_arg_t *arguments) {
   emberAfCorePrintln("GPIO settings have been applied.");
 }
 
-void emAfMfglibGetGpio(sl_cli_command_arg_t *arguments) {
+void emAfMfglibGetGpio(sl_cli_command_arg_t *arguments)
+{
   /*
    * POSSIBLE PORTS:
    * Port A = 0
@@ -964,7 +978,8 @@ void emAfMfglibGetGpio(sl_cli_command_arg_t *arguments) {
   emberAfCorePrintln("The specified port is in mode %d.", (uint32_t )mode);
 }
 
-void emAfMfglibGpioHelp(void) {
+void emAfMfglibGpioHelp(void)
+{
   emberAfCorePrintln(
       "Possible ports:\nPort A = 0\nPort B = 1\nPort C = 2\nPort D = 3\nPort E = 4\nPort F = 5\nPort G = 6\nPort H = 7\nPort I = 8\nPort J = 9\nPort K = 10\n");
   emberAfCorePrintln("AVAILABLE PINS: 0 - 15\n");
@@ -977,7 +992,8 @@ void emAfMfglibGpioHelp(void) {
   emberAfCorePrintln("DOUT PIN: Low = 0, High = 1\n");
 }
 
-void emAfMfglibTokDump(void) {
+void emAfMfglibTokDump(void)
+{
   //We define DEFINETOKENS so when token-stack.h is included below, only the
   //token definitions are operated on as opposed to the token types.
 #define DEFINETOKENS
@@ -1027,20 +1043,16 @@ void emAfMfglibTokDump(void) {
 #undef DEFINETOKENS
 }
 
-void emAfMfglibSleepTest(sl_cli_command_arg_t *arguments) {
+void emAfMfglibSleepTest(sl_cli_command_arg_t *arguments)
+{
   uint8_t mode = sl_cli_get_argument_uint8(arguments, 0);
   if (mode > 5) {
     emberAfCorePrintln("Invalid sleep mode.");
   } else {
     emberAfCorePrintln("Entering sleep mode.");
     halCommonDelayMicroseconds(1000);
-    halSleep(mode);
+    halInternalSleep(mode);
   }
-}
-
-void halSleep(SleepModes sleepMode)
-{
-  halInternalSleep(sleepMode);
 }
 
 void halInternalSleep(SleepModes sleepMode)
@@ -1082,8 +1094,8 @@ void halInternalSleep(SleepModes sleepMode)
   sl_power_manager_remove_em_requirement(em_power);
 }
 
-void emAfMfglibEnterBootloader() {
-
+void emAfMfglibEnterBootloader()
+{
   halInternalSysReset(RESET_BOOTLOADER_BOOTLOAD);
 }
 

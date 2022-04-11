@@ -162,10 +162,6 @@ The following steps describe how to extend mfglib capabilities in an sample proj
 	SLEEPMODE_MAINTAINTIMER = 3U,
 	SLEEPMODE_NOTIMER = 4U,
 	SLEEPMODE_HIBERNATE = 5U,
-
-	//The following SleepModes are deprecated on EM2xx and EM3xx chips.  Each
-	//micro's halSleep() function will remap these modes to the appropriate
-	//replacement, as necessary.
 	SLEEPMODE_RESERVED = 6U,
 	SLEEPMODE_POWERDOWN = 7U,
 	SLEEPMODE_POWERSAVE = 8U,
@@ -173,7 +169,6 @@ The following steps describe how to extend mfglib capabilities in an sample proj
 
 	extern RAIL_Handle_t emPhyRailHandle;
 
-	void halSleep(SleepModes sleepMode);
 	void halInternalSleep(SleepModes sleepMode);
 	void packetSendHandler(void);
 
@@ -189,11 +184,11 @@ The following steps describe how to extend mfglib capabilities in an sample proj
 	void emAfPluginManufacturingLibraryCliInitCallback(SLXU_INIT_ARG)
 	{	
 
-  	... 
+  		... 
 
-	//MFG UPDATED CODE START -------------------------------------------------------
-	slxu_zigbee_event_init(&packetSend, packetSendHandler);
-	//MFG UPDATED CODE START -------------------------------------------------------
+		//MFG UPDATED CODE START -------------------------------------------------------
+		slxu_zigbee_event_init(&packetSend, packetSendHandler);
+		//MFG UPDATED CODE START -------------------------------------------------------
 	}
 	```  
 
@@ -201,8 +196,8 @@ The following steps describe how to extend mfglib capabilities in an sample proj
 	
 	```C
 	//MFG UPDATED CODE START-------------------------------------------------------
-	static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi) {
-
+	static void mfglibRxHandler(uint8_t *packet, uint8_t linkQuality, int8_t rssi) 
+	{
 		// This increments the total packets for the whole mfglib session
 		// this starts when mfglibStart is called and stops when mfglibEnd
 		// is called.
@@ -240,16 +235,16 @@ The following steps describe how to extend mfglib capabilities in an sample proj
 	//MFG UPDATED CODE START-------------------------------------------------------
 
 	//Send set number of packets(set from argument) with message indicating the number sent
-	void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) {
-
-	uint16_t numPackets = sl_cli_get_argument_uint16(arguments, 0);
-	uint16_t interval = sl_cli_get_argument_uint16(arguments, 1);
+	void emAfMfglibPERTest(sl_cli_command_arg_t *arguments) 
+	{
+	    uint16_t numPackets = sl_cli_get_argument_uint16(arguments, 0);
+		uint16_t interval = sl_cli_get_argument_uint16(arguments, 1);
 
 	...
 
-	void emAfMfglibEnterBootloader() {
-
-	halInternalSysReset(RESET_BOOTLOADER_BOOTLOAD);
+	void emAfMfglibEnterBootloader() 
+	{
+		halInternalSysReset(RESET_BOOTLOADER_BOOTLOAD);
 	}
 
 	//MFG UPDATED CODE END-------------------------------------------------------

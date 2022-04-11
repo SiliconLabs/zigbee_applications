@@ -720,7 +720,7 @@ void emAfMfglibReceiveStop(void)
         expectedPackets);
     emberAfCorePrintln("The Packet Error rate is %d.%d percent",
         lostPackets * 100 / expectedPackets, //multiply to get percentage
-        lostPackets * 1000 / expectedPackets % 10); //multiply to get percentage
+        (lostPackets * 1000 / expectedPackets) % 10); //multiply to get percentage
     expectedPackets = 0;
   } else {
     emberAfCorePrintln("Error: PER test has not been started yet");

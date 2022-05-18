@@ -74,7 +74,7 @@ A custom event consists of **`two parts`**: **`the event handler`**, called when
 
 ## 2.1. Define the Event Control
 
-The event control must be defined as a global variable. You can define it in any source file you want.
+The event control must be defined as a global variable. You can define it in any source file you want. The recommended is `app.c`.
 
 ```C
 static sl_zigbee_event_t ledBlinkingEventControl;
@@ -90,7 +90,7 @@ The event handler is normally defined in the same source file as the event contr
 
 static void ledBlinkingEventHandler(sl_zigbee_event_t *event)
 {
-  sl_led_toggle(&sl_led_led1);
+  sl_led_toggle(&sl_led_led0);
 }
 ```
 
@@ -113,20 +113,22 @@ The event is pretty much like a timer. It must be scheduled with a specific dela
 #include "sl_led.h"
 #include "sl_simple_led_instances.h"
 
+static sl_zigbee_event_t ledBlinkingEventControl;
+
+void ledBlinkingEventHandler(void)
+{
+  sl_led_toggle(&sl_led_led0);
+
+  //Reschedule the event after a delay of 2 seconds
+  sl_zigbee_event_set_delay_ms(&ledBlinkingEventControl, 2000);
+}
+
 void emberAfMainInitCallback(void)
 {
   sl_zigbee_event_init(&ledBlinkingEventControl, ledBlinkingEventHandler);
 
   //add the following code the schedule the event with 5 seconds delay
   sl_zigbee_event_set_delay_ms(&ledBlinkingEventControl, 5000);
-}
-
-void ledBlinkingEventHandler(void)
-{
-  sl_led_toggle(&sl_led_led1);
-
-  //Reschedule the event after a delay of 2 seconds
-  sl_zigbee_event_set_delay_ms(&ledBlinkingEventControl, 2000);
 }
 ```
 

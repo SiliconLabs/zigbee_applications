@@ -1,0 +1,93 @@
+ <configurator>
+  <domain name="Ember" />
+  <!-- Use manufacturerCode to indicate that this is a manufacturer specific
+       cluster. -->
+  <cluster manufacturerCode="0x1002">
+    <name>Large network diagnostics</name>
+    <domain>Ember</domain>
+    <description>This cluster provides some OTA diagnostics functions.
+      </description>
+    <!-- Cluster Id must be within the mfg spec range 0xfc00 - 0xffff -->
+    <code>0xFC03</code> 
+    <define>LARGE_NETWORK_DIAGNOSTICS</define>
+    <client init="false" tick="false">true</client>
+    <server init="false" tick="false">true</server>
+    <!-- Commands from client to server -->
+    <command source="client" code="0x00" 
+      name="GetCounters" 
+      optional="true">
+      <description>
+        Get counters of remote device
+      </description>
+    </command>
+    <command source="client" code="0x01" 
+      name="GetNeighborTable" 
+      optional="true">
+      <description>
+        Get neighbor table of remote device
+      </description>
+    </command>
+    <command source="client" code="0x02" 
+      name="GetRoutingTable" 
+      optional="true">
+      <description>
+        Get routing table of remote device
+      </description>
+    </command>
+    <command source="client" code="0x03" 
+      name="GetChildTable" 
+      optional="true">
+      <description>
+        Get child table of remote device
+      </description>
+    </command>
+    <!-- Commands from server to client -->
+    <command source="server" code="0x00" 
+      name="GetCountersResponse" 
+      optional="true">
+      <description>
+        Get counters of remote device
+      </description>
+      <arg name="counters" type="INT16U" array="true" />
+    </command>
+    <command source="server" code="0x01" 
+      name="GetNeighborTableResponse" 
+      optional="true">
+      <description>
+        Get neighbor table of remote device
+      </description>
+      <arg name="shortId" type="INT16U" />
+      <arg name="averageLqi" type="INT8U" />
+      <arg name="inCost" type="INT8U" />
+      <arg name="outCost" type="INT8U" />
+      <arg name="age" type="INT8U" />
+      <arg name="longId" type="INT64U" />
+    </command>
+    <command source="server" code="0x02" 
+      name="GetRoutingTableResponse" 
+      optional="true">
+      <description>
+        Get routing table of remote device
+      </description>
+       <arg name="destination" type="INT16U" />
+       <arg name="nextHop" type="INT16U" />
+       <arg name="status" type="INT8U" />
+       <arg name="age" type="INT8U" />
+       <arg name="concentratorType" type="INT8U" />
+       <arg name="routeRecordState" type="INT8U" />
+    </command>
+    <command source="server" code="0x03" 
+      name="GetChildTableResponse" 
+      optional="true">
+      <description>
+        Get child table of remote device
+      </description>
+      <arg name="longId" type="INT64U" />
+      <arg name="type" type="INT8U" />
+      <arg name="id" type="INT16U" />
+      <arg name="phy" type="INT8U" />
+      <arg name="power" type="INT8U" />
+      <arg name="timeout" type="INT8U" />
+    </command>
+  </cluster>
+</configurator>

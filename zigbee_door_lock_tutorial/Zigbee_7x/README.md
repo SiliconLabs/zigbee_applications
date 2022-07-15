@@ -75,13 +75,12 @@ Back to Zigbee-LockCoordinator-UC.slcp, select “CONFIGURATION TOOLS” box in 
 ![alt text](Image/Lock_coordinator_6.jpg)
 
 Select the Zigbee Cluster Configurator and click Open. 
-Click on “ADD NEW ENDPOINT”. 
+Click on “EDIT ENDPOINT”. 
 
 ![alt text](Image/Lock_coordinator_7.jpg)
 
-In the Device box, search “HA Home Gateway” and Click Create.
+In the Device box, search “HA Home Gateway” and Click SAVE.
 
-![alt text](Image/Lock_coordinator_8.jpg)
 
 We have now successfully added an endpoint. In the main screen, click on the General dropdown to see the enabled clusters.
 
@@ -232,8 +231,7 @@ Configure the Zigbee-Lock-UC Endpoint
 
 
     ·  Click on gear to configure “Door Lock” cluster.
-    ·  In the “ATTRIBUTES” table, enable “lock state”, “lock type”, “actuator enabled”, “max pin length”, “min pin length”
-    ·  In the “ATTRIBUTE REPORTING” table, enable “lock type”, “max pin length”, “min pin length”, “send pin over the air”
+    ·  In the “ATTRIBUTES” table, enable “lock state”, “lock type”, “actuator enabled”, “max pin length”, “min pin length”, “send pin over the air”
     ·  In the “COMMANDS”, enable “LockDoor”, “unLockDoor”,”SetPin”, “GetPin”, “ClearPin” with their response commands.
 
 ![alt text](Image/Lock_controller_8.jpg)
@@ -242,7 +240,7 @@ Configure the Zigbee-Lock-UC Endpoint
     ·  Once you have finished configuring the clusters in the ZAP Tool, make sure to SAVE the configuration. 
     ·  Back to the UC interface click on "Software Components" to see all the components installed in the Zigbee-Lock-UC. 
 
-The configurations are the same as Zigbee-LockController except some changes in Zigbee 3.0. the components “network creator” and “network creator security” must be uninstalled and the “Find and Bind Target” must be installed.
+The configurations are the same as Zigbee-LockController except some changes in Zigbee 3.0. the components “network creator”, "End device Bind" and “network creator security” must be uninstalled and the “Find and Bind Target” must be installed.
 
 **Zigbee 3.0**
 
@@ -284,7 +282,7 @@ Before we can associate a callback with a specific command, we will need to “s
 
  
 
-We’ll need to include the zap-id.h file in our app.c file. This file contains the necessary ZCL macros. In the emberAfMainInitCallback function, we must add a call as follows: 
+We’ll need to include the zap-id.h  and sl_simple_led_instances.h files in our app.c file. These files contain the necessary ZCL macros. In the emberAfMainInitCallback function, we must add a call as follows: 
 ```c
   sl_zigbee_subscribe_to_zcl_commands(ZCL_DOOR_LOCK_CLUSTER_ID,
 
@@ -309,8 +307,8 @@ We’ll need to include the zap-id.h file in our app.c file. This file contains 
 The function receives a ZCL command and checks the command ID, and then it will pass it to the next callback in the chain. See the example implementation below. 
 
 ```c
-uint32_t emberAfLockClusterServerCommandPars(sl_service_opcode_t opcode,
-                                             sl_service_function_context_t *context)
+uint32_t emberAfLockClusterServerCommandParse (sl_service_opcode_t opcode,
+                                               sl_service_function_context_t *context)
 
 {
 
@@ -406,7 +404,7 @@ vvoid emberAfMainInitCallback(void)
 
 {
   doorLockPin_t initPin = DOOR_LOCK_DEFAULT_PIN;
-  boolean isPinInUse = TRUE;
+  boolean isPinInUse = FALSE;
 
   emberAfClusterInitCallback(DOOR_LOCK_ENDPOINT,
                              ZCL_DOOR_LOCK_CLUSTER_ID);
@@ -594,6 +592,7 @@ typedef enum {
   DOOR_UNLOCKED = 0x02,
   DOOR_UNDEFINED=0xFF
 } doorLockState_t;
+doorLockState_t doorLockStatus;
 ```
 ### Implementing the Callbacks
 

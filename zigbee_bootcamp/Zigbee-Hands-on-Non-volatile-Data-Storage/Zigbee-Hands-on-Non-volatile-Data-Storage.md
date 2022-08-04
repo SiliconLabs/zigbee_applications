@@ -9,30 +9,30 @@ The exercise is the 4th part of series “Zigbee Boot Camp” course.
 - In the 1st phase, a basic network forming by the Light, and a joining process by the Switch will be realized.
 - The 2nd part will prepare the devices to transmit, receive, and process the On-Off commands by using APIs.
 - At the 3rd step the Switch will have a periodic event to execute any custom code, which will be a LED blinking in our case.
-- **The 4th thing to do is to make the Switch to be able to store any custom data in its flash by using Non-volatile memory.**
+- **The 4th step is to make the Switch to be able to store any custom data in its flash by using Non-volatile memory.**
 
 ## 1.2. Purpose
 
-This training demonstrates the basic usage of Non-Volatile data storage on EmberZNet Stack. And also some of the basic knowledge are included in this documentation to help everyone to understand the hands-on well.
+This training demonstrates the basic usage of Non-Volatile data storage on EmberZNet Stack. And includes basic knowledge to help everyone understand the hands-on lab well.
 
 **You will learn**
 
-- With this hands-on course, you will learn the basic knowledge of non-voltage data storage, and the available implementation provided by Silicon Labs, and also how to use token to access non-voltage data storage objects.
+- With this hands-on course, you will learn the basic knowledge of non-voltage data storage and how to use token to access non-voltage data storage objects.
 
 **You need to do**
 
-- There is a problem we need to solve is that how to store the Light On/Off status locally over power cycle on our EFR32MG12 platform without EEPROM. In this hands-on, we provide the solution to do that with the token.
-- And also you need to retrieve the manufacturing string that the manufacturer has programmed during production.
+- Using the token to store the Light On/Off status locally over power cycle on our EFR32MG12 platform without EEPROM.
+- Retrieving the manufacturing string that the manufacturer has programmed during production.
 
 
 # 2. Using NVM in EmberZNet
 
-Non-Volatile Memory (NVM) or Non-Volatile Storage is memory that can retrieve stored information even when the device is power-cycled. Silicon Labs offers 3 different implementations for Non-Volatile data storage in flash memory and also offer Token mechanism for storing and retrieving data from the Non-Volatile Data Storage. These 3 different implementations for Non-Volatile data storage including 
+Non-Volatile Memory (NVM) or Non-Volatile Storage is memory that can retrieve stored information even when the device is power-cycled. Silicon Labs offers 3 different implementations for Non-Volatile data storage in flash memory and also offer Token mechanism for storing and retrieving data from the Non-Volatile Data Storage. These 3 different implementations for Non-Volatile data storage include
 
 - Persistent Store (PS Store)
   - PS Store is only used with Bluetooth devices on all platforms except for EFR32 Series 2. The persistent store size is 2048 bytes and uses two flash pages for storage. Since this documentation focus on EmberZNet PRO, we will not introduce the PS Store much in this document.
 - SimEEv1/v2
-  - SimEEv1(Simulated EEPROM version 1) or SimEEv2(Simulated EEPROM version 2) are used with EmberZNet PRO, Silicon Labs Thread, Silicon Labs Connect on EM35x and EFR32 Series 1 platforms. SimEEv1 uses two virtual pages, with each virtual page consisting of two flash pages, while SimEEv2 uses three virtual pages where each virtual page consists of 6 flash pages.
+  - SimEEv1(Simulated EEPROM version 1) or SimEEv2(Simulated EEPROM version 2) are used with EmberZNet PRO, Silicon Labs Thread, and Silicon Labs Connect on EM35x and EFR32 Series 1 platforms. SimEEv1 uses two virtual pages, with each virtual page consisting of two flash pages, while SimEEv2 uses three virtual pages where each virtual page consists of 6 flash pages.
 - NVM3
   - The third generation Non-Volatile Memory (NVM3) data storage driver is an alternative to SimEEv1/v2 and PS Store, it is designed to work in EmberZNet, Silicon Labs Thread, Connect, and Bluetooth applications running on EFR32 as well as MCU applications running on EFM32.
   - Since the NVM3 is more configurable which allows for better balance of token capacity versus reserved flash, and it's compatible with DMP application, it's recommended for developing on EFR32. In this hands-on course, we will use the NVM3 for data storage.
@@ -91,7 +91,7 @@ For more details about Simulated EEPROM, please refer to [Simulated EEPROM 1 and
 
 ## 2.3 Token Manager
 
-The Token Manager is design to abstract implementation details and simplify interacting with differing non-volatile systems. By searching "token manager", the Token Manager related components will be shown up.
+The Token Manager is designed to abstract implementation details and simplify interacting with differing non-volatile systems. By searching "token manager", the Token Manager related components will be shown up.
 
 <div align="center">
   <img src="TokenManager.png">
@@ -101,7 +101,7 @@ The Token Manager is design to abstract implementation details and simplify inte
 </div>  
 </br>
 
-Token Manager enables SimEE data storage with the same API for accessing NVM3 or SimEE storage. The Simulated EEPROM needs to periodically perform a page erase oper, which will cause a high memory wear level. The NVM3 driver which is designed to use pages in a sequential order (providing equal usage and wear) is preferred to be used for Non-Volatile Storage. 
+Token Manager enables SimEE data storage with the same API for accessing NVM3 or SimEE storage. The Simulated EEPROM needs to periodically perform a page erase operration, which will cause a high memory wear level. The NVM3 driver which is designed to use pages in a sequential order (providing equal usage and wear) is preferred to be used for Non-Volatile Storage. 
 
 **Note:** SimEEv1/v2 are not implemented on EFR32 Series 2. 
 
@@ -117,14 +117,14 @@ By clicking the gear icon in the Token Manager component, we can configure to **
 
 ## 2.4 Zigbee Token Definitions
 
-The EmberZNet PRO stack has defined lots of tokens for stack, Application Framework, manufacturing data storage. The majority of tokens are stored in NVM3 or Simulated EEPROM (both use Flash) where they can be rewritten. Manufacturing tokens are stored in dedicated regions of flash and are not designed to be rewritten.
+The EmberZNet PRO stack has defined lots of tokens for stack, Application Framework, and manufacturing data storage. The majority of tokens are stored in NVM3 or Simulated EEPROM (both use Flash) where they can be rewritten. Manufacturing tokens are stored in dedicated regions of flash and are not designed to be rewritten.
 
 - Zigbee Stack Token
 
 Stack Tokens are runtime configuration options set by the stack. These dynamic tokens should not be changed by the application.
 
 To view the stack tokens, refer to the file:
-`<install-dir>/stack/config/token-stack.h`
+`<project_name>/geck_sdk_4.1.0/protocol/zigbee/stack/config/token-stack.h`
 
 - Manufaturing Token
 
@@ -168,11 +168,11 @@ Depending on how the tokens are going to be used, it can be distinguished as **D
 </div>  
 </br>
 
-In this chapter, we will introduce **How to defining and accesing dynamic tokens and manufacturing tokens in NVM3**. A lab will be will be provided to demonstrat in the next chapter.
+In this chapter, we will introduce **How to define and access dynamic tokens and manufacturing tokens in NVM3**. A lab will be will be provided to demonstrate in the next chapter.
 
 ## 3.1 Dynamic Tokens
 
-There are two types of dynamic tokens, includes Non-indexed/Basic dynamic tokens and Indexed dynamic tokens. 
+There are two types of dynamic tokens, Non-indexed/Basic dynamic tokens and Indexed dynamic tokens. 
 
 - **Non-indexed/Basic Dynamic Tokens** can be thought of as a simple char variable type. They can be used to store an array, but if one element changes the entire array must be rewritten.
   - **Counter Token** is a special type of Non-indexed dynamic token meant to store a number that increments by 1 at a time.
@@ -252,7 +252,7 @@ Ecode_t sl_token_set_data (uint32_t token, uint32_t index, void *data, uint32_t 
 In this case, 'token' is the token key, ‘index’ is 1 for non-indexed/basic tokens, 'data' is the token data, and ‘length’ is the size in bytes of the data. Note that sl_token_get_data() and sl_token_set_data() are specific for basic dynamic tokens.
 
 Now let us use an example to explain the usage of these APIs.
-As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, we needs to store the LED0's on/off status frequently, and restore the LED0 last on/off status after power up. As we have defined the token as above, then you can access it with the code snippet like this:
+As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, we need to store the LED0's on/off status frequently, and restore the LED0 last on/off status after power up. Since we have defined the tokens above, you can access it with a code snippet like this:
 
 ```
 ledOnOffStatus_t led0OnOffStatus;
@@ -266,7 +266,7 @@ led0OnOffStatus.ledOnOff = <current status>;
 sl_token_set_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
 ```
 
-Since this hands-on is designed for new to the Silicon Labs EmberZNet stack, we will focus on the basic token usage, if you are interested about how to write the counter token, please read the section [3.4.1.1 Accessing Counter Tokens](https://www.silabs.com/documents/public/application-notes/an1154-tokens-for-non-volatile-storage.pdf) of AN1154.
+Since this hands-on is designed for new users to the Silicon Labs, we will focus on the basic token usage, if you are interested about how to write the counter token, please read the section [3.4.1.1 Accessing Counter Tokens](https://www.silabs.com/documents/public/application-notes/an1154-tokens-for-non-volatile-storage.pdf) of AN1154.
 
 #### 3.1.2.2 Accessing Indexed Dynamic Tokens
 
@@ -370,7 +370,7 @@ DEFINE_BASIC_TOKEN(LED0_ON_OFF,
 
 ## 4.2 Access the Basic Token LED0_ON_OFF
 
-Let's moving on for how to access the defined token. Below are step-by-step instructions for adding code to store the LED status to Non-volatile data storage, and retrieve the data for restoring the LED status.
+Let's move on to accessing the defined token. Below are step-by-step instructions for adding code to store the LED status to Non-volatile data storage, and retrieve the data for restoring the LED status.
 
 ### 4.2.1 Write the Basic Token data
 
@@ -384,7 +384,7 @@ Open the `app.c`, include the head file and define "led0OnOffStatus" variable at
 ledOnOff led0OnOffStatus;
 ```
 
-Navigate to the function `void ledBlinkingHandler(void)` in the `Zigbee_Switch_ZR_callback.c`. Write the basic token `LED0_ON_OFF` with the API `sl_token_set_data()`. Please note that the LED0 toggle process of last hands-on is surrounded by the token retrieving and storing process.
+Navigate to the function `void ledBlinkingHandler(void)` in the `app.c`. Write the basic token `LED0_ON_OFF` with the API `sl_token_set_data()`. Please note that the LED0 toggle process of last hands-on is surrounded by the token retrieving and storing process.
 
 ```c
 void ledBlinkingEventHandler(void)
@@ -430,7 +430,7 @@ void emberAfMainInitCallback(void)
 
 Once you've added the necessary code to you project, Build and flash the `Zigbee_Switch_ZR` project to your BRD4162A radio board.
 
-The LED0 on the starter kit will blinky periodically after few seconds delay after power up, reset the device, the application will restore the LED0 to the status before reset/power-off.
+The LED0 on the starter kit will blink periodically after a few seconds delay after power up. If the device is reset the application will restore the LED0 to the status before reset / power-off.
 **Note:** You may notice the device spends more time in booting up, it is because Zigbee project is using LFXO as the clock source by default in SDK 7.x, which is LFRCO in SDK 6.x. This can be found in `<project_name>/autogen/sl_device_init_clocks.c`
 
 ## 4.3 Access the Manufacturing Token
@@ -439,7 +439,7 @@ Manufacturing token can be written from on-chip code only if the token is curren
 
 ### 4.3.1 Read the Manufacturing Token MFG_STRING
 
-This part will involve reading the manufacturing Token `MFG_STRING` which hold the manufacturing string programmed by the manufacture during production.Navigate to the function `void emberAfMainInitCallback(void)` of the `app.c`, and read the manufacturing Token MFG_STRING with the API `sl_token_get_manufacturing_data()`.
+This part will involve reading the manufacturing Token `MFG_STRING` which holds the manufacturing string programmed by the manufacture during production. Navigate to the function `void emberAfMainInitCallback(void)` of the `app.c`, and read the manufacturing Token MFG_STRING with the API `sl_token_get_manufacturing_data()`.
 
 ```
 // Non-volatile Data Storage: Step 4

@@ -44,7 +44,7 @@ Beginning with Zigbee EmberZnet SDK version 7.x, Zigbee applications are configu
 Simplicity Studio 5 Project Configurator provides an **NVM3 Core** component and **NVM3 Default Instance** component to initialize and use with NVM3. By typing "nvm3" in the search bar in the upper right corner, the NVM3 related software components can be found.
 
 <div align="center">
-  <img src="NVM3.png">
+  <img src="Images/NVM3.png">
 </div>
 <div align="center">
   <b>Figure 2-1 NVM3 Software Components</b>
@@ -54,7 +54,7 @@ Simplicity Studio 5 Project Configurator provides an **NVM3 Core** component and
 The NVM3 Default Instance with a gear icon represents that this component can be configured.
 
 <div align="center">
-  <img src="NVM3Configuration.png">
+  <img src="Images/NVM3Configuration.png">
 </div>
 <div align="center">
   <b>Figure 2-2 NVM3 Configuration</b>
@@ -78,7 +78,7 @@ For more details about NVM3 Data Management driver, please refer to [NVM3 - NVM 
 Simulated EEPROM version 1 (SimEEv1) and Simulated EEPROM version 2 (SimEEv2) use a section of internal flash memory for stack and application token storage. Specifically, SimEEv1 uses two virtual pages, with each virtual page consisting of two flash pages, while SimEEv2 uses three virtual pages where each virtual page consists of 6 flash pages. By searching "simulated", the Simulated EEPROM related components will be shown up.
 
 <div align="center">
-  <img src="SimEE.png">
+  <img src="Images/SimEE.png">
 </div>
 <div align="center">
   <b>Figure 2-3 Simulated EEPROM Software Components</b>
@@ -94,7 +94,7 @@ For more details about Simulated EEPROM, please refer to [Simulated EEPROM 1 and
 The Token Manager is designed to abstract implementation details and simplify interacting with differing non-volatile systems. By searching "token manager", the Token Manager related components will be shown up.
 
 <div align="center">
-  <img src="TokenManager.png">
+  <img src="Images/TokenManager.png">
 </div>
 <div align="center">
   <b>Figure 2-4 Token Manager Software Components</b>
@@ -108,7 +108,7 @@ Token Manager enables SimEE data storage with the same API for accessing NVM3 or
 By clicking the gear icon in the Token Manager component, we can configure to **Enable Custom tokens** and/or *** Enable Custom Manufacturing Tokens***, which can be further configured and defined in sl_custom_token_header.h and sl_custom_manufacturing_token_header.h respectively. Detailed description will be illustrated in next chapter.
 
 <div align="center">
-  <img src="TokenManagerConfiguration.png">
+  <img src="Images/TokenManagerConfiguration.png">
 </div>
 <div align="center">
   <b>Figure 2-5 Token Manager Configuration</b>
@@ -161,7 +161,7 @@ For custom application token, please define and use with Token Manager.
 Depending on how the tokens are going to be used, it can be distinguished as **Dynamic Tokens** or **Manufacturing Tokens**. 
 
 <div align="center">
-  <img src="types_of_tokens.png">
+  <img src="Images/types_of_tokens.png">
 </div>
 <div align="center">
   <b>Figure 3-1 Types of Tokens</b>
@@ -199,7 +199,7 @@ In general, creating a dynamic token involves three steps below.
 ​	For NVM3, custom application tokens should use the **NVM3KEY_DOMAIN_USER** range so as not to collide with the stack tokens in other ranges such as **NVM3KEY_DOMAIN_ZIGBEE**. See the table below for the NVM3 default instance key space.
 
 <div align="center">
-  <img src="NVM3Key.png">
+  <img src="Images/NVM3Key.png">
 </div>
 <div align="center">
   <b>Figure 3-2 NVM3 default instance key space</b>
@@ -339,7 +339,7 @@ We will now add some custom tokens to the project in order to track the On-Off L
 After installing these software components, navigate to the Token Manager component, enable custom tokens. Note that we can choose in which file to define our custom tokens. In this case, we will leave the values as the default. The tokens will be defined in sl_custom_token_hearder.h, which can be found in the "config" folder of the project files.
 
 <div align="center">
-  <img src="CustomTokenHeader.png">
+  <img src="Images/CustomTokenHeader.png">
 </div>
 <div align="center">
   <b>Figure 4-1 Enable Custom Token</b>

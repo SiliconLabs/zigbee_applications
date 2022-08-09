@@ -15,8 +15,7 @@
 ## One Day Workshop
 | Time | Content |  
 |:---- |:----|    
-| 1 hour | [Introduction of Zigbee](Introduction-of-Zigbee-Basic) |
-| 1 hour | [Introduction of EmberZnet and AppBuilder](Introduction-of-EmberZnet-and-AppBuilder) |
+| 5 mins | [Boot Camp Introduction](Boot-Camp-Intro) |
 | 1 hour | [Hands on : Forming and Joining](Zigbee-Hands-on-Forming-and-Joining) |
 | 1 hour | [Hands on : Sending on/off commands](Zigbee-Hands-on-Sending-OnOff-Commands) |
 | 1 hour | [Hands on : Using Event](Zigbee-Hands-on-Using-Event) |

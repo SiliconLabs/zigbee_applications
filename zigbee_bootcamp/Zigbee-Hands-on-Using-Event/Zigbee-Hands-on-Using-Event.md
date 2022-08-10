@@ -134,7 +134,7 @@ void emberAfMainInitCallback(void)
 
 # 3. Testing your project
 
-Build the applications and download the image to the Switch devices. Press the Reset button on the starter kit, you will notice that the LED1 on the board will be turned on after few seconds delay, and then blink with 2s interval.  
+Build the applications and download the image to the Switch devices. Press the Reset button on the starter kit, you will notice that the LED0 on the board will be turned on after few seconds delay, and then blink with 2s interval.  
 
 # 4. Conclusion
 

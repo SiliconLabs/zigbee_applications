@@ -502,7 +502,7 @@ DEFINE_BASIC_TOKEN(DOOR_LOCK_PIN_IN_USE,
 
                    FALSE)
 ```
-
+For the complete version of the code, please refer to src/sl_custom_token_header.h
 ### Utilities
 
 Check Door Lock Pin Helper Function
@@ -882,6 +882,7 @@ void emberAfClusterInitCallback(int8u endpoint,
 }
 
 ```
+For the complete version of the code, please refer to the src/app.c.
 ### Build and Flash the Door Lock
 Now that everything is correctly set up, build and flash the Coordinator, the Door Lock Controller, and the Door Lock, and we can proceed to the next steps.
 

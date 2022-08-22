@@ -4,9 +4,9 @@
 
 # Who is this boot camp for?
 
-The following boot camp is focused on providing a hands-on experience on the development of IoT technologies with the Silicon Labs EmberZnet Stack and Simplicity Studio IDE. We will give a brief introduction of Zigbee and then you can expect to work through a series of workshops to develop your own Zigbee network. You will also have the ability to reference other Silicon Labs documentation for more detailed learning.
+The following boot camp is focused on providing a hands-on experience on the development of IoT technologies with the Silicon Labs EmberZNet Stack and Simplicity Studio IDE. We will give a brief introduction of Zigbee and then you can expect to work through a series of workshops to develop your own Zigbee network. You will also have the ability to reference other Silicon Labs documentation for more detailed learning.
 
-By the end of the hands-on tutorials you will know how to use the Simplicity IDE to build, customize, and implement applications that utilize Zigbee. 
+By the end of the hands-on tutorials you will know how to use the Simplicity Studio IDE to build, customize, and implement applications that utilize Zigbee. 
 
 # Zigbee Boot Camp
 We have prepared a series of hands-on modules to implement the Zigbee protocol and familiarize you with Simplicity Studio v5. You should complete the following modules:
@@ -27,8 +27,7 @@ We have prepared a series of hands-on modules to implement the Zigbee protocol a
 
 Each module builds on the former module so we strongly recommend completing these in order. Before starting the modules, make sure you have Simplicity Studio v5 installed and configured. 
 
-NOTE: QSG-180 is designed for developers who are new to Zigbee EmberZNet and the Silicon Labs development hardware. It provides basic information on configuring, building, and installing applications for the EFR32MG family of
-SoCs. Completing QSG-180 prior to the Zigbee Bootcamp is recommended.
+NOTE: QSG-180 is designed for developers who are new to Zigbee EmberZNet and the Silicon Labs development hardware. It provides basic information on configuring, building, and installing applications for the EFR32MG family of SoCs. Completing QSG-180 prior to the Zigbee Boot Camp is recommended.
 
 ## Quiz and Feedback
 - [Quiz](https://forms.office.com/Pages/ResponsePage.aspx?id=ItjbVDFSIEuUTW9KvNVB-_gYgvSbceFAppvKGwjVr_1UQVdQVVFYTlYwMjhZRlMzVDdUMlA0NUFSNy4u)

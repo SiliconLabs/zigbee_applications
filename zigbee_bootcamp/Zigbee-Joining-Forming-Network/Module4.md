@@ -393,7 +393,7 @@ similar to node [(>)000B57FFFE648DD8].
 
 The CRC is displayed just below the install code and is printed in little endian format. Reverse the bytes to big endian before using as an argument with the option install-code CLI.
 
-To see if the link key is added successfully to the Transient Key Table, enter the `keys print` command on the CLI of the Light node. The printout shows the Transient Key table that contains the derived key. Additionally, it shows the Trust Center Link key table and the Network key.
+To see if the link key is added successfully to the Transient Key Table, enter the `keys print` command on the CLI of the Light node. The printout shows the Transient Key table that contains the derived key. Additionally, once the Switch application is connected to the network it shows the Trust Center Link key table and the Network key.
 
 <div align="center">
   <img src="Images/LinkKey.png">

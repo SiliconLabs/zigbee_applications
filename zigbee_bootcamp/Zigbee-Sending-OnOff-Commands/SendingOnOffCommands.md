@@ -3,11 +3,11 @@
 
 ## 1.1. Application features
 
-The following boot camp hands-on workshop is divided into four steps to show how an application should be built from scratch.
+The Zigbee boot camp is divided into four phases to show how an application should be built from scratch.
 This module is the 2nd phase of the series “Zigbee Boot Camp” course.
 
-- The 1st phase, you will form a centralized network with the Light, and execute a joining process with Switch.
-- The 2nd phase, the devices will be set to transmit, receive, and process the ZCL On-Off commands using APIs.
+- The 1st phase, you will form a centralized network with the Light, and execute a joining process with the Switch.
+- The **2nd phase**, the devices will be set to transmit, receive, and process the ZCL On-Off commands using APIs.
 - The 3rd phase, the Switch will have a periodic event to execute any custom code, which in our case will be a LED blinking.
 - The 4th phase, you will make the Switch be able to store any custom data in its flash by using Non-volatile memory.
 
@@ -20,7 +20,7 @@ As in the previous hands-on, the network will consist of two devices using BRD41
 The figure below depicts this hands-on workflow:
 
 <div align="center">
-  <img src="Workflow.png">
+  <img src="Images/Workflow.png">
 </div>
 <div align="center">
   <b>Figure 1-1 Sending On Off Commands Workflow</b>
@@ -30,9 +30,7 @@ The figure below depicts this hands-on workflow:
 
 # 2. Sending On/Off Commands
 
-In the previous hands-on, we have created two projects, Zigbee_Light_ZC and Zigbee_Switch_ZR, and these two devices are now in the same network and ready to transmit and receive data on the network.
-In this application, the Switch device should send one of the On/Off commands based on which button has been pressed, and the Light application should turn on/off the LED1 based on the received command.
-Our task is to prepare the devices for these features.
+In Phase 1 of the hands-on workshop, we created two projects, Zigbee_Light_ZC and Zigbee_Switch_ZR. These have been programmed into two separate devices which are now in the same network and ready to transmit and receive data on the network. In this phase, the Switch device should send one of the On/Off commands based on which button has been pressed. The Light application should respond by turning the LED1 on/off based on the received command. Our task is to prepare the devices for these features.
 
 ## 2.1. Command Handling on the Light Device
 
@@ -40,10 +38,10 @@ To become aware of any received command from the user application level, the **e
 
 
 <div align="center">
-<img src="app_c.png">
+<img src="Images/app_c.png">
 </div>
 <div align="center">
-<b> Figure 2-2 Application Code Source File. </b>
+<b> Figure 2-1 Application Code Source File. </b>
 </div>  
 </br>
 
@@ -85,17 +83,14 @@ void emberAfPostAttributeChangeCallback(uint8_t endpoint,
 Moving to the Switch device application, the objective is to make use of the two WSTK buttons (BTN0 and BTN1), to turn the Light LED ON and OFF. The button operations are handled by the Platform > Driver > Button > **Simple Button** component, this component must be installed and two different instances btn0 and btn1 should be created as depicted in Figure 2-3. 
 
 <div align="center">
-  <img src="simple-button.png">
+  <img src="Images/simple-button.png">
 </div>
 <div align="center">
   <b>Figure 2-3 Simple Button Component Instances. </b>
 </div>  
 </br>
 
-You can find the Simple Button component defined callbacks [here](https://docs.silabs.com/gecko-platform/4.1/driver/api/group-simple-button). Once the button changes its state ```void sl_button_on_change(const sl_button_t *handle) ``` is called in an interrupt context. Similar to [Section 2.1 Command Handling on Light Device](#2.1-Command-Handling-on-Light-Device) we will implement this callback in the app.c source file as follows: 
-
-
-- In order to send commands it is important to consider that every command is stored in a buffer before being sent. The transmitted data buffer should be built up as follows:
+You can find the Simple Button component defined callbacks [here](https://docs.silabs.com/gecko-platform/4.1/driver/api/group-simple-button). Once the button changes its state ```void sl_button_on_change(const sl_button_t *handle) ``` is called in an interrupt context. Similar to [Section 2.1 Command Handling on Light Device](#2.1-Command-Handling-on-Light-Device) we will implement this callback in the app.c source file. In order to send commands it is important to consider that every command is stored in a buffer before being sent. The transmitted data buffer should be built up as follows:
 
 - The actual ZCL command is made by the function below. Replace <> to “On” or “Off”.
 
@@ -111,6 +106,12 @@ You can find the Simple Button component defined callbacks [here](https://docs.s
 
 ```
 // Sending-OnOff-Commands: Step 2
+
+#include "sl_simple_button.h"
+#include "sl_simple_button_instances.h"
+#define BUTTON0 0
+#define BUTTON1 1
+
 void sl_button_on_change(const sl_button_t *handle)
 {
   EmberStatus status;
@@ -198,7 +199,7 @@ Off Command is received
 The above transactions can be observed in the Network Analyzer as well. See Figure 3‑1.
 
 <div align="center">
-<img src="nwk-analyzer.png">
+<img src="Images/nwk-analyzer.png">
 </div>
 <div align="center">
 <b>Figure 3-1 ZCL On/Off commands in Network Analyzer. </b>
@@ -210,17 +211,17 @@ Take the on/off command as a example to filter the format of the General ZCL Fra
 
 
 <div align="center">
-<img src="ZCL-Frame.png">
+<img src="Images/ZCL-Frame.png">
 </div>
 <div align="center">
 <b>Figure 3‑2 Format of the General ZCL Frame </b>
 </div>  
 </br>
 
-With the network analyzer, you can capture the network trace of the On/Off commands similar as below.
+With the Network Analyzer, you can capture the network trace of the On/Off commands similar as below.
 
 <div align="center">
-<img src="on-off-commands.png">
+<img src="Images/on-off-commands.png">
 </div>
 <div align="center">
 <b>Figure 3‑3 Captured ZCL On-Off commands </b>
@@ -231,7 +232,7 @@ Frame Control
 The frame control field is 8 bits in length and contains information defining the command type and other control flags. The frame control field SHALL be formatted as shown in the figure below.
 
 <div align="center">
-<img src="frame-control.png">
+<img src="Images/frame-control.png">
 </div>
 <div align="center">
 <b>Figure 3‑4 Format of the Frame Control Field </b>
@@ -264,6 +265,6 @@ Because the Manufacturer Specific sub-field of the On/Off command frame control 
 
 ## 4. Conclusion
 
-In this hands-on, you learned how to send different ZCL command and how to handle the received command from the user application level. As well as how to install/uninstall different components for the application functionality to meet your needs.
+In this hands-on module, you learned how to send different ZCL commands and how to handle the received command from the user application level. As well as, how to install/uninstall different components in order for the application functionality to meet your needs.
 
 This hands-on also demonstrate how to view and analyze the data being transmitted in the Zigbee network using the Network Analyzer tool.

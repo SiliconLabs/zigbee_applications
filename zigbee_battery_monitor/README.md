@@ -1,4 +1,9 @@
 # Zigbee Battery Monitor Example #
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v3.2.1-green)
+![GCC badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/zigbee_battery_monitor_gcc.json)
 
 ## Summary ##
 EmberZnet SDK has provided a plugin "Battery Monitor" to simplify the development of Zigbee battery monitor application. It works fine on series 1 SoCs, but doesn't work on series 2. The root cause is that the plugin uses ADC0 to read the voltage of the battery, but for series 2, there is only IADC. 

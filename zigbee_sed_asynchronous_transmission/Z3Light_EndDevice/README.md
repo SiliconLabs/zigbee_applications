@@ -1,4 +1,11 @@
 # Companion example for KBA - A reliable way for SED to receive asynchronous transmissions from other devices without frequent polling
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2.4.1-green)
+![GCC badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/Z3Light_EndDevice_gcc.json)
+![Flash badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/Z3Light_EndDevice_flash.json)
+![RAM badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/Z3Light_EndDevice_ram.json)
 
 ## Summary ##
 

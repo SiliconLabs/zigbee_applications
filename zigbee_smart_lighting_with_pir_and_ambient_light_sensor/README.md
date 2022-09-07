@@ -1,4 +1,9 @@
 # Zigbee Smart Lighting with PIR and Ambient light sensor #
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v3.0.0-green)
+![GCC badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/zigbee_smart_lighting_with_pir_and_ambient_light_sensor_gcc.json)
 
 ## 1. Introduction ##
 

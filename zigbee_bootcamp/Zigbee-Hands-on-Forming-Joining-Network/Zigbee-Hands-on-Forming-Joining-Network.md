@@ -7,7 +7,7 @@ These exercises help you get familiar with ZigBee 3.0 in the EmberZNet Stack, Si
 
 The boot camp series hands-on workshop will cover the four functionalities below, and the application development is split into four steps respectively to show how an application should be built up from scratch.
 The exercise in this documentation is the first exercise in the "Zigbee Boot Camp" series.
-- The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.
+- **The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.**
 - The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.
 - The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.
 - The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.

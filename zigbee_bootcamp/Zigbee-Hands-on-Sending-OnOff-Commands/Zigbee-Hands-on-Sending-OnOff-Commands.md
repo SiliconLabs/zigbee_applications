@@ -7,7 +7,7 @@ The Zigbee boot camp is divided into four phases to show how an application shou
 This module is the 2nd phase of the series “Zigbee Boot Camp” course.
 
 - The 1st phase, you will form a centralized network with the Light, and execute a joining process with the Switch.
-- The **2nd phase**, the devices will be set to transmit, receive, and process the ZCL On-Off commands using APIs.
+- **The 2nd phase, the devices will be set to transmit, receive, and process the ZCL On-Off commands using APIs.**
 - The 3rd phase, the Switch will have a periodic event to execute any custom code, which in our case will be a LED blinking.
 - The 4th phase, you will make the Switch be able to store any custom data in its flash by using Non-volatile memory.
 

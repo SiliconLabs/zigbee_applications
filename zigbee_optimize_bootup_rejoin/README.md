@@ -1,9 +1,9 @@
 # Optimize Boot-up Rejoin
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 ![SDK badge](https://img.shields.io/badge/SDK-v2.7.3-green)
-![GCC badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/feature/shield_update_zigbee_applications/zigbee_applications/zigbee_optimize_bootup_rejoin_gcc.json)
 
 ## 1. Summary ##
 According to Zigbee 3.0 BDB spec, Zigbee end devices and sleepy end devices need to attempt to rejoin the network when they boot up. This is very important for Zigbee end devices, especially for sleepy end devices as the PAN ID, channel or network key might have changed when they are absent or sleeping. 

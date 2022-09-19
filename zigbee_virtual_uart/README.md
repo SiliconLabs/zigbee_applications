@@ -1,5 +1,10 @@
 # ZigBee Virtual UART example #
 
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2.7.4-green)
+
 ## 1. Summary ##
 
 The Virtual UART(VUART) interface provides a high-performance application data interface that does not require any additional I/O pins apart from the debug interface. It is based on SEGGER's Real-Time Transfer (RTT) technology and uses Serial Wire Output (SWO) to get application data from the device, and a shared memory interface to send data to the target application. The Wireless Starter Kit makes the VUART interface available on TCP/IP port 4900.

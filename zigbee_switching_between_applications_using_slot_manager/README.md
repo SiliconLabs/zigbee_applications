@@ -1,5 +1,10 @@
 # Switching Between Two Zigbee Applications Using Slot Manager #
 
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2.7.4-green)
+
 ## 1. Summary ##
 
 In some cases, a device might need to support running two ZigBee applications at different time and switching between them. For example, a node might need to be a line-powered coordinator if there isn't any available network for it to join. However, this node might need to become a battery-powered sleepy end device when the users want it to join an existing network and save the power as much as possible. This example illustrates a way to implement this feature making use of the Slot Manager plugin in Silicon Labs' ZigBee application framework. Additionally, it sets up a button to allow switching between two applications by a single press.

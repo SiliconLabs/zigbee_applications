@@ -1,4 +1,8 @@
 # Switching Between Two Zigbee Applications
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2.7.3-green)
 
 ## 1. Summary ##
 This example demostrates how we put two Zigbee applicaiton images into one SoC (EFR32MG12) and switch between them.  

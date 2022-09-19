@@ -1,4 +1,7 @@
 # Zigbee Network Testing Plugin #
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 ## Summary ##
 This plugin provides the cli commands for network testing on Host application,and it depends on the device table plugin. It is not avaiable on SOC project. 

@@ -1,4 +1,9 @@
 # Green Power gateway example
+![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
+![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
+![License badge](https://img.shields.io/badge/License-Zlib-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2.7.6-green)
+
 ## 1. Summary
 The following article will demonstrate how to create a Green Power gateway using the Z3GatewayHost and NCP sample applications. The gateway's interface gives the user the option to choose the target of the Green Power message (that is coming from an e.g. Green Power On/Off switch). Targets can be devices that are connected to the gateway's ZigBee network as shown in the picture below. This sample works with ZigBee devices that have On/Off cluster and Find-and-Bind target plugin (e.g. a Z3Light), however, it can be expanded easily. This KBA will desmonstrate how to configure the sample applications step-by-step.
 

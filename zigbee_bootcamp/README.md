@@ -11,10 +11,7 @@ By the end of the hands-on tutorials you will know how to use the Simplicity Stu
 # Zigbee Boot Camp
 We have prepared a series of hands-on modules to implement the Zigbee protocol and familiarize you with Simplicity Studio v5. You should complete the following modules:
 
-## Preparatory Course
-| Time | Content |  
-|:---- |:----|    
-| 2 hour | [Preparatory Course](Zigbee-Preparatory-Course) |
+
 
 ## One Day Workshop
 | Time | Content | Description |
@@ -29,16 +26,13 @@ Each module builds on the former module so we strongly recommend completing thes
 
 NOTE: QSG-180 is designed for developers who are new to Zigbee EmberZNet and the Silicon Labs development hardware. It provides basic information on configuring, building, and installing applications for the EFR32MG family of SoCs. Completing QSG-180 prior to the Zigbee Boot Camp is recommended.
 
-## Quiz and Feedback
-- [Quiz](https://forms.office.com/Pages/ResponsePage.aspx?id=ItjbVDFSIEuUTW9KvNVB-_gYgvSbceFAppvKGwjVr_1UQVdQVVFYTlYwMjhZRlMzVDdUMlA0NUFSNy4u)
-- [Feedback](https://forms.office.com/Pages/ResponsePage.aspx?id=ItjbVDFSIEuUTW9KvNVB-_gYgvSbceFAppvKGwjVr_1UMDNWUkNYM1UyWkRBRUY5VVFIOTFTTEVZNi4u)
 
 # Reference
 - [Zigbee Onboarding Roadmap][Zigbee Onboarding Roadmap]
 - [QSG-180: Quick Start Guide using SSv5](https://www.silabs.com/documents/public/quick-start-guides/qsg180-zigbee-emberznet-7x-quick-start-guide.pdf)
 - [UG103-01 Fundamentals: Wireless Network](https://www.silabs.com/documents/public/user-guides/ug103-01-fundamentals-wireless-network.pdf)
 - [UG103-02 Fundamentals: Zigbee](https://www.silabs.com/documents/public/user-guides/ug103-02-fundamentals-zigbee.pdf)
-- [AN0822 Simplicity Studio User Guide](https://www.silabs.com/documents/public/application-notes/AN0822-simplicity-studio-user-guide.pdf)
+- [AN0822 Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-overview/)
 - [Silicon Labs: Zigbee - Application Framework API Reference Documentation](https://docs.silabs.com/zigbee/latest/)
 
 [Zigbee Onboarding Roadmap]: files/Silicon-Labs-ZigBee-Onboarding-Roadmap.pdf

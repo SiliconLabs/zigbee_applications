@@ -1,9 +1,10 @@
 # Companion example for KBA - A reliable way for SED to receive asynchronous transmissions from other devices without frequent polling
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
-![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
-![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2.4.1-green)
+![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Z3Light_EndDevice_common.json&label=Type&query=type&color=green)
+![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Z3Light_EndDevice_common.json&label=Technology&query=technology&color=green)
+![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Z3Light_EndDevice_common.json&label=License&query=license&color=green)
+![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Z3Light_EndDevice_build_status.json)
+![SDK badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Z3Light_EndDevice_common.json&label=SDK&query=sdk&color=green)
 
 ## Summary ##
 

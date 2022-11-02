@@ -1,9 +1,10 @@
 # Switching Between Two Zigbee Applications Using Slot Manager #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
-![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
-![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2.7.4-green)
+![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_switching_between_applications_using_slot_manager_common.json&label=Type&query=type&color=green)
+![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_switching_between_applications_using_slot_manager_common.json&label=Technology&query=technology&color=green)
+![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_switching_between_applications_using_slot_manager_common.json&label=License&query=license&color=green)
+![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_switching_between_applications_using_slot_manager_build_status.json)
+![SDK badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_switching_between_applications_using_slot_manager_common.json&label=SDK&query=sdk&color=green)
 
 ## 1. Summary ##
 

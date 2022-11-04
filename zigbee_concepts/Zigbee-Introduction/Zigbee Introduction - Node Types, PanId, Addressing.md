@@ -14,8 +14,6 @@ There are three node types in a zigbee mesh network. The differences among these
 
 ![Figure 1](./resources/nodetypes-addressing-01.png)
 
-![Figure 2](./resources/nodetypes-addressing-02.png)
-
 Whether the device should be a Router / Coordinator OR and EndDevice/Sleepy end device or a Router only should be decided in the design phase of the application. Changing the device type dynamically is not supported and should be avoided. One exception is when a device is configured to be a router / coordinator. These devices can implement both the NetworkCreator and NetworkSteering plugins and if said device is creating a centralized network it shall become a coordinator. Otherwise it can join another network as a end device.
 
 Zigbee implementations before 3.0 do something similar with the Form and Join API calls.
@@ -29,11 +27,11 @@ Line powered devices need to be chosen as Routers for the following reason:
 - Since routers are relaying messages they should be ready to receive messages all the time. They always need to be powered and never in low power mode with the radio offline.
 These devices should be planned to be powered as long as we want the network to function.
 
-To setup a ZR in EmberZnet make sure you have selected Router as a device type under Znet Stack in appbuilder. Also you must enable the Zigbee PRO stack library in the plugins tab.
+To setup a ZR in EmberZnet make sure you have selected Router as a device type by clicking __configure__ in the Zigbee Device Config component. Also you must enable the Zigbee PRO stack library as a component as well.
 
-![Figure 3](./resources/nodetypes-addressing-04.png)
+![Figure 2](./resources/nodetypes-addressing-02.png)
 
-Also you can configure the different buffers and tables associated with router functionalities.
+Also you can configure the different buffers and tables associated with router functionalities by going to zigbee PRO stack Library and click __configure__.
 
 ![Figure 4](./resources/nodetypes-addressing-03.png)
 
@@ -51,11 +49,11 @@ The only concept of routing that they have is to send things to their parent or 
 When I say parent I mean there is a router node, this can be the coordinator, that is responsible for that end device, so it bears the responsibility of forwarding messages out and proxying messages in for that end device.
 An end device relies on its parent for communication to the network. If that communication is lost, the end device then has to go out and find a new parent, and re-attach itself to the network through this new parent.
 
-To setup a ZR in EmberZnet make sure you have selected End device or sleepy end device as a device type under ZNet Stack in AppBuilder.
+To setup a ZR in EmberZnet make sure you have selected End device or sleepy end device as a device type by clicking __configure__ of the Zigbee Device Config component.
 
 ![Figure 6](./resources/nodetypes-addressing-06.png)
 
-Aslo you must enable the Zigbee PRO leaf library in the plugins tab.
+Aslo you must enable the Zigbee PRO leaf library in the components tab as well.
 
 ![Figure 7](./resources/nodetypes-addressing-07.png)
 

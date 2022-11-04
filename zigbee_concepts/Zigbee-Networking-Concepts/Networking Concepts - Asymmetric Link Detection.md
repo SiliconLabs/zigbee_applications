@@ -35,7 +35,7 @@ However, with Link Status Messages, the node is aware of the better route and wi
 
 Let’s take a look at an example of a Link Status Message.
 
-![Figure 5](./resources.asymmetric-link-05.png)
+![Figure 5](./resources/asymmetric-link-05.png)
 
 The above image is pulled from our Network Analyzer which breaks down a packet so that it is easier to consume. The coordinator (0x0000 in the fourth line) has sent out a Link Status broadcast. The event detail shows under the Zigbee command section that the coordinator only has one neighbor 0x20FC.
 

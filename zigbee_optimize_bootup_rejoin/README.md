@@ -3,8 +3,8 @@
 ![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_common.json&label=Type&query=type&color=green)
 ![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_common.json&label=Technology&query=technology&color=green)
 ![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_common.json&label=License&query=license&color=green)
-![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_build_status.json)
 ![SDK badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_common.json&label=SDK&query=sdk&color=green)
+![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_optimize_bootup_rejoin_build_status.json)
 
 ## 1. Summary ##
 According to Zigbee 3.0 BDB spec, Zigbee end devices and sleepy end devices need to attempt to rejoin the network when they boot up. This is very important for Zigbee end devices, especially for sleepy end devices as the PAN ID, channel or network key might have changed when they are absent or sleeping. 

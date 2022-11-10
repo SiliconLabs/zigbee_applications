@@ -1,7 +1,7 @@
 # Tutorial Overview
-![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
-![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
-![License badge](https://img.shields.io/badge/License-Zlib-green)
+![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Zigbee_7x_common.json&label=Type&query=type&color=green)
+![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Zigbee_7x_common.json&label=Technology&query=technology&color=green)
+![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/Zigbee_7x_common.json&label=License&query=license&color=green)
 
 This lab procedure demonstrates how to create Lock projects in Simplicity Studio 5.4 with the new Project Configurator interface. In this lab, the trainee will learn how to create a project, do some simple configurations, use events and tokens, as well as learn about how callbacks are structured within the EmberZNet 7.0.0 framework. 
 

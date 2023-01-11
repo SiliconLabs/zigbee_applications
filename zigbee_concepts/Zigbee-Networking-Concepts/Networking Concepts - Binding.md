@@ -8,7 +8,7 @@ A binding creates a one-way link from one node to another node or from one node 
 
 Once devices are on a network, devices can create bindings to establish applicaiton layer links.
 
-![Figure 01](./resources/binding-01.png)
+<p align="center"> <img src = "./resources/binding-01.png"> </p>
 
 For example a switch could have a binding for a light that it will always control. However, bindings are not required for zigbee communication, but are useful for frequently used, persistent communication paths.
 

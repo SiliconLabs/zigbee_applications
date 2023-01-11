@@ -91,7 +91,7 @@ A device joining a Zigbee network is a basic 3 step process:
 
 - __Device Announce__ – This is when the device broadcasts to the network that it has joined and ready to operate. At this time other nodes will see the message and can start inquiring about functionality and the like.
 
-![Figure 6](./resources/security-06.png)
+<p align="center"> <img src = "./resources/security-06.png"> </p>
 
 Because as you can see below – in your key transport packet, the Network key is visible (see the line 5 from the bottom - that Is the network key).
 

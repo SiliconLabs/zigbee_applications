@@ -70,7 +70,7 @@ Zigbee utilizes Ad-hoc On-Demand Distance Vector (__AODV__) routing to discover 
 
 Each node stores information about next hop to a specific destination. If the next hop is not known, route discovery must take place in order to find a path. Since only a fixed number of routes can be saved on a node, route discovery may take place more often in a network with a large number of nodes where there is frequent communication between many different nodes.
 
-When a source node needs to discover a route to a destination node, it sends a broadcast route request command. The route request contains the source address, destination address and path cost (to measure route quality and choose best route). Intermediate nodes listen to and rebroadcast this request while updating the path cost field and propagate the message through the network. They also store the route entry into the route discovery table. 
+When a source node needs to discover a route to a destination node, it sends a broadcast Route Request command. The Route Request contains the source address, destination address and path cost (to measure route quality and choose best route). Intermediate nodes listen to and rebroadcast this request while updating the path cost field and propagate the message through the network. They also store the route entry into the route discovery table. 
 
 ## Table routing : Link Cost
 
@@ -80,7 +80,7 @@ Often times, in a mesh network, there are many possible routes to get from one n
 
 Routers keep track of link status in a Zigbee network, and hold the link costs in their neighbor table. Routers can determine incoming link quality from the physical layer using the link quality measurements. They exchange this information using Link Status messages that are 1 hop broadcasts (no retries) with other routers to get the outgoing link quality.
 
-Upon receipt of a route request command frame, the neighbor table is searched for an entry corresponding to the transmitting device. If no such entry is found, or if the outgoing cost field of the entry has a value of 0, the frame is discarded and route request processing is terminated. If an entry is found with non-zero outgoing cost, the maximum of the incoming and outgoing costs is used for the purposes of the path cost calculation, instead of only the incoming cost. This value is also used to increment the path cost field of the route request frame prior to retransmission.
+Upon receipt of a Route Request command frame, the neighbor table is searched for an entry corresponding to the transmitting device. If no such entry is found, or if the outgoing cost field of the entry has a value of 0, the frame is discarded and Route Request processing is terminated. If an entry is found with non-zero outgoing cost, the maximum of the incoming and outgoing costs is used for the purposes of the path cost calculation, instead of only the incoming cost. This value is also used to increment the path cost field of the Route Request frame prior to retransmission.
 
 __Outgoing and incoming links might not necessarily be the same__ due to differences in local noise floor, differences in receiver sensitivity, etc. The EmberZNet stack tends to prefer a link with a symmetric link cost over one that is not.
 
@@ -126,7 +126,7 @@ Since this is another 15.4 message, there has to be a point to point acknowledge
 
 ![Figure 10](./resources/table-routing-10.png)
 
-And that is the whole process. Once complete a message is considered successful and on the source node gets a success message.
+And that is the whole process.
 
 ### Multiple hop
 

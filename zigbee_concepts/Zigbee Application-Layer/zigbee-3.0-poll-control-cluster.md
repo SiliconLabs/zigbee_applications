@@ -6,25 +6,25 @@
 
 The primary issue is a combination of two mechanisms which cause problems for sleepy end devices receiving messages.
 
-First is the duration that the parent device store messages mean for their children. This is only 7.68 seconds before a message is lost. This means that a message going from a router to an end device through another router (for example A -> B -> c, where A and B are routers and c is a sleepy end device), the message is held in the parent of the end device (B in this case). And the end device must poll within 7.68 seconds of receiving the message or the message times out of the queue. Messages can be resent, but this small window means a SED must poll frequently to receive messages.
+First is the duration of time that the parent device stores messages for their children. This is only 7.68 seconds before a message is lost. This means that a message going from a router to an end device through another router (for example A -> B -> C, where A and B are routers and C is a sleepy end device), the message is held in the parent of the end device (B in this case). And the end device must poll within 7.68 seconds of receiving the message or the message times out of the queue. Messages can be resent, but this small window means a SED must poll frequently to receive messages.
 
-But as we know, customers want their sleepy end device is powered by batteries and have the longest life possible, years in many cases. In order to save battery life, SED manufacturers prefers to have their devices sleep as longer as possible. This usually results in polling intervals much longer than 7.68 seconds. This means that unless a SED is very lucky in polling, it will many times miss messages meant for it.
+But as we know, many customers sleepy end devices are powered by batteries and want the longest life possible, years in many cases. In order to save battery life, SED manufacturers prefer to have their devices sleep as long as possible. This usually results in polling intervals much longer than 7.68 seconds. This means that unless a SED is very lucky in polling at the right time, it will many times miss messages.
 
 As a result sleepy end devices may miss the messages sent from other devices due to lack of polling frequency and this means that any sort of management by the controller is extremely difficult.
 
 ### Solution
 
-In order to overcome this problem, the poll control cluster is used to provide a mechanism for the management of a sleepy end device’s data poll rate. It can be used by a configuration device to make an end device more responsive for a short period of time, polling at a very high rate, also known as fast polling, so that the device can more reliably receive message and be managed by the controller.
+In order to overcome this problem, the Poll Control cluster is used to provide a mechanism for the management of a sleepy end device’s data poll rate. It can be used by a configuration device to make an end device more responsive for a short period of time, polling at a very high rate, also known as fast polling, so that the device can more reliably receive message and be managed by the controller.
 
 ## Poll Control Cluster
 
-The poll control cluster is a cluster that is defined in the Zigbee Cluster Library specification. It is similar as other ZCL clusters in that it operates as in a server-client model. There is a poll control client and poll control server.
+The Poll Control cluster is a cluster that is defined in the Zigbee Cluster Library Specification. It is similar as other ZCL clusters in that it operates as in a server-client model. There is a Poll Control client and Poll Control server.
 
-![Figure 1](resources\poll-control-01.png)
+<p align="center"> <img src = "./resources/poll-control-01.png"></p>
 
-Now the confusing part are which roles are played by each device. We normally think of a server as the always on device and a client the one that checks in. However in the Poll Control Cluster, usually the Gateway acts as client and the sleepy end device works as server. This is the case because the generally the server checks in with the client, which then sends commands to operate the server.
+Now the confusing parts are which roles are played by each device. We normally think of a server as the always on device and a client the one that checks in. However in the Poll Control cluster, usually the Gateway acts as client and the sleepy end device works as the server. This is the case because the generally the server checks in with the client, which then sends commands to operate the server.
 
-In the Poll Control Cluster, once the SED server checks in with the client (usually a router), the client manages the data polling rate of the sleepy end device using four different commands:
+In the Poll Control cluster, once the SED server checks in with the client (usually a router), the client manages the data polling rate of the sleepy end device using four different commands:
 
 - 0x00 - Check-in Response (Mandatory): When a server checks in, the client uses this to respond if it wants to enter fast polling mode or not.
 
@@ -60,7 +60,7 @@ You can refer to the ZCL specification for a more detailed explanation about the
 
 ## Attribute Settings and Battery Life Considerations
 
-The sleepy end device works as poll control server and can be managed by poll control client. In order to help conserve battery life sleepy end devices have two attributes which set bounds on the time they are allowed to be kept awake and more importantly, turn on their radios to check in.
+The sleepy end device works as Poll Control server and can be managed by Poll Control client. In order to help conserve battery life sleepy end devices have two attributes which set bounds on the time they are allowed to be kept awake and more importantly, turn on their radios to check in.
 
 - _Check-inIntervalMin_ - Provide minimum value for the Check-inInterval to protect against the Check-inInterval being set too low and draining the battery on the device
 
@@ -77,17 +77,17 @@ It also requires that the _Check-in interval_ >= _Long Poll interval_ >= _Short 
 
 It should also be noted that Fast polling mode will operate so long as the client is sending data to the server/end device. So these values only come into play once fast polling data transfers are complete.
 
-## How does the Poll Control Cluster work
+## How does the Poll Control cluster work
 
-In some practical user cases we need to use the poll control cluster for sleepy end device. For example: the sleepy end device receives an OTA update from the OTA server or the billing information being downloaded from the meter.
+In some practical user cases we need to use the Poll Control cluster for sleepy end device. For example: the sleepy end device receives an OTA update from the OTA server or the billing information being downloaded from the meter.
 
-So here we have a sleepy end device/Poll Control Server and router on the network/poll control client. This client/router will want to send data to the SED at certain intervals.
+So here we have a sleepy end device/Poll Control server and router on the network/Poll Control client. This client/router will want to send data to the SED at certain intervals.
 
-![Figure 2](resources\poll-control-02.png)
+![Figure 2](./resources/poll-control-02.png)
 
-Normally when a SED wakes up, it polls it’s parent for data and then go back to sleep. But this is where the poll control cluster operations step in.
+Normally when a SED wakes up, it polls its parent for data and then go back to sleep. But this is where the Poll Control cluster operations step in.
 
-1. When the devices first come up, usually during device discovery, the Poll Control Client __configure bindings__ on the device implementing the Poll Control Server. This will initiate the server sending Check-in commands to client.
+1. When the devices first come up, usually during device discovery, the Poll Control client __configure bindings__ on the device implementing the Poll Control server. This will initiate the server sending Check-in commands to client.
 
 2. Server sends Check-in to client periodically and the Check-in interval is guaranteed  
     __Note__: On a normal check in, the client will return FALSE and the SED returns to sleep.
@@ -100,4 +100,4 @@ Normally when a SED wakes up, it polls it’s parent for data and then go back t
 
 6. Client can send Fast Poll Stop after the configuration
 
-From all above we can see that the Poll Control Cluster allows you to configure end devices in a way that maximizes their sleep time while allowing them to have intervals where they receive data from other nodes on the network easily and efficiently.
+From all above we can see that the Poll Control cluster allows you to configure end devices in a way that maximizes their sleep time while allowing them to have intervals where they receive data from other nodes on the network easily and efficiently.

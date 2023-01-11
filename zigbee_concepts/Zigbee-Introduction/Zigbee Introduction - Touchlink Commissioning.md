@@ -2,7 +2,7 @@
 
 ## Quick Review
 
-As we know, touchlink commissioning is used in ZLL network. It was originally developed to easily integrate devices in connected lighting systems that follow the ZigBee Light Link(legacy) standard. The idea of touchlink commissioning is to facilitate close physical proximity(approx. 10 cm) instead of cryptographic authentication.
+As we know, touchlink commissioning is used in the ZLL network. It was initially developed to easily integrate devices in connected lighting systems that follow the ZigBee Light Link(legacy) standard. The idea of touchlink commissioning is to facilitate close physical proximity(approx. 10 cm) instead of cryptographic authentication.
 
 Zigbee 3.0 inherited the touchlink commissioning procedure as an optional commissioning mechanism where nodes are commissioned on a network using commands sent using inter-PAN communication in close physical proximity.
 
@@ -18,7 +18,7 @@ The BDB specification describes there are four commissioning methods in Zigbee 3
 
 In here, touchlink commissioning is the first step in the ZigBee 3.0 network commissioning process.
 
-![Typical Touchlink Commissioning example](./resources/touchlink-commission-01.png)
+<p align="center"> <img src = "./resources/touchlink-commission-01.png"> </p>
 
 A device may choose to perform the touchlink process for an initiator to try and find a touchlink target. A typical example of this interaction may be a switch and a light. The switch may perform touchlink commissioning to establish itself on the same network as the light.
 
@@ -26,16 +26,16 @@ A device may choose to perform the touchlink process for an initiator to try and
 
 Touchlinking Commissioning involves two parties, an __“initiator”__, who is the device (usually a controller of some sort) initiating the discovery process, and a __“target”__, who is the device (usually a light) being discovered. A device may choose to perform the touchlink process for an initiator to try and find a touchlink target.
 
-The device does not contain any network parameters and is not part of a network is known as __“factory new”__. When a device is reset to __“factory new”__, its network parameters are erased.
-Conversely, the device does contain network parameters and is part of the distributed network is known as __“non factory new”__.
+A device that does not contain any network parameters and is not part of a network is known as __“factory new”__. When a device is reset to __“factory new”__, its network parameters are erased.
+Conversely, a device that does contain network parameters and is part of the distributed network is known as __“non factory new”__.
 
 ![Figure 2](./resources/touchlink-commission-02.png)
 
-We can see the differences obviously from above figure. Once the device is a part of network, then it is non factory new device.
+We can see the differences from the above figure. Once the device is a part of the network, then it is non factory new device.
 
 ## Touchlink Commissioning Scenarios
 
-The commissioning mechanisms depend on whether the initiator is factory new or non-factory new, and both the initiator and target can be implemented from either an end device or a router, so there are many scenarios.
+The commissioning mechanisms depend on whether the initiator is factory-new or non-factory-new. The initiator and target can be implemented from either an end device or a router, so there are many scenarios.
 
 Here are some tips you should care:
 
@@ -61,9 +61,9 @@ The touchlink commissioning command set has command identifiers in the range 0x0
 
 The commissioning utility command set has command identifiers in the range 0x40-0xff and shall be transmitted using the standard unicast transmission service, similar to that used for other ZCL cluster commands.
 
-![Figure 4](./resources/touchlink-commission-04.png)
+<p align="center"> <img src = "./resources/touchlink-commission-04.png"> </p>
 
-From above image, we can see both of the client and server contain the touchlink commissioning and commissioning utility commands. More details can be found in Zigbee Cluster Library specification.
+The above image shows that both the client and server contain the touchlink commissioning and commissioning utility commands. More details can be found in the Zigbee Cluster Library specification.
 
 ## Device Discovery Procedure
 
@@ -83,11 +83,11 @@ On the initiator side, device discovery begins with a broadcast of eight inter-P
 
 All touchlink commissioning cluster inter-PAN command frames shall carry a 32-bit transaction identifier.
 The transaction identifier is created by the initiator of a scan request inter-PAN command frame and shall be random, non-zero and non-sequential.
-Related inter-PAN command frames which follow the scan request, i.e., scan response, device information request/response, identify request, reset to factory new request, network start request/response, network join router request/response and network join end device request/response shall carry the same transaction identifier as was defined in the scan request.
+Related inter-PAN command frames which follow the scan request, i.e., scan response, device information request/response, identify request, reset to factory new request, network start request/response, network join router request/response, and network join end device request/response shall carry the same transaction identifier as was defined in the scan request.
 
 Let’s introduce the function of the inter-PAN command frames:
 
-![Touchlink Commissioning inter-PAN transaction](./resources/touchlink-commission-06.png)
+<p align="center"> <img src = "./resources/touchlink-commission-06.png"> </p>
 
 - The __scan request__ command frame is used to initiate a scan for other devices in the vicinity of the originator. The information contained in this command frame relates to the scan request initiator.
 
@@ -97,7 +97,7 @@ Let’s introduce the function of the inter-PAN command frames:
 
 - The __device information response__ command frame is used to return information about the sub-devices supported by a node.
 
-If the Profile Interop bit of the Touchlink Information field of the Scan Request command received at the beginning of the current touchlink exchange is set to zero, the device may choose to represent its device information in the form of ZLL device information to support legacy devices. If this bit is set to one, the device shall use the device information as given in its simple descriptors.
+Suppose the Profile Interop bit of the Touchlink Information field of the Scan Request command received at the beginning of the current touchlink exchange is set to zero. In that case, the device may represent its device information in the form of ZLL device information to support legacy devices. If this bit is set to one, the device shall use the device information as given in its simple descriptors.
 
 - The __identify request__ command frame is used to request that the recipient identifies itself in some application specific way to aid with touchlinking. 
 
@@ -129,17 +129,17 @@ After the touchlink commissioning successfully, there are four kinds of ZCL comm
 
 - Get endpoint list request/response
 
-![Touchlink Commissioning ZCL transaction](./resources/touchlink-commission-07.png)
+<p align="center"> <img src = "./resources/touchlink-commission-01.png"> </p>
 
 The __network update request__ command frame is used to attempt to bring a router that may have missed a network update back onto the network. If an initiator finds a device during device discovery that is part of the same network as the initiator but that reports a network update identifier in its scan response inter-PAN command frame that is lower than that of the initiator, it may generate and transmit a __network update request inter-PAN__ command frame to the target using the unicast data service. The target updates its stored network update identifier and logical channel with the values received in the network update request.
 
 The __endpoint information__ command is used to inform the remote endpoint about the general information of the local endpoint. This command may be a trigger for the remote endpoint to get more information from the local device using the other commands described as below.
 
-A controller application endpoint may send an endpoint information command frame to another controller application endpoint to announce itself. It is then up to the recipient controller application endpoint to decide to take further action to get information about the lights that are controlled by the originator.
+A controller application endpoint may send an endpoint information command frame to another controller application endpoint to announce itself. It is then up to the recipient controller application endpoint to take further action to get information about the lights that the originator controls.
 
-If it decides to do so, it can use the get group identifiers request command frame to get knowledge about the group of lights controlled by the originator. The originator responds with a get group identifiers response command frame containing the requested information (which may have a start index field and a count field equal to 0, indicating no groups are used).
+If it decides to do so, it can use the get group identifiers request command frame to gain knowledge about the group of lights controlled by the originator. The originator responds with a get group identifiers response command frame containing the requested information (which may have a start index field and a count field equal to 0, indicating no groups are used).
 
-Similarly, the recipient device can use the get endpoint list request command frame to get knowledge about the list of individual lights controlled by the originator. The originator responds with a get endpoint list response command frame containing the requested information (which may have a start index field and a count field equal to 0, indicating no lights are controlled).
+Similarly, the recipient device can use the get endpoint list request command frame to gain knowledge about the list of individual lights controlled by the originator. The originator responds with a get endpoint list response command frame containing the requested information (which may have a start index field and a count field equal to 0, indicating no lights are controlled).
 
 Please note that the “optional” in here means these are mandatory for a controller device but not mandatory for other devices as defined in the device specification.
 
@@ -149,7 +149,7 @@ Please note that the “optional” in here means these are mandatory for a cont
 
 A typical scenario might be a new remote control and a new lamp being started for the first time.
 
-It is easy to set up the testing with Z3SwitchSoc and Z3LightSoc samples. After you build the samples and download the firmware into the WSTK kits, you can launch the console in Network Analyzer and use the below CLI command to reset the devices to factory new.
+It is easy to set up the testing with Z3Switch and Z3Light samples. After you build the samples and download the firmware into the WSTK kits, you can launch the console in Network Analyzer and use the below CLI command to reset the devices to factory new.
 
 ```C
 plugin zll-commissioning reset
@@ -172,7 +172,7 @@ Another typical scenario might be adding a new lamp to an existing lighting netw
 
 It is easy to set up the testing based on the scenario one. After we finish the scenario one, the Z3Switch and Z3Light are in the same distributed network and they are non factory new devices.
 
-Then, let’s build another Z3LightSoc sample and download the firmware into another WSTK kit, as the same operation in scenario one, you can launch the console in Network Analyzer and use the below CLI command to reset this second Z3Light device to factory new.
+Then, let’s build another Z3Light sample and download the firmware into another WSTK kit. As the same operation in scenario one, you can launch the console in Network Analyzer and use the below CLI command to reset this second Z3Light device to factory new.
 
 ```C
 plugin zll-commissioning reset
@@ -184,7 +184,7 @@ After that, move the Z3Switch device and this second Z3Light device close to app
  plugin zll-commissioning link
 ```
 
-Once the second Z3Light responds the device discovery,  the new touchlink commissioning is starting. During this case the second Z3Light target will join to the pre-existing distributed network and the Z3Switch device will rejoin to the Z3Light. At last, you will find all the three devices are in the same distributed network and they can talk to each other with ZCL commands. The whole procedure is shown in the image and you will see the details in packet trace.
+Once the second Z3Light responds to the device discovery,  the new touchlink commissioning starts. During this case, the second Z3Light target will join the pre-existing distributed network, and the Z3Switch device will rejoin the Z3Light. At last, you will find that all three devices are in the same distributed network and can talk to each other with ZCL commands. The whole procedure is shown in the image, and you will see the details in the packet trace.
 
 |![Figure 10](./resources/touchlink-commission-10.png) | ![Figure 11](./resources/touchlink-commission-11.png)|
 |-|-|

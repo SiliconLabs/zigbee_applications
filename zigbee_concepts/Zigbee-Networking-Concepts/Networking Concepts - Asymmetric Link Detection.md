@@ -21,15 +21,16 @@ Zigbee routing discovers routes without regards to asymmetry, sometimes resultin
 To combat message delivery failures due to an asymmetric link, nodes need to find a reliable link in both directions. Routers will exchange link cost measurements with their neighbors by periodically sending out a Link Status message and collecting the information. The Link Status is a 1-hop broadcast message transmitted about every 15 seconds (+/- 1 second).
 
 Lets say we have these four nodes.
-![Figure 2](./resources/asymmetric-link-02.png)
+
+<p align="center"> <img src = "./resources/asymmetric-link-02.png"> </p>
 
 In this example, using only route discovery, the node will choose D to B to A, since it thinks the quality of A to B is 95%, vs A to C which is 80%. The node chose the worse route because of the asymmetry.
 
-![Figure 3](./resources/asymmetric-link-03.png)
+<p align="center"> <img src = "./resources/asymmetric-link-03.png"> </p>
 
 However, with Link Status Messages, the node is aware of the better route and will use the route with higher quality links in both directions: D to C to A.
 
-![Figure 4](./resources/asymmetric-link-04.png)
+<p align="center"> <img src = "./resources/asymmetric-link-04.png"> </p>
 
 ## Link Status Message
 
@@ -39,7 +40,7 @@ Let’s take a look at an example of a Link Status Message.
 
 The above image is pulled from our Network Analyzer which breaks down a packet so that it is easier to consume. The coordinator (0x0000 in the fourth line) has sent out a Link Status broadcast. The event detail shows under the Zigbee command section that the coordinator only has one neighbor 0x20FC.
 
-![Figure 6](./resources/asymmetric-link-06.png)
+<p align="center"> <img src = "./resources/asymmetric-link-06.png"> </p>
 
 The link quality is assigned outgoing and incoming link cost in a rating from 1 to 5 where 1 is the best. Here the Outgoing Cost, meaning sending messages to 0x20FC has the best link quality, while the Incoming Cost, meaning receiving messages from 0x20FC has a bad link quality.
 

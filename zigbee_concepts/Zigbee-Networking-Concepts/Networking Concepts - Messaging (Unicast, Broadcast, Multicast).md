@@ -26,7 +26,7 @@ The unicast is a message that is directed from one node to another node. At itâ€
 
 ![Figure 012](./resources/messaging-02.png)
 
-However, they can be must more complicated, being sent through 1 or more additional nodes through the network.
+However, they can be much more complicated, being routed through 1 or more additional nodes through the network.
 
 ![Figure 03](./resources/messaging-03.png)
 
@@ -58,7 +58,7 @@ Since this is another 15.4 message, there has to be a point to point acknowledge
 
 ![Figure 07](./resources/messaging-07.png)
 
-And that is the whole process. Once complete a message is considered successful and on the source node gets a success message.
+And that is the whole process. 
 
 ##### Multiple hops
 
@@ -109,7 +109,7 @@ The routers maintain the record of all the messages that they broadcast in a tab
 | 0xFFFD           | All non-sleepy devices |
 | 0xFFFC           | All routing capable devices |
 
-The record itself is known as the broadcast transaction record (BTR) and contains the sequence number and the source address of the broadcast frame which helps in retransmission of the broadcasts. So in a given window of time, the number of broadcasts is limited  by the broadcast transaction table size. In the EmberZnet, the broadcast table size can be configured in Zigbee Pro Stack Library Plugin.
+The record itself is known as the broadcast transaction record (BTR) and contains the sequence number and the source address of the broadcast frame which helps in retransmission of the broadcasts. So in a given window of time, the number of broadcasts is limited  by the broadcast transaction table size. In the EmberZnet, the broadcast table size can be configured in Zigbee Pro Stack Component.
 
 While broadcast message sounds simple, it can significantly increase the traffic in the network, cause congestion and degrade performance. They should be used sparingly and with careful consideration.
 
@@ -129,7 +129,7 @@ Each group is identified by a 16-bit multicast group ID. The devices in the same
 
 ![Figure 16](./resources/messaging-16.png)
 
-Groups usually managed via ZCL Groups cluster (see Groups client & server plugins and Zigbee cluster library Specification for more information). The table on the right side shows the commands supported by the Group cluster.
+Groups usually managed via ZCL Groups cluster (see Groups client & server plugins and Zigbee cluster library Specification for more information). The table above shows the commands supported by the Group cluster.
 
 The multicast message can be sent by API __`emberAfSendMulticast()`__.
 

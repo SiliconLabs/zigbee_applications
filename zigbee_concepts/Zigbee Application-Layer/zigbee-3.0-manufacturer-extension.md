@@ -1,12 +1,12 @@
 # Zigbee 3.0: Manufacturer’s Extensions
 
-There are some standard profilers and clusters can be used in Zigbee specification, it makes the Zigbee devices in the market built by different manufactures can be compatible with other. But manufacturers are free to extend the standard, so we will find how to extend it?
+There are some standard profilers and clusters that can be used in Zigbee specification. This allows Zigbee devices in the market built by different manufactures to be compatible with one other. But manufacturers are free to extend the standard, so we will find how to extend it.
 
 ## Types of Manufacturer Specific Extensions
 
 All communications regarding manufacturer specific extensions shall be transmitted with the manufacturer specific sub-field of the frame control field set to 1 and the manufacturer code included in the frame. This is because different manufactures may specify the same cluster.
 
-![Figure 1](resources\manufacture01.png)
+<p align="center"> <img src = "./resources/manufacture01.png"></p>
 
 Usually, there are four ways to add manufacturer specific extensions within Zigbee.
 
@@ -62,7 +62,7 @@ There are only two steps to apply the manufacturer’s extensions to Simplicity 
 
     - Save and reopen the .slcp file
 
-![Figure 2](resources\manufacturer02.png)
+![Figure 2](./resources/manufacturer02.png)
 
 __Note:__ This is used for EmberZnet 7.x
 
@@ -74,30 +74,30 @@ You can see how these properties displayed in Simplicity Studio via below pictur
 
 Properties: __cluster__, __name__, __domain__, __code__, __client__, __server__
 
-![Figure 3](resources\manufacturer03.png)
+![Figure 3](./resources/manufacturer03.png)
 
 Properties: __description__, __attribute__
 
-![Figure 4](resources\manufacturer04.png)
+![Figure 4](./resources/manufacturer04.png)
 
 Properties: __command__
 
-![Figure 5](resources\manufacturer05.png)
+![Figure 5](./resources/manufacturer05.png)
 
-## Custom Manufacturer Specific Attributes in On-Off Cluster
+## Custom Manufacturer Specific Attributes in On/Off Cluster
 
-As we know, the on-off cluster is a standard cluster which defined in Zigbee Cluster Library, it has some attributes like on/off, global scene control, on time, off wait time and so on. If we want to add some custom attributes to the cluster, we need prepare the xml file and set the properties appropriately. After install the custom xml to Simplicity Studio we will see the specific attributes in on-off cluster.
+As we know, the On/Off cluster is a standard cluster which defined in Zigbee Cluster Library, it has some attributes like On/Off, Global Scene Control, On Time, Off Wait Time and so on. If we want to add some custom attributes to the cluster, we need prepare the xml file and set the properties appropriately. After install the custom xml to Simplicity Studio we will see the specific attributes in On/Off cluster.
 
-Below is an example to introduce how to add custom manufacturer specific attributes in standard Zigbee on-off cluster.
+Below is an example to introduce how to add custom manufacturer specific attributes in standard Zigbee On/Off cluster.
 
-![Figure 6](resources\manufacturer06.png)
+![Figure 6](./resources/manufacturer06.png)
 
-## Custom Manufacturer Specific Commands in On-Off Cluster
+## Custom Manufacturer Specific Commands in On/Off Cluster
 
-The on-off cluster is a standard cluster which defined in Zigbee Cluster Library, it has some commands like on/off/toggle and so on.
+The On/Off cluster is a standard cluster which defined in Zigbee Cluster Library, it has some commands like On/Off/Toggle and so on.
 
-After install the custom xml to Simplicity Studio we will see the specific commands in on-off cluster.
+After install the custom xml to Simplicity Studio we will see the specific commands in On/Off cluster.
 
-Below is an example to introduce how to add custom manufacturer specific commands in standard Zigbee on-off cluster.
+Below is an example to introduce how to add custom manufacturer specific commands in standard Zigbee On/Off cluster.
 
-![Figure 7](resources\manufacturer07.png)
+![Figure 7](./resources/manufacturer07.png)

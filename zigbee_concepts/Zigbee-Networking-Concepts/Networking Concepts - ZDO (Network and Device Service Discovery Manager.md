@@ -38,20 +38,20 @@ Also, the task of the network manager is to report the interference on the chann
 
 All the functionality of the network manager is provided by the plugins in the stack. 
 
-| Plugin |
+| Component |
 |--------|
 | Network Steering |
 | Network Creator |
-| ZigBee PRO stack library |
-| ZigBee PRO leaf library |
+| ZigBee Pro Stack |
+| ZigBee Pro Leaf Stack |
 
-- __The network steering plugin__ allows you to join a network, this will also provide the network scan.
+- __The Network Steering Component__ allows you to join a network, this will also provide the network scan.
 
-- __The network creator__ allows you to create a network this is mostly used for coordinators.
+- __The Network Creator__ allows you to create a network this is mostly used for coordinators.
 
-- __The ZigBee pro stack library__ will provide the base stack for Zigbee
+- __The ZigBee Pro Stack__ will provide the base stack for Zigbee
 
-- __the ZigBee PRO leaf library__ will provide the base stack for Zigbee end devices.
+- __The ZigBee Pro Leaf Stack__ will provide the base stack for Zigbee end devices.
 
 ## Device and Service Discovery
 

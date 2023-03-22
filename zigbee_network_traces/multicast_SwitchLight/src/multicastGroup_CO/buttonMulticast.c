@@ -42,32 +42,27 @@ void sl_button_on_change(const sl_button_t *handle)
 {
   EmberStatus status;
 
-  if(SL_SIMPLE_BUTTON_INSTANCE(BUTTON0) == handle)
-  {
-    if(sl_simple_button_get_state(handle) == SL_SIMPLE_BUTTON_RELEASED)
-      {
-        emberAfCorePrintln("Button0 is pressed");
-        if(currentBtnState == 0) // ON Command
-        {
-            emberAfCorePrintln("Command is zcl on-off ON");
-            emberAfFillCommandOnOffClusterOn();
-            currentBtnState = 1;
-        }
-        else // OFF command
-        {
-            emberAfCorePrintln("Command is zcl on-off OFF");
-            emberAfFillCommandOnOffClusterOff();
-            currentBtnState = 0;
-        }
-        emberAfSetCommandEndpoints(1,1);
-        status = emberAfSendCommandMulticast(GROUP_ID);
-
-        if(status == EMBER_SUCCESS){
-          emberAfCorePrintln("Command is successfully sent");
-        }else{
-          emberAfCorePrintln("Failed to send");
-          emberAfCorePrintln("Status code: 0x%x",status);
-        }
+  if (SL_SIMPLE_BUTTON_INSTANCE(BUTTON0) == handle) {
+    if (sl_simple_button_get_state(handle) == SL_SIMPLE_BUTTON_RELEASED) {
+      emberAfCorePrintln("Button0 is pressed");
+      if (currentBtnState == 0) { // ON Command
+        emberAfCorePrintln("Command is zcl on-off ON");
+        emberAfFillCommandOnOffClusterOn();
+        currentBtnState = 1;
+      } else { // OFF command
+        emberAfCorePrintln("Command is zcl on-off OFF");
+        emberAfFillCommandOnOffClusterOff();
+        currentBtnState = 0;
       }
+      emberAfSetCommandEndpoints(1, 1);
+      status = emberAfSendCommandMulticast(GROUP_ID);
+
+      if (status == EMBER_SUCCESS) {
+        emberAfCorePrintln("Command is successfully sent");
+      } else {
+        emberAfCorePrintln("Failed to send");
+        emberAfCorePrintln("Status code: 0x%x", status);
+      }
+    }
   }
 }

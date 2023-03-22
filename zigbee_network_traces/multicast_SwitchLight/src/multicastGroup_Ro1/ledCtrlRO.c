@@ -44,11 +44,11 @@ void emberAfPostAttributeChangeCallback(uint8_t endpoint,
                                         uint16_t manufacturerCode,
                                         uint8_t type,
                                         uint8_t size,
-                                        uint8_t* value)
+                                        uint8_t *value)
 {
-  if (clusterId == ZCL_ON_OFF_CLUSTER_ID
-      && attributeId == ZCL_ON_OFF_ATTRIBUTE_ID
-      && mask == CLUSTER_MASK_SERVER) {
+  if ((clusterId == ZCL_ON_OFF_CLUSTER_ID)
+      && (attributeId == ZCL_ON_OFF_ATTRIBUTE_ID)
+      && (mask == CLUSTER_MASK_SERVER)) {
     bool onOff;
     if (emberAfReadServerAttribute(endpoint,
                                    ZCL_ON_OFF_CLUSTER_ID,
@@ -69,7 +69,8 @@ void emberAfPostAttributeChangeCallback(uint8_t endpoint,
 
 /** @brief On/off Cluster Server Post Init
  *
- * Following resolution of the On/Off state at startup for this endpoint, perform any
+ * Following resolution of the On/Off state at startup for this endpoint,
+ *   perform any
  * additional initialization needed; e.g., synchronize hardware state.
  *
  * @param endpoint Endpoint that is being initialized

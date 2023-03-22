@@ -38,12 +38,10 @@
 
 void myRequestAppLinkKeyHandler(sl_cli_command_arg_t *args);
 
-
 /***************************************************************************//**
  * Variables
  ******************************************************************************/
 
 extern sl_cli_command_group_t my_request_cli_command_group;
-
 
 #endif /* APPLINKKEY_H_ */

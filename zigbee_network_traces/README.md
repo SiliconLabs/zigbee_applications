@@ -1,13 +1,13 @@
-# Basic Network Policies captures Project
+# Basic Network Policies captures Project #
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Zigbee-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 ![SDK badge](https://img.shields.io/badge/SDK-v4.1.0-green)
  
-## 1. Summary
+## Summary ##
 This repository provides projects and network traces about basic network Policies on Zigbee. 
 
-## 2. List of Projects
+## List of Projects ##
 **Joining Policies** : 
 * Joining_InstallCode : To join a network with install-code
 * Joining_WellKnownKey : Join with the well-known key "ZigbeeAlliance09"
@@ -30,9 +30,35 @@ This repository provides projects and network traces about basic network Policie
 **Messaging** :
 * Multicast_SwitchLight : Project to send multicast message to a specific Group
 
-## 3. Structure of Projects
+## Structure of Projects ##
 You can see in all the projects the following structures : 
 * Src : Source code files used for the project
 * SimplicityStudio : Export files for all the projects
 * Traces directly into the directory
 * README : Explains how to use the project
+
+## Gecko SDK version ##
+
+v4.1
+
+## Hardware Required ##
+
+* 3x Wireless Starter Kit Main Board 
+* 3x BRD4180A
+
+## Connections Required ##
+
+Connect the radio boards to the WSTK mainboards.
+
+## Setup ##
+
+Look at each guidelines present in each projects in this repository.
+
+
+## How It Works ##
+
+Some Wireshark/Network Analyzer traces are directly available in order to explore the different packet exchanges 
+
+## .sls Projects Used ##
+
+Voir dans chacun des sous-projets

@@ -39,18 +39,19 @@ static const sl_cli_command_info_t myJoinCommand =
   SL_CLI_COMMAND(myJoinHandler,
                  "Function to join the network with install-code",
                  "None",
-                 {SL_CLI_ARG_END});
-                 
+                 { SL_CLI_ARG_END });
+
 static const sl_cli_command_entry_t my_cli_commands[] = {
-  {"join", &myJoinCommand, false},
-  {NULL, NULL, false},
+  { "join", &myJoinCommand, false },
+  { NULL, NULL, false },
 };
 
 sl_cli_command_group_t my_cli_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
+
 /***************************************************************************//**
  * Functions & events.
  ******************************************************************************/
@@ -66,12 +67,9 @@ void myJoinHandler(sl_cli_command_arg_t *arguments)
   status = emberAfPluginNetworkSteeringStart();
 
   // Check the status of the network Steering
-  if (status == EMBER_SUCCESS)
-  {
+  if (status == EMBER_SUCCESS) {
     emberAfCorePrintln("Start of Network Steering successful");
-  }
-  else
-  {
+  } else {
     emberAfCorePrintln("ERROR to start Network Steering");
   }
 }

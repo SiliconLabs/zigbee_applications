@@ -35,7 +35,7 @@
 
 #include "networkCreation.h"
 
-static EmberNodeId nodeTable[3] = {0};
+static EmberNodeId nodeTable[3] = { 0 };
 static int currentIndex = 0;
 
 /// Create the CLI_Command_info
@@ -43,24 +43,24 @@ static const sl_cli_command_info_t myFormCreate_command =
   SL_CLI_COMMAND(eventNetworkFormHandler,
                  "Form and Create custom Network",
                  "No argument",
-                 {SL_CLI_ARG_END, });
+                 { SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t myOpen_command =
   SL_CLI_COMMAND(networkOpenHandler,
                  "Open the network with well-known key",
                  "No Argument",
-                 {SL_CLI_ARG_END, });
+                 { SL_CLI_ARG_END, });
 
 /// Create the entries
 const sl_cli_command_entry_t my_cli_commands[] = {
-  {"form", &myFormCreate_command, false},
-  {"open", &myOpen_command, false},
-  {NULL, NULL, false},
+  { "form", &myFormCreate_command, false },
+  { "open", &myOpen_command, false },
+  { NULL, NULL, false },
 };
 
 /// Create the group of entries
 sl_cli_command_group_t my_cli_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
@@ -71,15 +71,16 @@ sl_cli_command_group_t my_cli_command_group = {
 
 /**
  * @brief Callback when Network Creator is completed
- * 
+ *
  * @param network Network Parameters
  * @param usedSecondaryChannels Flag indicating the use of Secondary channels
  */
-void emberAfPluginNetworkCreatorCompleteCallback(const EmberNetworkParameters *network,
-                                                 bool usedSecondaryChannels)
+void emberAfPluginNetworkCreatorCompleteCallback(
+  const EmberNetworkParameters *network,
+  bool usedSecondaryChannels)
 {
   // Launch Open Network Event
-  emberAfCorePrintln("PanId : %d",network->panId);
+  emberAfCorePrintln("PanId : %d", network->panId);
 }
 
 void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
@@ -88,22 +89,26 @@ void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
                                     EmberDeviceUpdate status,
                                     EmberJoinDecision decision)
 {
-  emberAfCorePrintln("\n_______________TC Node joined Callback__________________");
-  emberAfCorePrintln("Child 0x%x%x has %s the channel", ((newNodeId >> 8) & 0xff),
-                     (newNodeId & 0xff), ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
+  emberAfCorePrintln(
+    "\n_______________TC Node joined Callback__________________");
+  emberAfCorePrintln("Child 0x%x%x has %s the channel",
+                     ((newNodeId >> 8) & 0xff),
+                     (newNodeId & 0xff),
+                     ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
   // JOINING ?
-  if(status != EMBER_DEVICE_LEFT) {
-      nodeTable[currentIndex] = newNodeId;
-      emberAfCorePrintln("Current NodeID : 0x%x%x",(newNodeId >> 8) & 0xff,
-                         (newNodeId & 0xff));
-      currentIndex += 1;
+  if (status != EMBER_DEVICE_LEFT) {
+    nodeTable[currentIndex] = newNodeId;
+    emberAfCorePrintln("Current NodeID : 0x%x%x", (newNodeId >> 8) & 0xff,
+                       (newNodeId & 0xff));
+    currentIndex += 1;
   }
-  emberAfCorePrintln("________________________________________________________\n");
+  emberAfCorePrintln(
+    "________________________________________________________\n");
 }
 
 /**
  * @brief CLI Function to form the network when : form
- * 
+ *
  * @param arguments CLI arguments of form command
  */
 void eventNetworkFormHandler(sl_cli_command_arg_t *arguments)
@@ -126,7 +131,7 @@ void eventNetworkFormHandler(sl_cli_command_arg_t *arguments)
 
 /**
  * @brief CLI Function to open the network with to join with well-known key
- * 
+ *
  * @param arguments CLI arguments of open command
  */
 void networkOpenHandler(sl_cli_command_arg_t *arguments)
@@ -147,5 +152,6 @@ void networkOpenHandler(sl_cli_command_arg_t *arguments)
   }
 
   // Change the TC policies
-  emberTrustCenterLinkKeyRequestPolicy = EMBER_ALLOW_TC_LINK_KEY_REQUEST_AND_GENERATE_NEW_KEY;
+  emberTrustCenterLinkKeyRequestPolicy =
+    EMBER_ALLOW_TC_LINK_KEY_REQUEST_AND_GENERATE_NEW_KEY;
 }

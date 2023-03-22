@@ -30,7 +30,7 @@
 #include "af-security.h"
 #include "network-steering.h"
 
-#define INFO_DELAY_MS 1000
+#define INFO_DELAY_MS   1000
 #define REJOIN_DELAY_MS 15000
 
 /***************************************************************************//**
@@ -48,7 +48,5 @@ void myEventRouterInfoHandler(sl_zigbee_event_context_t *context);
 extern sl_zigbee_event_t eventRouterInfoCtrl;
 extern sl_zigbee_event_t eventRejoinCtrl;
 extern sl_cli_command_group_t my_cli_command_group;
-
-
 
 #endif /* NETWORKJOIN_H_ */

@@ -40,7 +40,10 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                                   uint8_t joinAttempts,
                                                   uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n",
+                            "Join",
+                            "complete",
+                            status);
 }
 
 /** @brief
@@ -61,10 +64,9 @@ void emberAfNetworkKeyUpdateCompleteCallback(EmberStatus status)
   EmberKeyStruct nwkKey;
   emberAfCorePrintln("Network Key Update Complete : ",
                      (status == EMBER_SUCCESS) ? "Success" : "Failed");
-  if(status == EMBER_SUCCESS)
-  {
+  if (status == EMBER_SUCCESS) {
     // Display new NWK Key
-    emberGetKey(EMBER_CURRENT_NETWORK_KEY,&nwkKey);
+    emberGetKey(EMBER_CURRENT_NETWORK_KEY, &nwkKey);
     emberAfCorePrint("Current NWK Key : ");
     emberAfPrintKey(true, nwkKey.key.contents);
   }
@@ -78,11 +80,11 @@ void emberAfNetworkKeyUpdateCompleteCallback(EmberStatus status)
 void emberAfMainInitCallback(void)
 {
   // Initialize Events
-  sl_zigbee_event_init(&eventRouterInfoCtrl,myEventRouterInfoHandler);
+  sl_zigbee_event_init(&eventRouterInfoCtrl, myEventRouterInfoHandler);
 
   // Initialize custom group event
   sl_cli_command_add_command_group(sl_cli_handles[0], &my_cli_command_group);
 
   // Launch Events
-  sl_zigbee_event_set_delay_ms(&eventRouterInfoCtrl,INFO_DELAY_MS);
+  sl_zigbee_event_set_delay_ms(&eventRouterInfoCtrl, INFO_DELAY_MS);
 }

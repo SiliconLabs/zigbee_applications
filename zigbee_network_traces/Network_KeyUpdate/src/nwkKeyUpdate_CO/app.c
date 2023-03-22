@@ -41,7 +41,10 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                                   uint8_t joinAttempts,
                                                   uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n",
+                            "Join",
+                            "complete",
+                            status);
 }
 
 /** @brief
@@ -60,5 +63,6 @@ void emberAfMainInitCallback(void)
 {
   // Initiliaze command group
   sl_cli_command_add_command_group(sl_cli_handles[0], &my_cli_command_group);
-  sl_cli_command_add_command_group(sl_cli_handles[0], &my_updateNwk_command_group);
+  sl_cli_command_add_command_group(sl_cli_handles[0],
+                                   &my_updateNwk_command_group);
 }

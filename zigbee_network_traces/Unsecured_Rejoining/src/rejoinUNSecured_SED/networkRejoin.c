@@ -37,15 +37,15 @@ static const sl_cli_command_info_t myRejoinCommand =
   SL_CLI_COMMAND(myRejoinHandler,
                  "Function to rejoin the network",
                  "None",
-                 {SL_CLI_ARG_END});
-                
+                 { SL_CLI_ARG_END });
+
 static const sl_cli_command_entry_t my_cli_commands[] = {
-  {"rejoin", &myRejoinCommand, false},
-  {NULL, NULL, false},
+  { "rejoin", &myRejoinCommand, false },
+  { NULL, NULL, false },
 };
 
 sl_cli_command_group_t my_rejoin_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
@@ -56,7 +56,7 @@ sl_cli_command_group_t my_rejoin_command_group = {
 
 /**
  * @brief CLI Handler to rejoin a network with join command
- * 
+ *
  * @param arguments CLI arguments after the rejoin
  */
 void myRejoinHandler(sl_cli_command_arg_t *arguments)

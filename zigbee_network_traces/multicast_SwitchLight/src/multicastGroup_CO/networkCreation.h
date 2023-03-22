@@ -31,9 +31,9 @@
 #include "sl_cli_handles.h"
 #include "af-security.h"
 
-#define NODETABLE_SIZE (3)
+#define NODETABLE_SIZE  (3)
 #define SWITCH_ENDPOINT (1)
-#define GROUP_ID (0x4123)
+#define GROUP_ID        (0x4123)
 
 /***************************************************************************//**
  * Function Prototypes

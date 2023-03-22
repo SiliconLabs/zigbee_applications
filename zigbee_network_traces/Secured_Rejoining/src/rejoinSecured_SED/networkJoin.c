@@ -38,17 +38,17 @@ sl_zigbee_event_t eventRejoinCtrl;
 
 static const sl_cli_command_info_t myJoinCommand =
   SL_CLI_COMMAND(myJoinHandler,
-                "Function to join the network",
-                "None",
-                {SL_CLI_ARG_END});
+                 "Function to join the network",
+                 "None",
+                 { SL_CLI_ARG_END });
 
 static const sl_cli_command_entry_t my_cli_commands[] = {
-  {"join", &myJoinCommand, false},
-  {NULL, NULL, false},
+  { "join", &myJoinCommand, false },
+  { NULL, NULL, false },
 };
 
 sl_cli_command_group_t my_cli_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
@@ -76,8 +76,9 @@ void myJoinHandler(sl_cli_command_arg_t *arguments)
 }
 
 /**
- * @brief Event handler to launch the rejoin process 15 seconds after joining a network
- * 
+ * @brief Event handler to launch the rejoin process 15 seconds after joining a
+ *   network
+ *
  * @param arguments CLI Arguments after rejoin
  */
 void myEventRejoinHandler(sl_zigbee_event_context_t *context)
@@ -85,7 +86,7 @@ void myEventRejoinHandler(sl_zigbee_event_context_t *context)
   EmberStatus status;
 
   status = emberRejoinNetwork(true); // true = Secured Rejoining
-  if(status == EMBER_SUCCESS) {
+  if (status == EMBER_SUCCESS) {
     emberAfCorePrintln("Succeeded to launch Secured Rejoining");
   } else {
     emberAfCorePrintln("Failed to launch Secured Rejoining");
@@ -94,7 +95,7 @@ void myEventRejoinHandler(sl_zigbee_event_context_t *context)
 
 /**
  * @brief Event to print info of the router
- * 
+ *
  * @param context Context of the Handler
  */
 void myEventRouterInfoHandler(sl_zigbee_event_context_t *context)

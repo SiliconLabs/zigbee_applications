@@ -46,6 +46,4 @@ void myEventRouterInfoHandler(sl_zigbee_event_context_t *context);
 extern sl_zigbee_event_t eventRouterInfoCtrl;
 extern sl_cli_command_group_t my_cli_command_group;
 
-
-
 #endif /* NETWORKJOIN_H_ */

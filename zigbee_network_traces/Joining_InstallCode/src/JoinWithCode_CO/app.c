@@ -40,12 +40,15 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                                   uint8_t joinAttempts,
                                                   uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n",
+                            "Join",
+                            "complete",
+                            status);
 }
 
-/** @brief
- *
- * Application framework equivalent of ::emberRadioNeedsCalibratingHandler
+/**
+ * @brief Application framework equivalent of
+ *   ::emberRadioNeedsCalibratingHandler
  */
 void emberAfRadioNeedsCalibratingCallback(void)
 {
@@ -53,14 +56,10 @@ void emberAfRadioNeedsCalibratingCallback(void)
 }
 
 /**
- * Main Callback called after initialization of the stack
- * WARNING : All the stack is not completely initialized
- *           You must wait set event after a little delay
+ * @brief Main Initialization callback
  */
 void emberAfMainInitCallback(void)
 {
-  // Initialize all the events
-
-  // Initialize custom group event
+  // Initiliaze command group
   sl_cli_command_add_command_group(sl_cli_handles[0], &my_cli_command_group);
 }

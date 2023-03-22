@@ -44,5 +44,4 @@ void myRejoinHandler(sl_cli_command_arg_t *arguments);
 
 extern sl_cli_command_group_t my_rejoin_command_group;
 
-
 #endif /* NETWORKREJOIN_H_ */

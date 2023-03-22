@@ -20,7 +20,8 @@
  *  This file grants you a set of custom CLI commands to form a network and
  *  open it for install-code
  *    - form : Create the Network
- *    - open : Allows to add a Transient Key to the TC to allow a specific device
+ *    - open : Allows to add a Transient Key to the TC to allow a specific
+ *   device
  *    to join with its install-code key
  *
  *  HOW TO USE :
@@ -38,7 +39,7 @@
 
 sl_zigbee_event_t networkFormCtrl;
 sl_zigbee_event_t networkOpenCtrl;
-static EmberNodeId nodeTable[3] = {0};
+static EmberNodeId nodeTable[3] = { 0 };
 static int currentIndex = 0;
 
 /// Create the CLI_Command_info
@@ -46,24 +47,25 @@ static const sl_cli_command_info_t myFormCreate_command =
   SL_CLI_COMMAND(eventNetworkFormHandler,
                  "Form and Create custom Network",
                  "No argument",
-                 {SL_CLI_ARG_END, });
+                 { SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t myOpenInstallCode_command =
   SL_CLI_COMMAND(networkOpenwithCodeHandler,
                  "Open the network with Install-code",
                  "index<7:0>" SL_CLI_UNIT_SEPARATOR "eui64" SL_CLI_UNIT_SEPARATOR "install-code" SL_CLI_UNIT_SEPARATOR,
-                 {SL_CLI_ARG_UINT8, SL_CLI_ARG_HEX, SL_CLI_ARG_HEX, SL_CLI_ARG_END, });
+                 { SL_CLI_ARG_UINT8, SL_CLI_ARG_HEX, SL_CLI_ARG_HEX, SL_CLI_ARG_END,
+                 });
 
 /// Create the entries
 const sl_cli_command_entry_t my_cli_commands[] = {
-  {"form", &myFormCreate_command, false},
-  {"open", &myOpenInstallCode_command, false},
-  {NULL, NULL, false},
+  { "form", &myFormCreate_command, false },
+  { "open", &myOpenInstallCode_command, false },
+  { NULL, NULL, false },
 };
 
 /// Create the group of entries
 sl_cli_command_group_t my_cli_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
@@ -78,11 +80,12 @@ sl_cli_command_group_t my_cli_command_group = {
  * @param network Network parameters
  * @param usedSecondaryChannels Flag indicating use of Secondary channels
  */
-void emberAfPluginNetworkCreatorCompleteCallback(const EmberNetworkParameters *network,
-                                                 bool usedSecondaryChannels)
+void emberAfPluginNetworkCreatorCompleteCallback(
+  const EmberNetworkParameters *network,
+  bool usedSecondaryChannels)
 {
   // Launch Open Network Event
-  emberAfCorePrintln("PanId : %d",network->panId);
+  emberAfCorePrintln("PanId : %d", network->panId);
 }
 
 void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
@@ -91,17 +94,21 @@ void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
                                     EmberDeviceUpdate status,
                                     EmberJoinDecision decision)
 {
-  emberAfCorePrintln("\n_______________TC Node joined Callback__________________");
-  emberAfCorePrintln("Child 0x%x%x has %s the channel", ((newNodeId >> 8) & 0xff),
-                     (newNodeId & 0xff), ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
+  emberAfCorePrintln(
+    "\n_______________TC Node joined Callback__________________");
+  emberAfCorePrintln("Child 0x%x%x has %s the channel",
+                     ((newNodeId >> 8) & 0xff),
+                     (newNodeId & 0xff),
+                     ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
   // JOINING ?
-  if(status != EMBER_DEVICE_LEFT) {
-      nodeTable[currentIndex] = newNodeId;
-      emberAfCorePrintln("Current NodeID : 0x%x%x",(newNodeId >> 8) & 0xff,
-                         (newNodeId & 0xff));
-      currentIndex += 1;
+  if (status != EMBER_DEVICE_LEFT) {
+    nodeTable[currentIndex] = newNodeId;
+    emberAfCorePrintln("Current NodeID : 0x%x%x", (newNodeId >> 8) & 0xff,
+                       (newNodeId & 0xff));
+    currentIndex += 1;
   }
-  emberAfCorePrintln("________________________________________________________\n");
+  emberAfCorePrintln(
+    "________________________________________________________\n");
 }
 
 /**
@@ -155,7 +162,8 @@ void networkOpenwithCodeHandler(sl_cli_command_arg_t *arguments)
   } else {
     emberAfCorePrintln("Network UP, opening process launched");
     emberAfCorePrintln("Derived key from Install-Code : ");
-    status = emberAfPluginNetworkCreatorSecurityOpenNetworkWithKeyPair(eui64, keyData);
+    status = emberAfPluginNetworkCreatorSecurityOpenNetworkWithKeyPair(eui64,
+                                                                       keyData);
     emberAfCorePrintln("Network Open with Key : 0x%X", status);
   }
 }

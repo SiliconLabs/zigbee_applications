@@ -39,17 +39,17 @@ static const sl_cli_command_info_t myNwkUpdate_command =
   SL_CLI_COMMAND(networkKeyUpdateHandler,
                  "Network Update Handler",
                  "No Argument",
-                 {SL_CLI_ARG_END, });
+                 { SL_CLI_ARG_END, });
 
 /// Create the entries
 static const sl_cli_command_entry_t my_updateNwk_cli_commands[] = {
-  {"updateNwk", &myNwkUpdate_command, false},
-  {NULL, NULL, false},
+  { "updateNwk", &myNwkUpdate_command, false },
+  { NULL, NULL, false },
 };
 
 /// Create the group of entries
 sl_cli_command_group_t my_updateNwk_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_updateNwk_cli_commands
 };
@@ -60,7 +60,7 @@ sl_cli_command_group_t my_updateNwk_command_group = {
 
 /**
  * @brief Callback when Network Key update complete
- * 
+ *
  * @param status Status of the NWK key update
  */
 void emberAfNetworkKeyUpdateCompleteCallback(EmberStatus status)
@@ -68,9 +68,9 @@ void emberAfNetworkKeyUpdateCompleteCallback(EmberStatus status)
   EmberKeyStruct nwkKey;
   emberAfCorePrintln("Network Key Update Complete : ",
                      (status == EMBER_SUCCESS) ? "Success" : "Failed");
-  if(status == EMBER_SUCCESS) {
+  if (status == EMBER_SUCCESS) {
     // Display new NWK Key
-    emberGetKey(EMBER_CURRENT_NETWORK_KEY,&nwkKey);
+    emberGetKey(EMBER_CURRENT_NETWORK_KEY, &nwkKey);
     emberAfCorePrint("Current NWK Key : ");
     emberAfPrintZigbeeKey(nwkKey.key.contents);
   }
@@ -79,7 +79,7 @@ void emberAfNetworkKeyUpdateCompleteCallback(EmberStatus status)
 /**
  * @brief Custom CLI to launch a Network Key Update
  * The TC waits 9 sec before switching to this new key
- * 
+ *
  * @param context Context of the handler
  */
 void networkKeyUpdateHandler(sl_cli_command_arg_t *arguments)
@@ -88,9 +88,9 @@ void networkKeyUpdateHandler(sl_cli_command_arg_t *arguments)
 
   status = emberAfTrustCenterStartNetworkKeyUpdate();
   // Check
-  if(status == EMBER_SUCCESS) {
+  if (status == EMBER_SUCCESS) {
     emberAfCorePrintln("Successfully updated NWK key");
-  } else{
+  } else {
     emberAfCorePrintln("Failed to update NWK Key");
   }
 }

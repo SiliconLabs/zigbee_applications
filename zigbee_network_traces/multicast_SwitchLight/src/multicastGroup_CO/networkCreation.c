@@ -38,40 +38,40 @@
 sl_zigbee_event_t networkFormCtrl;
 sl_zigbee_event_t networkOpenCtrl;
 
-static EmberNodeId nodeTable[NODETABLE_SIZE] = {0};
+static EmberNodeId nodeTable[NODETABLE_SIZE] = { 0 };
 static int currentIndex = 0;
-static uint8_t groupName[] = {6,'L','i','g','h','t','s'};
+static uint8_t groupName[] = { 6, 'L', 'i', 'g', 'h', 't', 's' };
 
 // Create the CLI_Command_info
 static const sl_cli_command_info_t myFormCreate_command =
-    SL_CLI_COMMAND(eventNetworkFormHandler,
-                   "Form and Create custom Network",
-                   "No argument",
-                   {SL_CLI_ARG_END, });
+  SL_CLI_COMMAND(eventNetworkFormHandler,
+                 "Form and Create custom Network",
+                 "No argument",
+                 { SL_CLI_ARG_END, });
 static const sl_cli_command_info_t myOpen_command =
-    SL_CLI_COMMAND(networkOpenHandler,
-                   "Open the network with well-known key",
-                   "No Argument",
-                   {SL_CLI_ARG_END, });
+  SL_CLI_COMMAND(networkOpenHandler,
+                 "Open the network with well-known key",
+                 "No Argument",
+                 { SL_CLI_ARG_END, });
 static const sl_cli_command_info_t myGroupCreate_command =
-    SL_CLI_COMMAND(groupCreateHandler,
-                  "Create the Group with Bindings",
-                  "No argument",
-                  {SL_CLI_ARG_END, });
+  SL_CLI_COMMAND(groupCreateHandler,
+                 "Create the Group with Bindings",
+                 "No argument",
+                 { SL_CLI_ARG_END, });
 
 // Create the entries
 const sl_cli_command_entry_t my_cli_commands[] = {
-    {"form", &myFormCreate_command, false},
-    {"group", &myGroupCreate_command, false},
-    {"open", &myOpen_command, false},
-    {NULL, NULL, false},
+  { "form", &myFormCreate_command, false },
+  { "group", &myGroupCreate_command, false },
+  { "open", &myOpen_command, false },
+  { NULL, NULL, false },
 };
 
 // Create the group of entries
 sl_cli_command_group_t my_cli_command_group = {
-    {NULL},
-    false,
-    my_cli_commands
+  { NULL },
+  false,
+  my_cli_commands
 };
 
 /***************************************************************************//**
@@ -83,11 +83,12 @@ sl_cli_command_group_t my_cli_command_group = {
  * @param network
  * @param usedSecondaryChannels
  */
-void emberAfPluginNetworkCreatorCompleteCallback(const EmberNetworkParameters *network,
-                                                 bool usedSecondaryChannels)
+void emberAfPluginNetworkCreatorCompleteCallback(
+  const EmberNetworkParameters *network,
+  bool usedSecondaryChannels)
 {
   // Launch Open Network Event
-  emberAfCorePrintln("PanId : %d",network->panId);
+  emberAfCorePrintln("PanId : %d", network->panId);
 }
 
 /**
@@ -104,14 +105,11 @@ void eventNetworkFormHandler(sl_cli_command_arg_t *arguments)
   // Network Creation
   state = emberAfNetworkState();
 
-  if (state != EMBER_JOINED_NETWORK)
-  {
-      status = emberAfPluginNetworkCreatorStart(true);
-      emberAfCorePrintln("%p network %p: 0x%X", "Form", "start", status);
-  }
-  else
-  {
-      emberAfCorePrintln("Network already created");
+  if (state != EMBER_JOINED_NETWORK) {
+    status = emberAfPluginNetworkCreatorStart(true);
+    emberAfCorePrintln("%p network %p: 0x%X", "Form", "start", status);
+  } else {
+    emberAfCorePrintln("Network already created");
   }
 }
 
@@ -128,15 +126,12 @@ void networkOpenHandler(sl_cli_command_arg_t *arguments)
   state = emberAfNetworkState();
 
   // Check if Network Created
-  if (state != EMBER_JOINED_NETWORK)
-  {
-      emberAfCorePrintln("Network not Joined, cannot open the network");
-  }
-  else
-  {
-      emberAfCorePrintln("Network UP, opening process launched");
-      status = emberAfPluginNetworkCreatorSecurityOpenNetwork();
-      emberAfCorePrintln("Network Open with Key : 0x%X", status);
+  if (state != EMBER_JOINED_NETWORK) {
+    emberAfCorePrintln("Network not Joined, cannot open the network");
+  } else {
+    emberAfCorePrintln("Network UP, opening process launched");
+    status = emberAfPluginNetworkCreatorSecurityOpenNetwork();
+    emberAfCorePrintln("Network Open with Key : 0x%X", status);
   }
 }
 
@@ -146,13 +141,13 @@ void networkOpenHandler(sl_cli_command_arg_t *arguments)
  */
 void groupCreateHandler(sl_cli_command_arg_t *arguments)
 {
-  for(uint8_t i = 0; i < currentIndex; i++)
+  for (uint8_t i = 0; i < currentIndex; i++)
   {
-      // Prepare the command
-      emberAfFillCommandGroupsClusterAddGroup(GROUP_ID,groupName);
-      emberAfSetCommandEndpoints(emberAfPrimaryEndpoint(), 1);
-      // Send the command
-      emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, nodeTable[i]);
+    // Prepare the command
+    emberAfFillCommandGroupsClusterAddGroup(GROUP_ID, groupName);
+    emberAfSetCommandEndpoints(emberAfPrimaryEndpoint(), 1);
+    // Send the command
+    emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, nodeTable[i]);
   }
 }
 
@@ -167,29 +162,28 @@ void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
                                     EmberJoinDecision decision)
 {
   uint8_t cond = 1;
-  emberAfCorePrintln("\n_______________TC Node joined Callback__________________");
-  emberAfCorePrintln("Child 0x%x%x has %s the channel", ((newNodeId >> 8) & 0xff),
-                     (newNodeId & 0xff), ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
+  emberAfCorePrintln(
+    "\n_______________TC Node joined Callback__________________");
+  emberAfCorePrintln("Child 0x%x%x has %s the channel",
+                     ((newNodeId >> 8) & 0xff),
+                     (newNodeId & 0xff),
+                     ((status) != EMBER_DEVICE_LEFT) ? "joined" : "left");
   // JOINING
-  if((status != EMBER_DEVICE_LEFT) && (currentIndex < NODETABLE_SIZE))
-  {
-
-      // Check if already in the network
-      for (uint8_t i = 0; i < currentIndex; i++)
-      {
-        if(newNodeId == nodeTable[i])
-        {
-          cond = 0;
-        }
+  if ((status != EMBER_DEVICE_LEFT) && (currentIndex < NODETABLE_SIZE)) {
+    // Check if already in the network
+    for (uint8_t i = 0; i < currentIndex; i++)
+    {
+      if (newNodeId == nodeTable[i]) {
+        cond = 0;
       }
-      if(cond == 1)
-      {
-          nodeTable[currentIndex] = newNodeId;
-          emberAfCorePrintln("Current NodeID : 0x%x%x",(newNodeId >> 8) & 0xff,
-                                   (newNodeId & 0xff));
-          currentIndex += 1;
-      }
+    }
+    if (cond == 1) {
+      nodeTable[currentIndex] = newNodeId;
+      emberAfCorePrintln("Current NodeID : 0x%x%x", (newNodeId >> 8) & 0xff,
+                         (newNodeId & 0xff));
+      currentIndex += 1;
+    }
   }
-  emberAfCorePrintln("________________________________________________________\n");
+  emberAfCorePrintln(
+    "________________________________________________________\n");
 }
-

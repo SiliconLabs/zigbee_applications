@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file networkJoin.c
- * @brief File with Events and Function to join the network. 
+ * @brief File with Events and Function to join the network.
  *******************************************************************************
  * # License
  * <b>Copyright 2021 Silicon Laboratories Inc. www.silabs.com</b>
@@ -39,14 +39,14 @@ static const sl_cli_command_info_t myJoinCommand =
   SL_CLI_COMMAND(myJoinHandler,
                  "Function to join the network with install-code",
                  "None",
-                 {SL_CLI_ARG_END});
+                 { SL_CLI_ARG_END });
 const sl_cli_command_entry_t my_cli_commands[] = {
-  {"join", &myJoinCommand, false},
-  {NULL, NULL, false},
+  { "join", &myJoinCommand, false },
+  { NULL, NULL, false },
 };
 
 sl_cli_command_group_t my_cli_command_group = {
-  {NULL},
+  { NULL },
   false,
   my_cli_commands
 };
@@ -57,7 +57,7 @@ sl_cli_command_group_t my_cli_command_group = {
 
 /**
  * @brief CLI Handler to join a network with join command
- * 
+ *
  * @param arguments CLI arguments
  */
 void myJoinHandler(sl_cli_command_arg_t *arguments)
@@ -70,13 +70,13 @@ void myJoinHandler(sl_cli_command_arg_t *arguments)
   if (status == EMBER_SUCCESS) {
     emberAfCorePrintln("Start of Network Steering successful");
   } else {
-      emberAfCorePrintln("ERROR to start Network Steering");
+    emberAfCorePrintln("ERROR to start Network Steering");
   }
 }
 
 /**
  * @brief Event to print info of the router
- * 
+ *
  * @param context Context of the event
  */
 void myEventRouterInfoHandler(sl_zigbee_event_context_t *context)

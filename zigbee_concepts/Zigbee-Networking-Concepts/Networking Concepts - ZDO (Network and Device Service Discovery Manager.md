@@ -8,9 +8,9 @@ The ZDO is a group of messages, concepts, and primitives that are all device spe
 
 - __Device and Service Discovery:__ Handles device and service discovery, so other devices in the network can get to know the device capabilities.
 
-- __Binding Manager:__ Handles end device binding, binding and unbinding activities. This is used to make binding between 2 endpoints on separate devices. This way we can bind a switch to a dedicated light. This will be handled in the “Networking Concepts: Binding” presentation.
+- __Binding Manager:__ Handles end device binding, binding and unbinding activities. This is used to make binding between 2 endpoints on separate devices. This way we can bind a switch to a dedicated light. This will be handled in the “[Networking Concepts: Binding](../Zigbee-Networking-Concepts/Networking%20Concepts%20-%20Binding.md)” presentation.
 
-- __Security Manager:__ Handles security services such as key loading, key establishment, key transport, and authentication. This will be handled in more detail in the “Networking Concepts: ZigBee security” presentation.
+- __Security Manager:__ Handles security services such as key loading, key establishment, key transport, and authentication. This will be handled in more detail in the “[Networking Concepts: ZigBee security](../Zigbee-Networking-Concepts/Networking%20Concepts%20-%20Zigbee%20Security.md)” presentation.
 
 Depending on the device not all of these subcategories are mandatory. We will dive a little deeper in the device and service manager and the network manager. The binding manager and the security manager will be discussed separately.
 

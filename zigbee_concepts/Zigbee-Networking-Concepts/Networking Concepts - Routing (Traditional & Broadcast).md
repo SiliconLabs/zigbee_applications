@@ -6,7 +6,7 @@ Below is the ZigBee system architecture from the Zigbee Introduction: Architectu
 
 ![Figure 1](./resources/table-routing-01.png)
 
-But we will focus on a specific function in the network layer of the protocol stack called routing. This behavior is defined by the Zigbee Alliance in the Zigbee PRO specification. Silicon Labs offers several Zigbee compliant platforms. For full platform details and up-to-date information, please visit www.zigbee.org.
+But we will focus on a specific function in the network layer of the protocol stack called routing. This behavior is defined by the Zigbee Alliance in the Zigbee PRO specification. Silicon Labs offers several Zigbee compliant platforms. For full platform details and up-to-date information, please visit [zigbee.org](https://zigbee.org).
 
 Routing is the process in which a __node relays information to another node that is either the final destination meant to receive this information, or a next step in the path leading to the final destination.__ In a mesh network, several routing mechanisms such as unicast, broadcast, or many-to-one routing / source routing are used to efficiently exchange data in the network.
 

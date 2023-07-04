@@ -1,7 +1,7 @@
 # Zigbee Introduction: Overview of Zigbee Cluster Library (ZCL)
 
 Zigbee defines the MAC/PHY and Network layer standard and the application layer protocol - Zigbee Cluster Library.
-This training module focuses on the Zigbee Cluster Library. The specification is available for public download at csa-iot.org
+This training module focuses on the Zigbee Cluster Library. The specification is available for public download at [csa-iot.org](https://csa-iot.org/)
 
 ## Overview
 

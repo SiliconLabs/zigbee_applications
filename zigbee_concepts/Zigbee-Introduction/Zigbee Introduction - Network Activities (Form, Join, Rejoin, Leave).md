@@ -18,6 +18,8 @@ Once the coordinator has chosen the channel, PAN ID, and extended PAN ID, the ne
 
 After the first router joins the coordinator after network formation, future nodes can join the network through the coordinator or the new router. Nodes cannot join through an end device because an end device doesn’t have routing functionalities. As the network grows, a tree-like structure forms from the coordinator, with the end devices generally being on the fringes of the network.
 
+As of R23 a Trust Center (TC) may exchange messages with a device before it joins the network during the device interview process. See the most recent Zigbee EmberZNet SDK [release notes](https://github.com/SiliconLabs/gecko_sdk/releases) for more information on the device interview process.
+
 ## Joining a Network
 
 From the perspective of joining a network - a device that wants to join the network is depicted by the purple circle. It is neither red nor blue because it hasn’t joined the network and therefore doesn’t have a node type.

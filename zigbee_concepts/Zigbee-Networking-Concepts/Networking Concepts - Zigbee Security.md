@@ -55,7 +55,7 @@ If you send the same command every time, you are susceptible to replay attacks. 
 
 ### Other Network Security Considerations
 
-As noted a there is a single network key. This under open trust, any device has the ability to see all traffic on the network. This means that:
+As noted there is a single network key. This under open trust, any device has the ability to see all traffic on the network. This means that:
 
 It’s important to keep rogue devices off the network, and certainly try to only admit trusted devices to join the network.
 Make use of other security (APS Security) can be used for additional encryption
@@ -78,6 +78,12 @@ Securing data from point to point. While some of the message can be decoded by o
 Within Smart Energy, this is the standard message sending method.
 
 This is compatible with older Zigbee Pro and current Zigbee 3.0. EmberZNet allows for different layers of encryption. All traffic can be APS encrypted or it can be done on a packet by packet basis, choosing only some packets to be APS encrypted.
+
+### Dynamic Link Key
+A new feature introduced in R23 is __Dynamic Link Key (DLK)__ joining which uses elliptic curve Diffie-Hellman key negotiation to establish keys and authenticate devices before joining the network as well as adding the Network Commissioning with High Security Join Feature. This ensures that the trust center can hold onto the network key for as long as possible before sharing it with the new device.
+
+### Mutli-Hop commissioning & APS Relay Commands
+R23 has introduced APS Relay frames which provide a secure mechanism to enable Multi-hop commissioning. An unauthenticated device sends a network commissioning request to a router in the network which sends an Update Device command to the Trust Center (TC) with TLVs (Tag Length Values) . The TC (upstream endpoint) then begins Key Negotiation by sending APS layer messages to the unauthenticated device (downstream endpoint) by relaying traffic via the 'joiner parent' (handoff router). The relayed packet payload includes the APS header and is contained in the TLV. The final hop to the downstream endpoint does not have network security as the joiner has not yet joined the network. The relay frames will work regardless of the number of hops and in the case of a single-hop the upstream endpoint assumes the role of the handoff router. Additionally, the relay frame APS sequence number is separate from relayed packet. [DLKs](#dynamic-link-key) established during Key Negotiation ensure that these messages are secure without revealing the Network Key before the new device has officially joined the network.
 
 ## Joining and Rejoining Process
 
@@ -151,14 +157,14 @@ Process:
 
 ### Zigbee 3.0
 
-This cause Zigbee 3.0 to be created. The basic idea was to do everything to get customers away from the well known link key.
+This caused Zigbee 3.0 to be created. The basic idea was to do everything to get customers away from the well known link key.
 
 They would leave a caveat for using ZigbeeAlliance09, but as a whole you wanted to use a new link key.
 Ideally customers would move to unique codes that was just for joining.
 
 Along with this, changing link keys became mandatory on devices. When a Zigbee 3.0 device joined a network, it would check that the network had the facility to issue new link keys and if so, request a new one.
 
-Finally a new idea was introduced, that of a single use joining install code. This was a which could be derived from a some other value, these keys would be unique for joining and then changed out. They would be shared with the network in some out of band way, just as a computer, mobile device or web interface. The idea was that with these single use derived codes the joining process became much more secure.
+Finally a new idea was introduced, that of a single use joining install code. This was a code which could be derived from a some other value, these keys would be unique for joining and then changed out. They would be shared with the network in some out of band way, just as a computer, mobile device or web interface. The idea was that with these single use derived codes the joining process became much more secure.
 
 Looking at the below picture, you see the 3 old joining steps: Associating, Transport of the network Key and the device announce.
 
@@ -252,7 +258,7 @@ Furthermore, since the stack is well versed in these key values, there is a well
 
 Most of the security topics we have discussed had to do with security considerations within EmberZNet and primarily with network security. But there are other issues which reside outside the stack. This is some details on an “IoT worm” which was created by some researchers in Israel and Canada. They were able to exploit two bugs within Phillips bulbs which allowed them to spread a virus across Phillips Hue bulbs. 
 
-First they exploiting a bug in Atmel’s ZLL implementation they were able to touchlink to a bulb from hundreds of meters away (a process that generally needs to be within a few centimeters). Doing so, they could “steal” the light bulbs from it’s network to their own network. Then they further exploited the fact that Phillips didn’t require signed bootload images to install their own hacked firmware within the lights. This allowed them to spread a self propogating worm.
+First they exploited a bug in Atmel’s ZLL implementation they were able to touchlink to a bulb from hundreds of meters away (a process that generally needs to be within a few centimeters). Doing so, they could “steal” the light bulbs from it’s network to their own network. Then they further exploited the fact that Phillips didn’t require signed bootload images to install their own hacked firmware within the lights. This allowed them to spread a self propogating worm.
 
 This demonstrates not just the need for companies like Phillips to consider security as they make their devices, but also vendors, like even Silicon Labs, to make sure they properly test their stacks and don’t have bugs like this in their code.
 

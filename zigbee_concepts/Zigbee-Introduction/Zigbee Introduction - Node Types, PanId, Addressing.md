@@ -14,7 +14,7 @@ There are three node types in a zigbee mesh network. The differences among these
 
 <p align="center"> <img src = "./resources/nodetypes-addressing-01.png"> </p>
 
-Whether the device should be Coordinator or a Route or an End Device/Sleepy End Device should be decided in the design phase of the application. Changing the device type dynamically is not supported and should be avoided. One exception is when a device is configured to be a router/coordinator. These devices can implement both the NetworkCreator and NetworkSteering plugins and if said device is creating a centralized network it shall become a coordinator. Otherwise, it can join another network as an end device.
+Whether the device should be Coordinator or a Router or an End Device/Sleepy End Device should be decided in the design phase of the application. Changing the device type dynamically is not supported and should be avoided. One exception is when a device is configured to be a router/coordinator. These devices can implement both the NetworkCreator and NetworkSteering plugins and if said device is creating a centralized network it shall become a coordinator. Otherwise, it can join another network as an end device.
 
 Zigbee implementations before 3.0 do something similar with the Form and Join API calls.
 
@@ -53,7 +53,7 @@ To setup a ZR in EmberZnet make sure you have selected End device or sleepy end 
 
 <p align="center"> <img src = "./resources/nodetypes-addressing-06.png"> </p>
 
-Aslo you must enable the Zigbee PRO leaf library in the components tab as well.
+Also you must enable the Zigbee PRO leaf library in the components tab as well.
 
 <p align="center"> <img src = "./resources/nodetypes-addressing-07.png"> </p>
 

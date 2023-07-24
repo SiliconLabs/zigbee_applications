@@ -30,7 +30,7 @@ Build and flash the nwkKeyUpdate_SED application to the last one (SED).
 
 ## Interpretation
 After doing the whole process, it is possible to see that the Trust Center and the router updated their NWK key.\
-**Before the NWK Key Update on the TC**
+**Before the NWK Key Update on the TC**\
 ![alt text](doc/TCKeysPrintBeforeUpdate.PNG "Keys Print TC after Update")\
 **After the NWK Key Update on the TC**\
 ![alt text](doc/TCKeysPrintAfterUpdate.PNG "Keys Print TC after Update")\

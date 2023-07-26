@@ -18,7 +18,6 @@ Once the coordinator has chosen the channel, PAN ID, and extended PAN ID, the ne
 
 After the first router joins the coordinator after network formation, future nodes can join the network through the coordinator or the new router. Nodes cannot join through an end device because an end device doesn’t have routing functionalities. As the network grows, a tree-like structure forms from the coordinator, with the end devices generally being on the fringes of the network.
 
-As of R23 a Trust Center (TC) may exchange messages with a device before it joins the network during the device interview process. See the most recent Zigbee EmberZNet SDK [release notes](https://github.com/SiliconLabs/gecko_sdk/releases) for more information on the device interview process.
 
 ## Joining a Network
 
@@ -40,7 +39,7 @@ On the top, you see a visual representation of the network, and the arrows show 
 
 The joining device sends an association message to the coordinator of the network, this is the green message in the log. After this the coordinator will share the network key, so the device can encrypt and decrypt the messages. After this is done the joining device is announcing itself in the network, this way the whole network knows what kind of device the just joined device is. The details of the device announcement can be seen in the “Event Detail pane” on the right. Here we see in the top red box the PAN id of the network, also here is the short Id of the joined device visible. The following 2 red boxes are more device describing, from these boxed you can determine the device type, coordinator, router, end device, or a sleepy end device. Routers and Coordinators are full-function devices, while an end device or a sleepy end device are reduced-function devices. For a sleepy end device, the receiver will sleep when the device is in an idle state, while the other devices will always listen to the channel.
 
-After Device Announce, the device requests a link key update. For further information and more details on link key update, we recommend the “__Network Concept: Zigbee Security__” and “__Zigbee App Layer: Zigbee 3.0 Security Considerations__”
+After Device Announce, the device requests a link key update. For further information and more details on link key update, we recommend the "[Network Concept: Zigbee Security](../Zigbee-Networking-Concepts/Networking%20Concepts%20-%20Zigbee%20Security.md)" and “__Zigbee App Layer: Zigbee 3.0 Security Considerations__”
 
 ## Rejoin a Network
 

@@ -29,10 +29,10 @@ echo 2. Program the Installation Code into the Manufacturing Area of the specifi
 echo 3. Check the Stored Installation Code
 echo **********************************************************************
 echo.
-%COMMANDER% flash --tokengroup znet --token "Install Code: !ERASE!"
+%COMMANDER% flash --tokengroup znet --token "Install Code: !ERASE!" -s 440267975
 echo.
-%COMMANDER% flash --tokengroup znet --token "Install Code:%DEFAULT_INSTALL_CODE%"
+%COMMANDER% flash --tokengroup znet --token "Install Code:%DEFAULT_INSTALL_CODE%" -s 440267975
 echo.
-%COMMANDER% tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE
+%COMMANDER% tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE -s 440267975
 
 pause

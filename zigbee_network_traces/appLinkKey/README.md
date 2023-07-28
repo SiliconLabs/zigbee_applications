@@ -6,7 +6,7 @@
 
 ## 1. Summary
 Zigbee can also use an additional security feature for end-to-end communication between 2 devices
-on the same network by using **Application Link Keys**. This key is going to encrypt the APS layer between 2 nodes on the network, and and also decrypt when receiving data. Only the 2 nodes are aware of this Link key, even the Trust Center does not have access to it. The trust center has only the role to give the keys to the two nodes.
+on the same network, this is **Application Link Keys**. This key is going to encrypt the APS layer between 2 nodes on the network, and and also decrypt when receiving data. Only the 2 nodes are aware of this Link key, even the Trust Center does not have access to it. The trust center has only the role to give the keys to the two nodes.
 
 ## 2. Gecko SDK version
 Gecko SDK Suite 4.1.0 or later
@@ -49,9 +49,9 @@ This directory also contains trace captures on Network Analyzer and Wireshark di
 * trace_app_link_key.pcapng : Capture for Wireshark
 
 **To use Wireshark Capture**
-You need to add the well-known key to your wireshark keys to decode packets.
+You need to add the well-known key to your wireshark keys to decode packets.\
 Go to : [Edit -> Preferences -> Protocols -> ZigBee -> Edit] and add :
-**5A:69:67:42:65:65:41:6C:6C:69:61:6E:63:65:30:39** as the well-known key
+**5A:69:67:42:65:65:41:6C:6C:69:61:6E:63:65:30:39** as the well-known key\
 
 To get more informations : [AN1233: Zigbee Security](https://www.silabs.com/documents/public/application-notes/an1233-zigbee-security.pdf)\
 [UG391: Zigbee Application Framework dev guide](https://www.silabs.com/documents/public/user-guides/ug391-zigbee-app-framework-dev-guide.pdf)

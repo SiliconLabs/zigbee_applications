@@ -35,12 +35,12 @@ It is possible to see in the traces that we have two keys that are different for
 **For the SED** : 
 ![alt text](doc/SedLinkKeyPacket.PNG "SED Transport Link Key")
 
-In order to check that the keys are the Trust key hashed by the EUI64 of the node, you can use the tool Calculate HMAC present in the Preferences window > Network Analyzer > Decoding > Security keys. 
+In order to check that the key are the Trust key hashed by the EUI64 of the node, you can use the tool Calculate HMAC present in the Preferences window > Network Analyzer > Decoding > Security keys. 
 
 You need to enter the **Trust Key** which is located in the TC Link key table when you use the **keys print** command and the eui64 of the node.
-For the router, we have the following result :\
+For the router, we have the following result :
 ![alt text](doc/HMAC_Check_Router.PNG "HMAC Check for Router")\
-As you can see, it matches with the one found in the trace. 
+It matches with the one found in the trace ! 
 
 ## 6. Traces & other documents
 This directory also contains trace captures on Network Analyzer and Wireshark directly in the repositories
@@ -50,6 +50,6 @@ This directory also contains trace captures on Network Analyzer and Wireshark di
 **To use Wireshark Capture**
 You need to add the well-known key to your wireshark keys to decode packets.\
 Go to : [Edit -> Preferences -> Protocols -> ZigBee -> Edit] and add :
-**5A:69:67:42:65:65:41:6C:6C:69:61:6E:63:65:30:39** as the well-known key
+**5A:69:67:42:65:65:41:6C:6C:69:61:6E:63:65:30:39** as the well-known key\
 
-For more information see: [AN1233: Zigbee Security](https://www.silabs.com/documents/public/application-notes/an1233-zigbee-security.pdf)
+To get more informations : [AN1233: Zigbee Security](https://www.silabs.com/documents/public/application-notes/an1233-zigbee-security.pdf)

@@ -7,10 +7,10 @@ These exercises help you get familiar with ZigBee 3.0 in the EmberZNet Stack, Si
 
 The boot camp series hands-on workshop will cover the four functionalities below, and the application development is split into four steps respectively to show how an application should be built up from scratch.
 The exercise in this documentation is the first exercise in the "Zigbee Boot Camp" series.
-- **The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.**
-- The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.
-- The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.
-- The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.
+- **[The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.](Zigbee-Hands-on-Forming-Joining.md)**
+- [The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md)
+- [The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.](../Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md)
+- [The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.](../Zigbee-Hands-on-Non-volatile-Data-Storage/Zigbee-Hands-on-Non-volatile-Data-Storage.md)
 
 
 ## 1.2. Purpose
@@ -19,7 +19,7 @@ This tutorial will give an overall knowledge about how to build a Light and Swit
 The network will consist of two devices using the EFR32MG12 SoCs (BRD4162A).
 - One of the devices is the Light. Since the created network is centralized, the Light will work as the Coordinator and Trust Center of the network. This device forms and opens the network, permits other devices to join, and manages security keys.
 - The other device is the Switch. It joins the network opened by the Light and sends On-Off commands to the Light.
-The figure below illustrates the workflow of this hands-on.
+The figure below illustrates the workflow of this hands-on. 
 
 <div align="center">
   <img src="Images/Workflow.png">
@@ -30,6 +30,8 @@ The figure below illustrates the workflow of this hands-on.
 </br>
 
 # 2. Create Light Application
+
+**Note:** Ensure that the device is loaded with a bootloader before flashing any images. See [QSG-180: Quick Start Guide using SSv5](https://www.silabs.com/documents/public/quick-start-guides/qsg180-zigbee-emberznet-7x-quick-start-guide.pdf) for reference.
 
 As presented in Section 1.2, the purpose of the Light is to form and open the network.
 The Silicon Labs Project Wizard will be used for creating the application. Silicon Labs Project Wizard is an interactive GUI tool that allows developers to create and configure most of their Zigbee application.
@@ -135,6 +137,8 @@ Press the Build button. Upon a successful build, the binary files should appear 
 
 # 3. Download and test the Light application
 
+**Note:** Ensure that the device is loaded with a bootloader before flashing any images. See [QSG-180: Quick Start Guide using SSv5](https://www.silabs.com/documents/public/quick-start-guides/qsg180-zigbee-emberznet-7x-quick-start-guide.pdf) for reference.
+
 Let's download the Zigbee_Light_ZC.s37 file to the development kit as shown below. See Figure 3-1 and Figure 3-2.
 The highlighted "Advanced Settings.." in Figure 3-3 allows the user to decide how to flash the chip. Here, the flash can be merged with a new image (Merge Content), partially (Page Erase) or completely (Full Erase) erase before downloading the file.
 Keep in mind that neither erase type cleans the bootloader section in EFR32MG12 part, but the Full erase deletes the token region.
@@ -192,9 +196,9 @@ Note: If the project name does not appear in console you can add this in the Ser
 
 # 4. Create Switch Applicaion
 
-In this hands-on, the Switch is the device that will join the network created and opened by the Light. However, the procedure to create and form the network is described in the next module.
+In this hands-on, the Switch is the device that will join the network created and opened by the Light. However, the procedure to create and form the network is described in the [next module](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md).
 Creating the project and configuration is similar to the Light application. The Switch application is also based on the "ZigBeeMinimal" sample application, therefore:
-1.  Repeat the step 1-4 of chapter Create Light application, except name the project to "Zigbee_Switch_ZR".
+1.  Repeat the step 1-4 of [Create Light application](#2-create-light-application), except name the project to "Zigbee_Switch_ZR".
 2.  Open the .slcp file of the project.
  - Go to  Configuration Tools  tab, open the Zigbee Cluster Configurator and choose HA On/Off Switch(0x0000) device template. Install the clusters that have a yellow warning sign. The Enabled Clusters filter can be used to identify the required clusters easily. 
  - Go to Software Components tab and search for Zigbee Device Config select the Router device type from the dropdown menu.
@@ -227,7 +231,9 @@ Table 4-1 presents the affected plugins on the Switch (Router) node.
 
 # 5. Download and test the Switch application
 
-Please repeat the steps from the chapter **3. Download and test the Light application** and test if the Switch application is working by pressing enter on the Serial 1 tab of the Launch console. See Figure 5-1.
+**Note:** Ensure that the device is loaded with a bootloader before flashing any images. See [QSG-180: Quick Start Guide using SSv5](https://www.silabs.com/documents/public/quick-start-guides/qsg180-zigbee-emberznet-7x-quick-start-guide.pdf) for reference.
+
+Please repeat the steps from the chapter **[3. Download and test the Light application](#3-download-and-test-the-light-application)** and test if the Switch application is working by pressing enter on the Serial 1 tab of the Launch console. See Figure 5-1.
 
 <div align="center">
   <img src="Images/CLITest.png">
@@ -244,7 +250,7 @@ This chapter presents how to form and join a network. The communication between 
 ## 6.1 Programming the Install Code to Switch (Router) Device
 
 For programming the install code into the Switch device, you need to create a text file with the value of the install code, and then write the install code into the manufacturing area of the Switch node by using the Simplicity Commander.
-To save your time on this hands-on, we have prepared a batch file as below that can finish the install code programming automatically. Create a batch file, as seen below, open it with any text editor, copy and paste the content below to it, save and execute it for programming the install code. Please ensure only the switch device is connected to the PC, before running the script. 
+To save your time on this hands-on, we have prepared a batch file below that can finish the install code programming automatically. Create a batch file, as seen below, open it with any text editor, copy and paste the content below to it, save and execute it for programming the install code. Please ensure only the switch device is connected to the PC, before running the script. 
 
 ```
 @echo off
@@ -296,6 +302,61 @@ Below is the result of executing the batch file:
   <b>Figure 6-1 Programming the Install Code </b>
 </div>  
 </br>
+
+<details>
+  <summary> Show/Hide Bash Shell file for Mac users
+   </summary>
+
+    #!/bin/bash
+
+    # USAGE
+    # You can run this file in the command line from this directory
+    # You may need to run the command: chmod +x program_install_code.sh
+    # to give the shell script the proper permissions to run.
+    # Then run the command: ./program_install_code.sh <serial number>
+    # If there is only one board connected then leave <serial number> empty
+
+    COMMANDER="/Applications/Simplicity Studio.app/Contents/Eclipse/developer/adapter_packs/commander/commander.app/Contents/MacOS/commander"
+    DEFAULT_INSTALL_CODE="83FED3407A939723A5C639B26916D505"
+    SERIAL_NUMBER=$1
+
+    # Change directory to the Simplicity Commander path
+    cd "/Applications/Simplicity Studio.app/Contents/Eclipse/developer/adapter_packs/commander/commander.app/Contents/MacOS"
+    echo
+    echo "**********************************************************************"
+
+    # Check the value of the MFG Token
+    echo "CHECKING THE VALUE OF THE MFG TOKEN:"
+    if [ -z "$SERIAL_NUMBER" ]; then
+      "$COMMANDER" tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE
+    else
+      "$COMMANDER" tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE --serialno "$SERIAL_NUMBER"
+    fi
+    echo "**********************************************************************"
+
+    echo
+    echo "**********************************************************************"
+    # Overwrite the MFG Token
+    echo "OVERWRITING THE MFG TOKEN:"
+    if [ -z "$SERIAL_NUMBER" ]; then
+      "$COMMANDER" flash --tokengroup znet --token "Install Code: $DEFAULT_INSTALL_CODE"
+    else
+      "$COMMANDER" flash --tokengroup znet --token "Install Code: $DEFAULT_INSTALL_CODE" --serialno "$SERIAL_NUMBER"
+    fi
+    echo "**********************************************************************"
+
+    echo
+    echo "**********************************************************************"
+    # Check the value of the MFG Token again
+    echo "CHECKING THE UPDATED MFG TOKEN:"
+    if [ -z "$SERIAL_NUMBER" ]; then
+      "$COMMANDER" tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE
+    else
+      "$COMMANDER" tokendump --tokengroup znet --token TOKEN_MFG_INSTALLATION_CODE --serialno "$SERIAL_NUMBER"
+    fi
+    echo "**********************************************************************"
+</details>
+<br>
 
 Note: The sections below (invisible by default, click the heading to view the details) describe in detail how to program the install code. You can skip it and go to **6.2 Form centralized network on Light (Coordinator) device** if you don't want spend much time on that.
 
@@ -405,9 +466,9 @@ To see if the link key is added successfully to the Transient Key Table, enter t
 
 As show above, the derived link key is:
 
-'''
-66 B6 90 09 81 E1 EE 3C  A4 20 6B 6B 86 1C 02 BB 
-'''
+```
+66 B6 90 09 81 E1 EE 3C  A4 20 6B 6B 86 1C 02 BB
+```
 
 ### 6.2.2 Form Centralized Network.
 
@@ -552,7 +613,7 @@ It should change the view to Network Analyzer and immediately start capturing.
 </div>  
 </br>
 
-And then repeat the step in **Open the network with the derived link key** to open the network, and step in **Join the network on Switch (Router) device** to join the network.
+And then repeat the step in **[Open the network with the derived link key](#623-open-the-network-with-the-derived-link-key)** to open the network, and step in **[Join the network on Switch (Router) device](#63-join-the-network-on-switch-router-device)** to join the network.
 The capture file (Live) should show the packets on the network.
 
 

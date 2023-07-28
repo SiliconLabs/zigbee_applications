@@ -34,7 +34,7 @@ In order to speed up the aging out of the SED, we set the value EMBER_END_DEVICE
 The rejoin process is composed of 3 messages which are Rejoin Request, Rejoin response and device announce
 as you can see on the following capture.\
 ![alt text](doc/rejoinCapture.PNG "Rejoin Trace")\
-On the TC, the rejoin is successful.\
+On the TC, the rejoin is successful.
 ![alt text](doc/SecuredRejoinTC.PNG "Secured Rejoining")
 
 ## 6. Traces & other documents

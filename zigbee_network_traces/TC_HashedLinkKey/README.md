@@ -5,7 +5,7 @@
 ![SDK badge](https://img.shields.io/badge/SDK-v4.1.0-green)
 
 ## 1. Summary
-When joining a network and to be allowed to communicate end-to-end with the trust center, each node requires a TC Link key. This link key can be unique, hashed link key based on a global key which is hashed by the ID of the corresponding node, or the same link key for every node which means the "end-to-end" communication can be decrypted by every node of the network. In this project, we are using hashed link keys. The advantage of this method being that it requires less RAM since the TC only needs to store one unique link key.
+When joining a network and to be allowed to communicate end-to-end with the trust center, each node requires a TC Link key. This link key can be unique, hashed link key based on a global key which is hashed by the ID of the corresponding node, or the same link key for every node which means the "end-to-end" communication can be decrypted by every node of the network. In this project, we are using hashed link keys. It has a lot of advantages to use this method, it requires less RAM since it only need to store one unique link key.
 
 ## 2. Gecko SDK version
 Gecko SDK Suite 4.1.0 or later

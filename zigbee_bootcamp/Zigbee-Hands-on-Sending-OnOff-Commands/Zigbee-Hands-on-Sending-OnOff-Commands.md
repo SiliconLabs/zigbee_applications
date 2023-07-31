@@ -6,16 +6,16 @@
 The Zigbee boot camp is divided into four phases to show how an application should be built from scratch.
 This module is the 2nd phase of the series “Zigbee Boot Camp” course.
 
-- The 1st phase, you will form a centralized network with the Light, and execute a joining process with the Switch.
-- **The 2nd phase, the devices will be set to transmit, receive, and process the ZCL On-Off commands using APIs.**
-- The 3rd phase, the Switch will have a periodic event to execute any custom code, which in our case will be a LED blinking.
-- The 4th phase, you will make the Switch be able to store any custom data in its flash by using Non-volatile memory.
+- [The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.](Zigbee-Hands-on-Forming-Joining.md)
+- **[The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md)**
+- [The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.](../Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md)
+- [The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.](../Zigbee-Hands-on-Non-volatile-Data-Storage/Zigbee-Hands-on-Non-volatile-Data-Storage.md)
 
 
 
-## 1.2. Purpose
+## 1.2. Purposes
 
-In the previous hands-on module “Forming and Joining”, we learned how to form a basic centralized Zigbee network and join the network. In this hands-on, we will demonstrate how to send ZCL on-off commands from the Switch node to operate the LED in the Light node.
+In the previous hands-on module [“Forming and Joining”](../Zigbee-Hands-on-Forming-and-Joining/Zigbee-Hands-on-Forming-Joining.md), we learned how to form a basic centralized Zigbee network and join the network. In this hands-on, we will demonstrate how to send ZCL on-off commands from the Switch node to operate the LED in the Light node.
 As in the previous hands-on, the network will consist of two devices using BRD4162A (EFR32MG12).
 The figure below depicts this hands-on workflow:
 

@@ -6,10 +6,10 @@ The boot camp series hands-on workshop will cover four functionalities below, an
 
 The exercise is the 4th part of series “Zigbee Boot Camp” course.
 
-- In the 1st phase, a basic network forming by the Light, and a joining process by the Switch will be realized.
-- The 2nd part will prepare the devices to transmit, receive, and process the On-Off commands by using APIs.
-- At the 3rd step the Switch will have a periodic event to execute any custom code, which will be a LED blinking in our case.
-- **The 4th step is to make the Switch to be able to store any custom data in its flash by using Non-volatile memory.**
+- [The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.](Zigbee-Hands-on-Forming-Joining.md)
+- [The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md)
+- [The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.](../Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md)
+- **[The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.](../Zigbee-Hands-on-Non-volatile-Data-Storage/Zigbee-Hands-on-Non-volatile-Data-Storage.md)**
 
 ## 1.2. Purpose
 
@@ -105,7 +105,7 @@ Token Manager enables SimEE data storage with the same API for accessing NVM3 or
 
 **Note:** SimEEv1/v2 are not implemented on EFR32 Series 2. 
 
-By clicking the gear icon in the Token Manager component, we can configure to **Enable Custom tokens** and/or *** Enable Custom Manufacturing Tokens***, which can be further configured and defined in sl_custom_token_header.h and sl_custom_manufacturing_token_header.h respectively. Detailed description will be illustrated in next chapter.
+By clicking the gear icon in the Token Manager component, we can configure to **Enable Custom tokens** and/or *** Enable Custom Manufacturing Tokens***, which can be further configured and defined in sl_custom_token_header.h and sl_custom_manufacturing_token_header.h respectively. A detailed description will be illustrated in chapter [3. Token Using NVM3](#3-token-using-nvm3).
 
 <div align="center">
   <img src="Images/TokenManagerConfiguration.png">
@@ -168,7 +168,7 @@ Depending on how the tokens are going to be used, it can be distinguished as **D
 </div>  
 </br>
 
-In this chapter, we will introduce **How to define and access dynamic tokens and manufacturing tokens in NVM3**. A lab will be will be provided to demonstrate in the next chapter.
+In this chapter, we will introduce **How to define and access dynamic tokens and manufacturing tokens in NVM3**. A lab will be will be provided to demonstrate in the next chapter [4. Lab](#4-lab).
 
 ## 3.1 Dynamic Tokens
 
@@ -266,7 +266,7 @@ led0OnOffStatus.ledOnOff = <current status>;
 sl_token_set_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
 ```
 
-Since this hands-on is designed for new users to the Silicon Labs, we will focus on the basic token usage, if you are interested about how to write the counter token, please read the section [3.4.1.1 Accessing Counter Tokens](https://www.silabs.com/documents/public/application-notes/an1154-tokens-for-non-volatile-storage.pdf) of AN1154.
+Since this hands-on is designed for new users to the Silicon Labs stack, we will focus on the basic token usage, if you are interested about how to write the counter token, please read the section [3.4.1.1 Accessing Counter Tokens](https://www.silabs.com/documents/public/application-notes/an1154-tokens-for-non-volatile-storage.pdf) of AN1154.
 
 #### 3.1.2.2 Accessing Indexed Dynamic Tokens
 
@@ -276,7 +276,7 @@ As explained above, we will not spend much space of this documentation to introd
 
 ## 3.2 Manufacturing Tokens
 
-The major difference between Manufacturing Tokens and Dynamic Tokens is on where the tokens are stored and how they are accessed. Manufacturing Tokens are set at manufacturing time and they are stored at absolute address of the flash. It can be written either with external programming tools or from on-chip code only if the token is currently in an erased state.
+The major difference between Manufacturing Tokens and Dynamic Tokens is where the tokens are stored and how they are accessed. Manufacturing Tokens are set at manufacturing time and they are stored at absolute address of the flash. They can be written either with external programming tools or on-chip code only if the token is currently in an erased state.
 
 ### 3.2.1 Creating Manufacturing Tokens
 
@@ -300,7 +300,7 @@ They have the same parameters as the basic tokens APIs. The two primary purposes
 - For access early in the boot process before `emberInit()` or `sl_token_init()` is called.
 
 Also let us use an example to explain the usage of these dedicated APIs for accessing manufacturing tokens.
-As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, manufacturer will program the manufacturing string token during the production with programming tool, and we can use the on-chip code snippet below to retrieve the string data from the manufacturing token.
+As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, the manufacturer will program the manufacturing string token during production with a programming tool, and we can use the on-chip code snippet below to retrieve the string data from the manufacturing token.
 
 ```
 tokTypeMfgString mfgString;
@@ -312,7 +312,7 @@ sl_token_get_manufacturing_data (TOKEN_MFG_STRING, 1, &mfgString, sizeof(mfgStri
 
 # 4. Lab
 
-This hands-on is building on top of previous three hands-on. Since the Non-volatile data storage mechanism does not depend on the mesh node type, we will only demonstrate how to access the NVM3 object via token API on the Switch (router) device side, it refers to the `Zigbee_Switch_ZR` project. 
+This hands-on is building on top of previous three [hands-on](#11-application-features). Since the Non-volatile data storage mechanism does not depend on the mesh node type, we will only demonstrate how to access the NVM3 object via token API on the Switch (router) device side, it refers to the `Zigbee_Switch_ZR` project. 
 
 This section provides step-by-step instructions to demonstrate how to store and retrieve the LED0's status to/from the Non-Volatile data storage (it's NVM3 in this hands-on) objects with basic token. And also demonstrate how to access manufacturing token with the dedicated APIs.
 
@@ -374,7 +374,7 @@ Let's move on to accessing the defined token. Below are step-by-step instruction
 
 ### 4.2.1 Write the Basic Token data
 
-In the last hands-on, we defined a event handler `ledBlinkingHandler()` to toggle the LED0 periodically, we need to store the LED0 status after each toggling process.
+In the last [hands-on](https://github.com/SiliconLabs/zigbee_applications/blob/f7059cdff81e6c57b711aaa2f0bd3634e2300b6f/zigbee_bootcamp/Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md#22-implement-the-event-handler), we defined an event handler `ledBlinkingHandler()` to toggle the LED0 periodically, we need to store the LED0 status after each toggling process.
 
 Open the `app.c`, include the head file and define "led0OnOffStatus" variable at the top of this file.
 

@@ -23,14 +23,14 @@
 The boot camp series hands-on workshop will cover four functionalities below, and the application development is split into four steps respectively to show how an application should be built up from the beginning.  
 The exercise in this documentation is the 3rd exercise in the “Zigbee Boot Camp” series.  
 
-- [The 1st phase, forming a basic network (Light), and a joining process (Switch) will be done using install code.](Zigbee-Hands-on-Forming-Joining.md)
-- [The 2nd phase, will prepare the devices to transmit, receive, and process the On-Off commands using APIs.](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md)
-- **[The 3rd phase, the Switch will have a periodic event to execute custom code, in this case a blinking LED.](../Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md)**
-- [The 4th phase, the Switch will be able to store any custom data in its flash using Non-volatile memory.](../Zigbee-Hands-on-Non-volatile-Data-Storage/Zigbee-Hands-on-Non-volatile-Data-Storage.md)
+- In the 1st phase, a basic network forming by the Light, and a joining process by the Switch will be realized.  
+- The 2nd part will prepare the devices to transmit, receive, and process the On-Off commands by using APIs.  
+- **At the 3rd step the Switch will have a periodic event to execute any custom code, which will be a LED blinking in our case.**  
+- The 4th thing to do is to make the Switch to be able to store any custom data in its flash by using Non-volatile memory.  
 
 ## 1.2. Purpose
 
-In the previous hands-on [“Forming and Joining”](../Zigbee-Hands-on-Forming-and-Joining/Zigbee-Hands-on-Forming-Joining.md) and [“Sending OnOff Command”](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md), we learned how to form a basic centralized Zigbee network and join the network, and how to send on-off command from the Switch node to the Light node in the Zigbee mesh network.  
+In the previous hands-on “Forming and Joining” and “Sending OnOff Command”, we learned how to form a basic centralized Zigbee network and join the network, and how to send on-off command from the Switch node to the Light node in the Zigbee mesh network.  
 In this hands-on, we provide step-by-step instructions to demonstrate how to use the Zigbee Stack event mechanism to schedule events on the Switch node.  
 The figure below illustrates the working flow of this hands-on.  
 
@@ -40,7 +40,7 @@ graph LR
 ```
 
 **Note**:
-Before all the individual steps would be performed, please make sure that both the hardware and software are ready for the development. 
+Before all the individual steps would be performed, please make sure that both the hardware and software are ready for the development. Read the chapter “2 Fundamental steps” of the previous 2 hands-on for more detail about it.  
 
 # 2. Using Event
 

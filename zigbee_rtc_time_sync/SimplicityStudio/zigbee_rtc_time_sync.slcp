@@ -1,0 +1,84 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: zigbee_rtc_time_sync
+label: Zigbee - Device RTC Time Synchronize
+description: |
+  This project shows how to implement the synchronization time between zigbee devices and zigbee gateway in the zigbee network.
+
+category: Zigbee Application
+
+filter:
+- name: Device Type
+  value: [SoC]
+- name: Project Difficulty
+  value: [Advanced]
+- name: Wireless Technology
+  value: [Zigbee]
+
+package: Zigbee
+
+quality: production
+
+readme:
+- path: ../README.md
+
+source:
+- path: ../src/end_device/main.c
+- path: ../src/end_device/app.c
+
+component:
+- instance: [example]
+  id: cli
+- id: zigbee_application_bootloader
+- id: zigbee_binding_table
+- id: zigbee_zcl_framework_core
+- id: zigbee_debug_basic
+- id: zigbee_network_steering
+- id: zigbee_counters
+- id: zigbee_basic
+- instance: [vcom]
+  id: iostream_usart
+- id: zigbee_scan_dispatch
+- id: zigbee_source_route
+- id: zigbee_simple_clock
+- id: zigbee_packet_validate
+- id: zigbee_pro_stack
+- id: zigbee_debug_print
+- id: zigbee_install_code
+- id: zigbee_update_tc_link_key
+
+config_file:
+- path: ../config/zcl_config.zap
+  directory: zcl
+
+configuration:
+- name: SL_BOARD_ENABLE_VCOM
+  value: '1'
+- name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
+  value: usartHwFlowControlCtsAndRts
+- name: SL_CLI_MAX_INPUT_ARGUMENTS
+  value: '16'
+- name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
+  value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_ROUTER
+- name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
+  value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
+- name: EMBER_BINDING_TABLE_SIZE
+  value: '10'
+- condition: [device_series_1]
+  name: NVM3_DEFAULT_NVM_SIZE
+  value: '36864'
+- condition: [device_series_2]
+  name: NVM3_DEFAULT_NVM_SIZE
+  value: '32768'
+- name: SL_PSA_ITS_SUPPORT_V1_DRIVER
+  value: '0'
+- name: SL_PSA_ITS_SUPPORT_V2_DRIVER
+  value: '0'
+- name: SL_PSA_ITS_SUPPORT_V3_DRIVER
+  value: '1'
+
+ui_hints:
+  highlight:
+  - path: ''
+    focus: true
+  - path: ../README.md
+

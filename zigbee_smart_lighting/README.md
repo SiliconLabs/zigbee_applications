@@ -1,50 +1,105 @@
-# Zigbee Motion Sensor PIR Example #
-![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_smart_lighting_common.json&label=Type&query=type&color=green)
-![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_smart_lighting_common.json&label=Technology&query=technology&color=green)
-![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_smart_lighting_common.json&label=License&query=license&color=green)
-![SDK badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_smart_lighting_common.json&label=SDK&query=sdk&color=green)
-![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_smart_lighting_build_status.json)
+# Zigbee Smart Lighting With Motion Sensor PIR #
 
-## 1. Summary ##
+## Overview ##
 
-This demo shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC of ZGM130S to take periodic measurements. CRYOTIMER is set to signal the ADC using PRS. The Op-Amp is configured to use the external one on the board. A simple motion detection algorithm is implemented to post-process ADC samples. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
+This demo shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC of EFR32MG12 to take periodic measurements. CRYOTIMER is set to signal the ADC using PRS. The Op-Amp is configured to use the external one on the board. A simple motion detection algorithm is implemented to post-process ADC samples. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.
 
-![zigbee](doc/Model.png)
+![zigbee](images/Model.png)
 
 In figure above, node 1 is the Zigbee Gateway. Node 2 is the motion sensor. Node 3 is the light. Upon motion detection, node 2 will notify the gateway and turn on the light.
 
-## 2. Gecko SDK version ##
+## Gecko SDK version ##
 
-- Gecko SDK Suite 2.7.3
+- Gecko SDK 4.2.2
+- [Third Party Hardware Drivers v1.5.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
-- Gecko SDK Suite 3.0.0
+## Required Hardware ##
 
-## 3. Hardware Required ##
-
-For the gateway (Node 1):
-
-- TBD.
-
-For the occupancy sensor node (Node 2):
+For the occupancy sensor node (Node 1):
 
 - BRD4001A WSTK board
-- BRD4162A Radio board with EFR32MG12
+- [EFR32MG12 2.4 GHz 10 dBm Radio Board BRD4162A](https://www.silabs.com/documents/public/reference-manuals/brd4162a-rm.pdf)
 - BRD8030A Occupancy sensor EXP board
 
-For the light node (Node 3):
+For the light node (Node 2):
 
 - BRD4001A WSTK board
-- BRD4162A Radio board with EFR32MG12
+- [EFR32MG12 2.4 GHz 10 dBm Radio Board BRD4162A](https://www.silabs.com/documents/public/reference-manuals/brd4162a-rm.pdf)
 
-## 4. Setup ##
+**NOTE:**
+Tested boards for working with this example:
 
-On the occupancy sensor node: Connect the occupancy sensor EXP board to the WSTK board through the expansion header. Then, you should program the EFR32MG12 with the Zigbee_SmartLight_Sensor_ZR.sls project.
+| Board ID | Description  |
+| ---------------------- | ------ |
+| BRD4162A | [EFR32MG12 2.4 GHz 10 dBm Radio Board BRD4162A](https://www.silabs.com/documents/public/reference-manuals/brd4162a-rm.pdf)    |
+| BRD4161A | [EFR32MG12 2.4 GHz 19 dBm Radio Board BRD4161A](https://www.silabs.com/documents/public/reference-manuals/brd4161a-rm.pdf)    |
 
-On the light node: Program the EFR32MG12 with Zigbee_SmartLight_Light.sls project.
+## Hardware Connection ##
 
-On the gateway: TBD.
+On the sensor node: Connect the occupancy sensor EXP board to the WSTK board through the expansion header.
 
-## 5. How It Works ##
+![hardware_connection](images/hardware_connection.png)
+
+## Setup ##
+
+You can either create a project based on an example project or start with an empty example project.
+
+### Create a project based on an example project ###
+
+1. From the Launcher Home, add the BRD4162A to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with filter "motion".
+
+2. Click **Create** button on the **Zigbee - Smart Light - Light Node** or **Zigbee - Smart Light - Sensor Node** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
+![create_example](images/create_example.png)
+
+3. Build and flash this example to the board.
+
+### Start with a ZigbeeMinimal example project ###
+
+1. Create a "Zigbee - SoC ZigbeeMinimal" project for the "EFR32MG12 Radio Board (BRD4162A)" using Simplicity Studio v5. Use the default project settings. Be sure to connect and select the "EFR32MG12 Radio Board (BRD4162A)" from the "Debug Adapters" on the left before creating a project.
+
+2. Copy the files from Zigbee_SmartLight_Light/src or Zigbee_SmartLight_Sensor/src folder into the project root folder (overwriting existing app.c, main.c).
+
+3. Copy the files from Zigbee_SmartLight_Sensor/config/zcl or Zigbee_SmartLight_Sensor/config/zcl folder into the config/zcl folder of project (overwriting existing zcl_config.zap).
+
+4. Install the software components:
+
+    - Open the .slcp file in the project. - Select the *SOFTWARE COMPONENTS* tab.
+      - Sensor node:
+        - Uninstall:
+          - **[Zigbee] → [Stack] → [Pro Core] → [Pro Stack]** component.
+        - Install the following components:
+          - **[Third Party Hardware Drivers] → [Sensor] → IRA-S210ST01 - PIR sensor**.
+          - **[Platform] → [Driver] → [LED] → [Simple LED]** component with the default instances name: **led0** and **led1**.
+          - **[Platform] → [Driver] → [Button] → [Simple Button]** component with the default instances name: **btn0** and **btn1**.
+          - **[Platform] → [Driver] → [GLIB Graphics Library]** component.
+          - **[Zigbee] → [Cluster Library] → [Common] → [Basic Server Cluster]** component.
+          - **[Zigbee] → [Stack] → [Pro Core] → [Pro Leaf Stack]** component.
+          - **[Zigbee] → [Stack] → [Debug Basic]** component.
+          - **[Zigbee] → [Stack] → [Install code]** component.
+          - **[Zigbee] → [Stack] → [Packet validation]** component.
+          - **[Zigbee] → [Stack] → [Source route]** component.
+          - **[Zigbee] → [Utility] → [Application Framework Common]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Find and Bind Initiator]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Network Steering]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Update TC Link Key]** component.
+    - Light node:
+        - Install the following components:
+          - **[Third Party Hardware Drivers] → [Sensor] → IRA-S210ST01 - PIR sensor**.
+          - **[Platform] → [Driver] → [LED] → [Simple LED]** component with the default instances name: **led0** and **led1**.
+          - **[Platform] → [Driver] → [Button] → [Simple Button]** component with the default instance name: **btn0****.
+          - **[Platform] → [Driver] → [GLIB Graphics Library]** component.
+          - **[Zigbee] → [Cluster Library] → [Common] → [Basic Server Cluster]** component.
+          - **[Zigbee] → [Stack] → [Pro Core] → [Pro Stack]** component.
+          - **[Zigbee] → [Stack] → [Debug Basic]** component.
+          - **[Zigbee] → [Stack] → [Install code]** component.
+          - **[Zigbee] → [Stack] → [Packet validation]** component.
+          - **[Zigbee] → [Stack] → [Source route]** component.
+          - **[Zigbee] → [Utility] → [Application Framework Common]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Find and Bind Target]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Network Steering]** component.
+          - **[Zigbee] → [Zigbee 3.0] → [Update TC Link Key]** component.
+
+## How It Works ##
 
 The gateway provides CLI commands application interface to the user. The CLI command **"plugin network-creator start 1"** can be issued in order to form a centralized network. The gateway application can then be triggered to allow other devices onto the network with the CLI command  **"plugin network-creator-security open-network"**. Devices can then join the network by manually entering the install code derived link key into the gateway using the CLI command  **"plugin network-creator-security set-joining-link-key"**. The CLI command **"plugin network-creator-security close-network"** will close the network and no longer allow devices onto the gateway's network.
 
@@ -57,11 +112,11 @@ The occupancy sensor board provides a simple application interface to the user. 
 
 The current debug printing settings in these applications are only for the purpose of aiding users in understanding and debugging this sample scenario. Debug printing should be turned off in order to save code size on a final product.
 
-### 5.1. Setup steps for a network without the gateway ###
+### Setup steps for a network without the gateway ###
 
-The figure below illustrates the working flow for the network with 2 nodes: a light and a occupancy sensor
+The figure below illustrates the working flow for the network with 2 nodes: a light and an occupancy sensor
 
-![zigbee](doc/Flow_Steps.png)
+![zigbee](images/Flow_Steps.png)
 
 Make sure both devices are not on any network. Go to the CLI for both and enter the command:
 
@@ -79,7 +134,7 @@ NWK Steering stack status 0x91
 ```
 
 **Putting the install code on the sensor**  
-The install code itself is a random value installed on the joining device at manufacturing time and is used to encrypt the initial network key transport from the coordinator to the joining device, via a unique link key. To emulate this, we are going to use commander to flash the install code onto our board. We have included a file install.txt on this page to give you an install code to work with for this example. While you can use any code you want, this code matches the commands you will see in this example and will allow you to easily follow along with our example. To install this via commander, use this command:
+The install code itself is a random value installed on the joining device at manufacturing time and is used to encrypt the initial network key transport from the coordinator to the joining device, via an unique link key. To emulate this, we are going to use commander to flash the install code onto our board. We have included a file install.txt on this page to give you an install code to work with for this example. While you can use any code you want, this code matches the commands you will see in this example and will allow you to easily follow along with our example. To install this via commander, use this command:
 
 ```
 commander flash --tokengroup znet --tokenfile install.txt --device efr32mg12p
@@ -192,27 +247,3 @@ From the sensor’s CLI, start joining the network:
 ```
 plugin network-steering start 0
 ```
-
-### 5.2. Setup steps for a network with the gateway ###
-
-- TBD.
-
-## 6.  .sls Projects Used ##
-
-For Gecko SDK Suite 2.7.3:
-
-- SimplicityStudio_V4/Zigbee_SmartLight_Light.sls
-- SimplicityStudio_V4/Zigbee_SmartLight_Sensor_ZR.sls
-
-For Gecko SDK Suite 3.0.0:
-
-- SimplicityStudio_V5/Zigbee_SmartLight_Light.sls
-- SimplicityStudio_V5/Zigbee_SmartLight_Sensor_ZR.sls 
-
-## 7. Special Notes ##
-
-The implemention of PIR sensor driver on this demo bases on two bellow links:
-
-- [Z-Wave Motion Sensor PIR Example](https://github.com/SiliconLabs/z_wave_applications_staging/tree/master/z_wave_motion_sensor_pir_application)
-
-- [Silicon Labs Occupancy Sensor EXP](https://github.com/SiliconLabs/occupancy-sensor-exp.git)

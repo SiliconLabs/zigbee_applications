@@ -1,0 +1,179 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: zigbee_mfglib_extension
+label: Zigbee - Manufacturing Library Extension
+description: |
+  This project extends manufacturing library plugin with more functionality and commands. Sending and receiving packets, PER test, manipulating tokens, configuring GPIO settings, and changing the power to deci dBm are among the added functionality of this code.
+category: Example|Bluetooth
+package: Bluetooth
+quality: experimental
+readme:
+- path: ../README.md
+source:
+- path: ../src/main.c
+- path: ../src/manufacturing-library-cli-soc-extend.c
+component:
+  - id: sl_system
+  - id: sl_string
+  - id: board_control
+  - id: cli
+    instance: [example]
+  - id: iostream_usart
+    instance: [vcom]
+  - id: zigbee_core_cli
+  - id: zigbee_debug_basic
+  - id: zigbee_debug_print
+  - id: zigbee_manufacturing_library_cli
+  - id: "zigbee_pro_stack"
+  - id: "zigbee_zcl_framework_core"
+config_file:
+  - path: ../config/zcl/zcl_config.zap
+    directory: zcl
+configuration:
+  - name: SL_BOARD_ENABLE_VCOM
+    value: '1'
+template_contribution:
+  - name: cli_command
+    value:
+      group: mfglib
+      name: per-test
+      handler: emAfMfglibPERTest
+      help: Sends specified # of packets at the specified interval to all devices on the same network set to receive; PER is displayed on the receiving device.
+      argument:
+      - type: uint16 
+        help: The number of packets to send.
+      - type: uint16 
+        help: The length of the interval between packets in microseconds.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: contPack-start
+      handler: emAfMfglibContinuousPacket
+      help: Starts sending continuous packets at a 1000 millisecond interval.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: contPack-stop
+      handler: emAfMfglibStopContinuous
+      help: Stops sending continuous packets.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: receive-mode
+      handler: emAfMfglibReceiveMode
+      help: Sets the print mode for incoming packets.
+      argument:
+      - type: int8
+        help: The Mode.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: receivePER-start
+      handler: emAfMfglibReceiveStart
+      help: Sets up receive mode for PER test by clearing packets and setting # of incoming packets.
+      argument:
+      - type: uint16 
+        help: The number of expected incoming packets.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: receivePER-stop
+      handler: emAfMfglibReceiveStop
+      help: Stops receive mode and prints out PER data.
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: clear-tx-packets
+      handler: emAfMfglibClearPacketCounter
+      help: Clears the packet Counter(number of transmitted packets).
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: get-tx-packets
+      handler: emAfMfglibGetPackets
+      help: Prints packet Counter(number of transmitted packets).
+
+  - name: cli_command
+    value:
+      group: mfglib
+      name: mode-set-gpio
+      handler: emAfMfglibModeSetGpio
+      help: Set various GPIO(general-purpose input/output) settings.
+      argument:
+      - type: uint32 
+        help: "Possible ports:\\n                                         Port A = 0\\n                                         Port B = 1\\n                                         Port C = 2\\n                                         Port D = 3\\n                                         Port E = 4\\n                                         Port F = 5\\n                                         Port G = 6\\n                                         Port H = 7\\n                                         Port I = 8\\n                                         Port J = 9\\n                                         Port K = 10"
+      - type: uint32 
+        help: "AVAILABLE PINS: 0 - 15"
+      - type: uint32 
+        help: "PIN MODES:\\n                                         gpioModeDisabled = 0\\n                                         gpioModeInput = 1\\n                                         gpioModeInputPull = 2\\n                                         gpioModeInputPullFilter = 3\\n                                         gpioModePushPull = 4\\n                                         gpioModePushPullAlternate = 5\\n                                         gpioModeWiredOr = 6\\n                                         gpioModeWiredOrPullDown = 7\\n                                         gpioModeWiredAnd = 8\\n                                         gpioModeWiredAndFilter = 9\\n                                         gpioModeWiredAndPullUp = 10\\n                                         gpioModeWiredAndPullUpFilter = 11\\n                                         gpioModeWiredAndAlternate = 12\\n                                         gpioModeWiredAndAlternateFilter = 13\\n                                         gpioModeWiredAndAlternatePullUp = 14\\n                                         gpioModeWiredAndAlternatePullUpFilter = 15"
+      - type: uint32
+        help: "DOUT PIN: Low = 0, High = 1"
+      
+  - name: cli_command
+    value:
+      group: mfglib
+      name: mode-get-gpio
+      handler: emAfMfglibModeGetGpio
+      help: Get GPIO mode at a specified GPIO port and pin.
+      argument:
+      - type: uint32 
+        help: "Possible ports:\\n                                         Port A = 0\\n                                         Port B = 1\\n                                         Port C = 2\\n                                         Port D = 3\\n                                         Port E = 4\\n                                         Port F = 5\\n                                         Port G = 6\\n                                         Port H = 7\\n                                         Port I = 8\\n                                         Port J = 9\\n                                         Port K = 10"
+      - type: uint32 
+        help: "AVAILABLE PINS: 0 - 15"
+        
+  - name: cli_command
+    value:
+      group: mfglib
+      name: set-gpio
+      handler: emAfMfglibSetGpio
+      help: Set GPIO output value at a specified GPIO port and pin.
+      argument:
+      - type: uint32 
+        help: "Possible ports:\\n                                         Port A = 0\\n                                         Port B = 1\\n                                         Port C = 2\\n                                         Port D = 3\\n                                         Port E = 4\\n                                         Port F = 5\\n                                         Port G = 6\\n                                         Port H = 7\\n                                         Port I = 8\\n                                         Port J = 9\\n                                         Port K = 10"
+      - type: uint32 
+        help: "AVAILABLE PINS: 0 - 15"
+      - type: uint32
+        help: "DOUT PIN: Low = 0, High = 1"
+        
+  - name: cli_command
+    value:
+      group: mfglib
+      name: get-gpio
+      handler: emAfMfglibGetGpio
+      help: Get GPIO input value at a specified GPIO port and pin.
+      argument:
+      - type: uint32 
+        help: "Possible ports:\\n                                         Port A = 0\\n                                         Port B = 1\\n                                         Port C = 2\\n                                         Port D = 3\\n                                         Port E = 4\\n                                         Port F = 5\\n                                         Port G = 6\\n                                         Port H = 7\\n                                         Port I = 8\\n                                         Port J = 9\\n                                         Port K = 10"
+      - type: uint32 
+        help: "AVAILABLE PINS: 0 - 15"
+      
+  - name: cli_command
+    value:
+      group: mfglib
+      name: help-gpio
+      handler: emAfMfglibGpioHelp
+      help: Give information of GPIO command inputs.
+
+other_file:
+- path: ../images/NAcapture.png
+  directory: "images"
+- path: ../images/PERtest.png
+  directory: "images"
+- path: ../images/ReceiveMode.png
+  directory: "images"
+- path: ../images/contPacktest.png
+  directory: "images"
+- path: ../images/gpiohelp.png
+  directory: "images"
+- path: ../images/create_project.png
+  directory: "images"
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true

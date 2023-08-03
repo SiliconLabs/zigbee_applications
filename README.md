@@ -15,18 +15,36 @@
 
 This repo demonstrates some of the applications that can be built on top of the Silicon Labs Zigbee stack.
 
+This repository provides only SLCP projects (as External Repositories) that are listed in the [Examples](#examples) section. Please refer [Working with Projects](#working-with-projects) section to know how to add this repository to **External Repo** in Simplicity Studio.
+
 ## Examples ##
 
-- Two Zigbee Applications on one SoC
-- Optimizing Boot-up Rejoin
-- Asynchronous Sleepy-End-Device Communication
-- Switching Between Two Zigbee Applications Using Slot Manager
-- ZigBee Virtual UART example
-- Manufacturing Library Extension
+| No | Example name | Link to example |
+|:--:|:-------------|:---------------:|
+| 1  | Zigbee - Battery Monitor | [Click Here](./zigbee_battery_monitor) |
+| 2  | Zigbee - Manufacturing Library Extension | [Click Here](./zigbee_mfglib_extension) |
+| 3  | Zigbee - RTC Time | [Click Here](./zigbee_rtc_time_sync) |
+| 4  | Zigbee - SoC Sleepy Switch | [Click Here](./zigbee_sed_z3switch) |
+| 5  | Zigbee - Smart Lighting using Motion Sensor PIR | [Click Here](./zigbee_smart_lighting) |
+| 6  | Zigbee - Sleepy End-Device and Gateway | [Click Here](./zigbee_sed_rht_sensor) |
+
+## Working with Projects ##
+
+1. To add an external repository, perform the following steps.
+
+    - From Simplicity Studio 5, go to **Preferences > Simplicity Studio > External Repos**. Here you can add the repo `https://github.com/SiliconLabs/bluetooth_applications.git`
+
+    - Cloning and then selecting the branch, tag, or commit via UI. The default branch is Master. This repo cloned to `<path_to_the_SimplicityStudio_v5>\developer\repos\`
+
+2. From Launcher, select your device from the "Debug Adapters" on the left before creating a project. Then click the **EXAMPLE PROJECTS & DEMOS** tab -> check **bluetooth_applications** under **Provider** to show a list of Bluetooth example projects compatible with the selected device. Click CREATE on a project to generate a new application from the selected template.
+
+## Porting to Another Board ##
+
+To change the target board, navigate to Project -> Properties -> C/C++ Build -> Board/Part/SDK. Start typing in the Boards search box and locate the desired development board, then click Apply to change the project settings. Ensure that the board specifics include paths, found in Project -> Properties -> C/C++ General -> Paths and Symbols, correctly match the target board.
 
 ## Documentation ##
 
-Official documentation can be found at our [Developer Documentation](https://docs.silabs.com/zigbee/latest/) page.
+Official documentation can be found on our [Developer Documentation](https://docs.silabs.com/zigbee/latest/) page.
 
 ## Reporting Bugs/Issues and Posting Questions and Comments ##
 
@@ -36,4 +54,4 @@ Questions and comments related to these examples should be made by creating a ne
 
 ## Disclaimer ##
 
-The Gecko SDK suite supports development with Silicon Labs IoT SoC and module devices. Unless otherwise specified in the specific directory, all examples are considered to be EXPERIMENTAL QUALITY which implies that the code provided in the repos has not been formally tested and is provided as-is.  It is not suitable for production environments.  In addition, this code will not be maintained and there may be no bug maintenance planned for these resources. Silicon Labs may update projects from time to time.
+The Gecko SDK suite supports development with Silicon Labs IoT SoC and module devices. Unless otherwise specified in the specific directory, all examples are considered to be EXPERIMENTAL QUALITY which implies that the code provided in the repository has not been formally tested and is provided as-is.  It is not suitable for production environments.  In addition, this code will not be maintained and there may be no bug maintenance planned for these resources. Silicon Labs may update projects from time to time.

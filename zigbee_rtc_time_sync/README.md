@@ -1,152 +1,124 @@
-# Zigbee RTC Time #
-![Type badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_rtc_time_sync_common.json&label=Type&query=type&color=green)
-![Technology badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_rtc_time_sync_common.json&label=Technology&query=technology&color=green)
-![License badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_rtc_time_sync_common.json&label=License&query=license&color=green)
-![SDK badge](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_rtc_time_sync_common.json&label=SDK&query=sdk&color=green)
-![Build badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SiliconLabs/application_examples_ci/master/zigbee_applications/zigbee_rtc_time_sync_build_status.json)
+# Zigbee RTC Time Synchronization #
 
 ## Summary ##
-In a common Zigbee network, the gateway normally has the capability of connecting to the internet, so it can get the date and time through NTP. Therefore, the gateway can act as the time server to provide the time source for the other Zigbee devices. This example demonstrates how we synchronize the date and time in Zigbee network. On the device side, the local date and time will be kept by the plugin **Simple Clock**. 
+In a common Zigbee network, the gateway normally has the capability of connecting to the internet, so it can get the date and time through NTP. Therefore, the gateway can act as the time server to provide the time source for the other Zigbee devices. This example demonstrates how we synchronize the date and time in the Zigbee network. On the device side, the local date and time will be kept by the plugin **Simple Clock**. 
 
 ## Gecko SDK version ##
-Gecko SDK Suite v3.2
+Gecko SDK Suite v4.2.2
 
 ## Hardware Required ##
-- EFR32MG12 2.4GHz 19 dBm Radio Board (BRD4161A Rev A01)
+
+- **Zigbee Gateway (host + NCP architecture)**
+  - NCP: EFR32MG12 2.4GHz 19 dBm Radio Board (BRD4161A Rev A01)
+  - Host: Linux 64 bit
+    - For details regarding setting up Docker for windows, refer to the app note:
+    [AN1389: Running Zigbee Host Applications in a Docker Container](https://www.silabs.com/documents/public/application-notes/an1389-running-host-applications-in-docker-containers.pdf)
+
+- **Zigbee Devices (SoC architecture)**
+  - EFR32MG12 2.4GHz 19 dBm Radio Board (BRD4161A Rev A01)
+
+- Use of other radio boards or EFR32 development kits is possible. Modifications are required in terms of GPIO selection, **always refer to your development kit/radio board user guide for details**.
+
+### NOTE: Tested boards for working with this example: ###
+
+| Board ID | Description  |
+| ---------------------- | ------ |
+| BRD4161A | [EFR32MG12 2.4GHz 19 dBm Radio Board- BRD4161A](https://www.silabs.com/documents/public/user-guides/ug260-brd4161a-user-guide.pdf)    |
+| BRD4180A | [EFR32xG21 2.4 GHz 20 dBm Radio Board-BRD4180A](https://www.silabs.com/documents/public/user-guides/ug385-brd4180a-user-guide.pdf) |
 
 ## Connections Required ##
-NA
+The hardware connection is shown in the image below:
+![hardware](images/hardware.png)
 
 ## Setup ##
-### Time Server ###
-1. Create a **Z3GatewayHost** sample project.
-2. In **ZCL** tab, enable the server side of the **Time** cluster.
-3. Enable the plugin **Time Server Cluster**.
-4. Enable the callback **emberAfGetCurrentTimeCallback**.
-5. Generate the project.
-6. Add the following source code to the file **\<projectname\>_callbacks.c**.
-   ```C
 
-    #define TIME_UNIX_EPOCH (1970u)
-    #define TIME_ZIGBEE_EPOCH (2000u)
-    #define TIME_SEC_PER_DAY (60u * 60u * 24u)
-    #define TIME_ZIGBEE_UNIX_EPOCH_DIFF (TIME_ZIGBEE_EPOCH - TIME_UNIX_EPOCH)
-    #define TIME_DAY_COUNT_ZIGBEE_TO_UNIX_EPOCH (TIME_ZIGBEE_UNIX_EPOCH_DIFF * 365u + 7u) ///< 30 years and 7 leap days
-    #define TIME_ZIGBEE_EPOCH_OFFSET_SEC (TIME_DAY_COUNT_ZIGBEE_TO_UNIX_EPOCH * TIME_SEC_PER_DAY)
+### Zigbee Gateway - Time server ###
 
-    int32u emberAfGetCurrentTimeCallback(void)
-    {
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
+#### Create the zigbee NCP ####
+1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project with filter "ncp ncp-uart-hw".
 
-        //Round the micro seconds
-        if (tv.tv_usec >= 500000)
-        {
-            tv.tv_sec++;
-        }
+2. Create a **Zigbee - NCP ncp-uart-hw** project in Simplicity Studio.
 
-        return tv.tv_sec - TIME_ZIGBEE_EPOCH_OFFSET_SEC;
-    }
-   ```
-7. Create a NCP project with the default settings.
-8. Build and test.
+![create_ncp](images/create_ncp.png)
 
+3. Build the project and flash it to your device.
 
-### Time Client ###
-1. Create a **ZigbeeMinimal** sample project.
-2. In **ZCL** tab, change the device type of the endpoint 1 to **Zigbee Custom**-->**LO devices**-->**LO On/Off Light**, then enable the client side of the **Time** cluster.
-3. Enable the plugin **Simple Clock**.
-4. In Callbacks tab, enable the callback **emberAfReadAttributesResponseCallback** and **emberAfStackStatusCallback**.
-5. In **Includes** tab, add a custom event **emberTimeSyncEventControl** and its handler **emberTimeSyncEventHandler**.
-6. Save and generate the project.
-7. Add the following source code snippet to the **\<projectname\>_callbacks.c**.
-  
-  ```C
-  EmberEventControl emberTimeSyncEventControl;
+#### Create the Zigbee host ####
+1. From the Launcher Home, add "Linux - 64 bit" to MyProducts tabs, click on **Start**, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project with the filter "host gateway".
 
-  void emberTimeSyncEventHandler()
-  {
-    emberEventControlSetInactive(emberTimeSyncEventControl);
+2. Create a **Zigbee - NCP ncp-uart-hw** project in Simplicity Studio.
 
-    if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
-      //send read attribute
-      uint8_t timeAttributeIds[] = {
-          LOW_BYTE(ZCL_TIME_ATTRIBUTE_ID),
-          HIGH_BYTE(ZCL_TIME_ATTRIBUTE_ID)};
+![host_gateway](images/create_gateway.png)
 
-      emberAfFillCommandGlobalClientToServerReadAttributes(ZCL_TIME_CLUSTER_ID, timeAttributeIds, sizeof(timeAttributeIds));
-      emberAfGetCommandApsFrame()->sourceEndpoint = 1;
-      emberAfGetCommandApsFrame()->destinationEndpoint = 1;
-      EmberStatus status = emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, 0x0000);
-      emberAfCorePrintln("Query time from the gateway status=0x%X", status);
+2. Copy all attached files in src folders into the project root folder (overwriting existing).
+3. Open the .slcp file:
+  - Select the **SOFTWARE COMPONENTS** tab and install these software components:
+    - [Zigbee] → [Cluster Library] → [Common] → [Time Server Cluster]
+  - Select the **CONFIGURATION TOOLS** tab and open **Zigbee Cluster Configurator**: 
+    - enable the server side of the Time cluster.
 
-      emberEventControlSetDelayMS(emberTimeSyncEventControl, 5000);
-    }
-  }
+![time](images/time_cluster.png)
 
-  bool emberAfStackStatusCallback(EmberStatus status)
-  {
-    if (status == EMBER_NETWORK_DOWN) {
-      emberEventControlSetInactive(emberTimeSyncEventControl);
-    } else if (status == EMBER_NETWORK_UP) {
-      emberEventControlSetDelayMS(emberTimeSyncEventControl, 5000);
-    }
+4. Save all the configurations.
+5. In the project root folder, open the terminal and build with the following command:
+    
+    **make -f Z3Gateway.Makefile**
 
-    // This value is ignored by the framework.
-    return false;
-  }
+    *note: replace 'Z3Gateway.Makefile' with the makefile in your project*
 
-  boolean emberAfReadAttributesResponseCallback(EmberAfClusterId clusterId,
-                                                int8u *buffer,
-                                                int16u bufLen)
-  {
-    if (ZCL_TIME_CLUSTER_ID != clusterId) {
-      return false;
-    }
+![make_gateway](images/make%20gateway.png)
 
-    //attribute ID (2B) + status (1B) + date type (0B or 1B) + value (4B)
-    if (bufLen < 7) {
-      return false;
-    }
+6. Run the Zigbee gateway device by connecting the Zigbee host to your NCP with the following command:
 
-    if ((emberAfGetInt16u(buffer, 0, bufLen) == ZCL_TIME_ATTRIBUTE_ID) && (emberAfGetInt8u(buffer, 2, bufLen) == EMBER_ZCL_STATUS_SUCCESS)) {
-      emberAfSetTime(emberAfGetInt32u(buffer, 4, bufLen));
-      emberAfCorePrintln("time sync ok, time: %4x", emberAfGetCurrentTime());
+    **./build/debug/Z3Gateway -n 0 -p /dev/ttyACM0**
 
-      emberEventControlSetDelayMS(emberTimeSyncEventControl, MILLISECOND_TICKS_PER_DAY);
+    *note: replace 'Z3Gateway' with the output file in your project*
 
-      return true;
-    }
+![connect_ncp](images/connect_ncp.png)
 
-    return false;
-  }  
-  ```
-8.  Build and test.
+### Zigbee Device - Time Client ###
+
+To create a Zigbee Device (time client), you can either create a project based on an example project or start with a "Zigbee - SoC ZigbeeMinimal" project based on your hardware.
+
+### Create a Zigbee Device project based on an example project ###
+
+1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with the filter "time sync".
+
+2. Click **Create** button on the **Zigbee - Device RTC Time Synchronize** example. This example projects creation dialog pops up -> click Create and Finish and the project should be generated.
+![Create_device](images/Create_device.png)
+
+3. Build and flash this example to your boards.
+
+### Create a Zigbee Device project with a "Zigbee - SoC ZigbeeMinimal" project ###
+
+1. Create a **Zigbee - SoC ZigbeeMinimal** project in Simplicity Studio.
+
+2. Copy all attached files in src folders into the project root folder (overwriting existing).
+3. Open the .slcp file:
+  - Select the **SOFTWARE COMPONENTS** tab and install these software components:
+    - [Zigbee] → [Utility] → [Simple clock]
+  - Select the **CONFIGURATION TOOLS** tab and open **Zigbee Cluster Configurator**:
+    - change the device type of endpoint 1 to **Zigbee Custom → LO On/Off Light**, then enable the client side of the Time cluster.
+
+4. Build and flash this project to your boards.
 
 ## How It Works ##
-Join the device into the network. The device will query the time from the gateway in about 5 seconds after the network is up. Then you can use the command **print time** to query the local time.
-```
-zigbee_rtc_time_sync_4161A>Reset info: 0x03 (EXT)
-Extended Reset info: 0x0301 (PIN)
-init pass
-EMBER_NETWORK_UP 0x97D6
-NWK Steering stack status 0x90
-Query time from the gateway status=0x00
-Processing message: len=11 profile=0104 cluster=000A
 
-T00000000:RX len 11, ep 01, clus 0x000A (Time) FC 18 seq 00 cmd 01 payload[00 00 00 E2 4A 31 AD 28 ]
+Firstly, form a centralized network with the Zigbee gateway and open the network.
 
-zigbee_rtc_time_sync_4161A>print time
-UTC time: 8/16/2021 14:23:10 (28ad314e)
-```
+![form_network](images/form_network.png)
+![open_network](images/open_network.png)
 
-## .sls Projects Used ##
-- [Timer Server - Z3GatewayHost.sls](SimplicityStudio/Z3GatewayHost.sls)
-- [Time Client - zigbee_rtc_time_sync_4161A.sls](SimplicityStudio/zigbee_rtc_time_sync_4161A.sls)
+In the simplicity studio, launch console for Zigbee device
 
-## How to Port to Another Part ##
-- Import the .sls file into Simplicity Studio
-- Open the .isc file of each project, turn to "General" tab, hit button "Edit Architecture", then select the board and part.
+Start joining a network with a Zigbee device.
 
-## Special Notes ##
-NA
+![join_network](images/join_network.png)
+
+When the Zigbee device joins the network, it will query the time from the gateway after the network is up.
+
+![query_time](images/query_time.png)
+
+Then you can use the command **print time** to query the local time.
+
+![print_time](images/print_time.png)

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ASCII"?><model:MDescriptors xmlns:model="http://www.silabs.com/ss/Studio.ecore">
+  <descriptors name="Z3SwitchSED" label="Zigbee - SoC Sleepy Switch" description="This application is used to create a Zigbee sleepy end device with the Silicon Labs EFR32xG21 Bluetooth Starter Kit board. Moreover, it can also get some sample test results on EM2 and demonstrate essential troubleshooting approaches.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_sed_z3switch.SimplicityStudio.zigbee_sed_z3switch.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_sed_z3switch/SimplicityStudio/zigbee_sed_z3switch.slcp"/>
+    <properties key="readmeFiles" value="zigbee_sed_z3switch/README.md"/>
+    <properties key="boardCompatibility" value="brd4181a brd4180a brd4180b brd4162a brd4161a"/>
+    <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg12p.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_rtc_time_sync" label="Zigbee - Device RTC Time Synchronize" description=" This project shows how to implement the synchronization time between zigbee devices and zigbee gateway in the zigbee network.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_rtc_time_sync/SimplicityStudio/zigbee_rtc_time_sync.slcp"/>
+    <properties key="readmeFiles" value="zigbee_rtc_time_sync/README.md"/>
+    <properties key="boardCompatibility" value="brd4181a brd4180a brd4162a brd4161a"/>
+    <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg12p.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_mfglib_extension" label="Zigbee - Manufacturing Library Extension" description="This project extends manufacturing library plugin with more functionality and commands. Sending and receiving packets, PER test, manipulating tokens, configuring GPIO settings, and changing the power to deci dBm are among the added functionality of this code.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_mfglib_extension.SimplicityStudio.zigbee_mfglib_extension.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_mfglib_extension/SimplicityStudio/zigbee_mfglib_extension.slcp"/>
+    <properties key="readmeFiles" value="zigbee_mfglib_extension/README.md"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2703a brd2704a brd4158a brd4159a brd4161a brd4162a brd4163a brd4164a brd4165b brd4166a brd4167a brd4168a brd4170a brd4172a brd4172b brd4173a brd4174a brd4174b brd4175a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4182a brd4183a brd4183c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4190a brd4194a brd4195a brd4196a brd4198a brd4304a brd4305d brd4305e brd4306c brd4306d brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4311b brd4316a brd4317a brd4318a brd4319a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32[bm]g12p.* .*efr32[bm]g13p.* .*efr32[bm]g1p.* .*efr32[bm]g21.* .*efr32[bm]g22.* .*efr32[bm]g24.* .*efr32[bm]g27.* .*[bm]gm1.* .*[bm]gm13.* .*[bm]gm21.* .*[bm]gm22.* .*[bm]gm24.* .*[bm]gm27.* .*efr32[fz]g28.* .*efr32bg1b.* .*efr32mg14p.* .*mgm12.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Capability|Machine\ Learning Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_battery_monitor_series_1" label="Zigbee - Battery Monitor (Series 1 Devices)" description=" This project aims to implement an battery monitor application using the Silicon Labs series 1 wireless devices integrated with the Zigbee wireless stack.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_battery_monitor/SimplicityStudio/zigbee_battery_monitor_mg12.slcp"/>
+    <properties key="readmeFiles" value="zigbee_battery_monitor/README.md"/>
+    <properties key="boardCompatibility" value="brd4162a brd4161a"/>
+    <properties key="partCompatibility" value=".*efr32mg12p.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_battery_monitor_series_2" label="Zigbee - Battery Monitor (Series 2 Devices)" description=" This project aims to implement an battery monitor application using the Silicon Labs series 2 wireless devices integrated with the Zigbee wireless stack.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_battery_monitor/SimplicityStudio/zigbee_battery_monitor_xG12.slcp"/>
+    <properties key="readmeFiles" value="zigbee_battery_monitor/README.md"/>
+    <properties key="boardCompatibility" value="brd4181a brd4180a"/>
+    <properties key="partCompatibility" value=".*efr32mg21.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_battery_monitor_coordinator" label="Zigbee - Battery Monitor Coordinator" description=" This project aims to implement an battery monitor application using the Silicon Labs wireless devices integrated with the Zigbee wireless stack.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_battery_monitor/SimplicityStudio/zigbee_battery_monitor_coordinator.slcp"/>
+    <properties key="readmeFiles" value="zigbee_battery_monitor/README.md"/>
+    <properties key="boardCompatibility" value="brd4181a brd4180a brd4162a brd4161a"/>
+    <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg12p.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_smart_light_light" label="Zigbee - Smart Light - Light Node" description="This demo shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC to take periodic measurements. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_smart_lighting.SimplicityStudio.zigbee_smart_light_light.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_smart_lighting/Zigbee_SmartLight_Light/SimplicityStudio/zigbee_smart_light_light.slcp"/>
+    <properties key="readmeFiles" value="zigbee_smart_lighting/README.md"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2703a brd4158a brd4159a brd4161a brd4162a brd4163a brd4164a brd4165b brd4166a brd4167a brd4168a brd4170a brd4172a brd4172b brd4173a brd4174a brd4174b brd4175a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4182a brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4190a brd4194a brd4195a brd4196a brd4198a brd4304a brd4305d brd4305e brd4306c brd4306d brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4311b brd4316a brd4317a brd4318a brd4319a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32[bm]g12p.* .*efr32[bm]g13p.* .*efr32[bm]g1p.* .*efr32[bm]g21.* .*efr32[bm]g22.* .*efr32[bm]g24.* .*efr32[bm]g27.* .*[bm]gm1.* .*[bm]gm13.* .*[bm]gm21.* .*[bm]gm22.* .*[bm]gm24.* .*[bm]gm27.* .*efr32[fz]g28.* .*efr32bg1b.* .*efr32mg14p.* .*mgm12.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Capability|Machine\ Learning Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_smart_light_sensor" label="Zigbee - Smart Light - Sensor Node" description="This demo shows the implementation of PIR sensor with Zigbee. The PIR sensor on the occupancy sensor EXP board enables the internal ADC to take periodic measurements. Whenever certain motion of the human body is detected, the system will either turn on the light or the alarm. The setup will have at least 2 nodes, 1 for motion detection, 1 for light control. A Zigbee gateway may be involved.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_smart_lighting.SimplicityStudio.zigbee_smart_light_sensor.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_smart_lighting/Zigbee_SmartLight_Sensor/SimplicityStudio/zigbee_smart_light_sensor.slcp"/>
+    <properties key="readmeFiles" value="zigbee_smart_lighting/README.md"/>
+    <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4170a brd4172a brd4172b brd4173a brd4176a brd4180a brd4180b brd4181a brd4181b brd4181c brd4182a brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4190a brd4194a brd4195a brd4196a brd4198a brd4304a brd4308a brd4308b brd4308c brd4308d brd4311b brd4316a brd4317a brd4318a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32[bm]g12p.* .*efr32[bm]g13p.* .*efr32[bm]g1p.* .*efr32[bm]g21.* .*efr32[bm]g22.* .*efr32[bm]g24.* .*efr32[bm]g27.* .*[bm]gm1.* .*[bm]gm13.* .*[bm]gm21.* .*[bm]gm22.* .*[bm]gm24.* .*[bm]gm27.* .*efr32[fz]g28.* .*efr32bg1b.* .*efr32mg14p.* .*mgm12.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Capability|Machine\ Learning Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="rht_zigbee_sed_application" label="Zigbee - RHT Si7021 Sleepy End-Device" description="This example shows how to use RHT Si7021 sensor on the EFR32xG24 Dev Kit Board and implement it in your Zigbee project with Simplciity Studio. This application acts as an RHT sensor and periodically reports the measured values to the coordinator.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_sed_rht_sensor.SimplicityStudio.rht_zigbee_sed_application.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_sed_rht_sensor/SimplicityStudio/rht_zigbee_sed_application.slcp"/>
+    <properties key="readmeFiles" value="zigbee_sed_rht_sensor/README.md"/>
+    <properties key="boardCompatibility" value="brd4162a brd4161a brd2601b"/>
+    <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="rht_zigbee_host_application" label="Zigbee - RHT Si7021 Gateway Host" description="This example acts as Zigbee Host Gateway for Zigbee - RHT Si7021 Sleepy End-Device example.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="zigbee_sed_rht_sensor.SimplicityStudio.rht_zigbee_host_application.slcp"/>
+    <properties key="projectFilePaths" value="zigbee_sed_rht_sensor/SimplicityStudio/rht_zigbee_host_application.slcp"/>
+    <properties key="readmeFiles" value="zigbee_sed_rht_sensor/README.md"/>
+    <properties key="boardCompatibility" value="com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*host.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+</model:MDescriptors>   

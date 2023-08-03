@@ -39,7 +39,8 @@
 #include "app/framework/util/af-main.h"
 #include "app/util/common/common.h"
 #include "app/framework/plugin/network-steering/network-steering.h"
-#include "app/framework/plugin/find-and-bind-initiator/find-and-bind-initiator.h"
+#include \
+  "app/framework/plugin/find-and-bind-initiator/find-and-bind-initiator.h"
 
 #include "sl_simple_button_instances.h"
 #include "sl_sensor_rht.h"
@@ -59,7 +60,7 @@
 #define led_stop(led) do {                    \
     led_turn_off(led);                        \
     sl_zigbee_event_set_inactive(&led_event); \
-} while(0)
+} while (0)
 
 // Normally, we don't need to send report directly
 #define USE_SEND_REPORT_TO_BINDINGS  (0)
@@ -70,9 +71,9 @@
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs
 // -----------------------------------------------------------------------------
-#define RHT_MEASUREMENT_ENDPOINT    1  // Endpoint with the RH and Temp ZCL
-#define FIND_AND_BIND_DELAY_MS      3000 // Delay for fidn and bind handler
-                                         // execution
+#define RHT_MEASUREMENT_ENDPOINT     1 // Endpoint with the RH and Temp ZCL
+#define FIND_AND_BIND_DELAY_MS       3000 // Delay for find and bind handler
+                                          // execution
 
 // -----------------------------------------------------------------------------
 //                          Static Function Declarations
@@ -82,6 +83,7 @@ static EmberStatus reportAttribute(EmberAfClusterId cluster,
                                    EmberAfAttributeId attributeID,
                                    uint8_t attribute_type,
                                    uint8_t buff[2]);
+
 #endif
 static void network_steering_event_handler(sl_zigbee_event_t *event);
 static void finding_and_binding_event_handler(sl_zigbee_event_t *event);
@@ -90,11 +92,13 @@ static void attribute_report_event_handler(sl_zigbee_event_t *event);
 static void led_event_handler(sl_zigbee_event_t *event);
 static uint8_t binding_table_unicast_binding_count(void);
 static void binding_table_print(void);
+
 // -----------------------------------------------------------------------------
 //                                Global Variables
 // -----------------------------------------------------------------------------
 static sl_zigbee_event_t network_steering_event_control; // Custom event control
-static sl_zigbee_event_t finding_and_binding_event_control; // Custom event control
+static sl_zigbee_event_t finding_and_binding_event_control; // Custom event
+                                                            //   control
 static sl_zigbee_event_t leave_network_event_control; // Custom event control
 static sl_zigbee_event_t attribute_report_event_control; // Custom event control
 static sl_zigbee_event_t led_event;
@@ -117,7 +121,7 @@ static bool binding = false; // Holds the binding status
  * routine should be put into this function. This is called before the clusters,
  * plugins, and the network are initialized so some functionality is not yet
  * available.
-        Note: No callback in the Application Framework is
+ *         Note: No callback in the Application Framework is
  * associated with resource cleanup. If you are implementing your application on
  * a Unix host where resource cleanup is a consideration, we expect that you
  * will use the standard Posix system calls, including the use of atexit() and
@@ -138,13 +142,18 @@ void emberAfMainInitCallback(void)
   // Enable the Si70xx sensor in the WSTK
   sc = sl_sensor_rht_init();
   if (sc != SL_STATUS_OK) {
-    sl_zigbee_app_debug_print("Relative Humidity and Temperature sensor initialization failed.\n");
+    sl_zigbee_app_debug_print(
+      "Relative Humidity and Temperature sensor initialization failed.\n");
   }
 
-  sl_zigbee_event_init(&network_steering_event_control, network_steering_event_handler);
-  sl_zigbee_event_init(&finding_and_binding_event_control, finding_and_binding_event_handler);
-  sl_zigbee_event_init(&leave_network_event_control, leave_network_event_handler);
-  sl_zigbee_event_init(&attribute_report_event_control, attribute_report_event_handler);
+  sl_zigbee_event_init(&network_steering_event_control,
+                       network_steering_event_handler);
+  sl_zigbee_event_init(&finding_and_binding_event_control,
+                       finding_and_binding_event_handler);
+  sl_zigbee_event_init(&leave_network_event_control,
+                       leave_network_event_handler);
+  sl_zigbee_event_init(&attribute_report_event_control,
+                       attribute_report_event_handler);
   sl_zigbee_event_init(&led_event, led_event_handler);
 
   // Print content of binding table
@@ -208,7 +217,10 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                                   uint8_t joinAttempts,
                                                   uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n",
+                            "Join",
+                            "complete",
+                            status);
 
   if (status != EMBER_SUCCESS) {
     commissioning = false;
@@ -230,7 +242,9 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
  */
 void emberAfPluginFindAndBindInitiatorCompleteCallback(EmberStatus status)
 {
-  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n", "complete", status);
+  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n",
+                            "complete",
+                            status);
 
   if (status == EMBER_SUCCESS) {
     sl_zigbee_event_set_delay_ms(&attribute_report_event_control,
@@ -319,9 +333,12 @@ static void network_steering_event_handler(sl_zigbee_event_t *event)
  */
 static void finding_and_binding_event_handler(sl_zigbee_event_t *event)
 {
-  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(RHT_MEASUREMENT_ENDPOINT);
+  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(
+    RHT_MEASUREMENT_ENDPOINT);
 
-  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n", "start", status);
+  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n",
+                            "start",
+                            status);
 
   binding = true;
 }
@@ -341,7 +358,7 @@ static void attribute_report_event_handler(sl_zigbee_event_t *event)
   union {
     int16_t t;
     uint16_t rh;
-  }attribute;
+  } attribute;
 
   sl_zigbee_event_set_delay_ms(&attribute_report_event_control,
                                REPORT_PERIOD_MS);
@@ -357,10 +374,10 @@ static void attribute_report_event_handler(sl_zigbee_event_t *event)
     attribute.t = t / 10;
 #if USE_SEND_REPORT_TO_BINDINGS
     // Send report directly
-    status = reportAttribute( ZCL_TEMP_MEASUREMENT_CLUSTER_ID,
-                              ZCL_TEMP_MEASURED_VALUE_ATTRIBUTE_ID,
-                              ZCL_INT16S_ATTRIBUTE_TYPE,
-                              (uint8_t *)&attribute);
+    status = reportAttribute(ZCL_TEMP_MEASUREMENT_CLUSTER_ID,
+                             ZCL_TEMP_MEASURED_VALUE_ATTRIBUTE_ID,
+                             ZCL_INT16S_ATTRIBUTE_TYPE,
+                             (uint8_t *)&attribute);
 #else
     // Just update attribute data to send report to bindings
     status = emberAfWriteServerAttribute(RHT_MEASUREMENT_ENDPOINT,
@@ -369,16 +386,18 @@ static void attribute_report_event_handler(sl_zigbee_event_t *event)
                                          (uint8_t *)&attribute,
                                          ZCL_INT16S_ATTRIBUTE_TYPE);
 #endif
-    sl_zigbee_app_debug_print("%s reported: 0x%X\n", "Temp - MeasuredValue", status);
+    sl_zigbee_app_debug_print("%s reported: 0x%X\n",
+                              "Temp - MeasuredValue",
+                              status);
 
     // Attribute MeasuredValue = 100 x Relative humidity
     attribute.rh = rh / 10;
 #if USE_SEND_REPORT_TO_BINDINGS
     // Send report directly
-    status = reportAttribute( ZCL_TEMP_MEASUREMENT_CLUSTER_ID,
-                              ZCL_TEMP_MEASURED_VALUE_ATTRIBUTE_ID,
-                              ZCL_INT16U_ATTRIBUTE_TYPE,
-                              (uint8_t *)&attribute);
+    status = reportAttribute(ZCL_TEMP_MEASUREMENT_CLUSTER_ID,
+                             ZCL_TEMP_MEASURED_VALUE_ATTRIBUTE_ID,
+                             ZCL_INT16U_ATTRIBUTE_TYPE,
+                             (uint8_t *)&attribute);
 #else
     // Just update attribute data to send report to bindings
     status = emberAfWriteServerAttribute(RHT_MEASUREMENT_ENDPOINT,
@@ -387,7 +406,9 @@ static void attribute_report_event_handler(sl_zigbee_event_t *event)
                                          (uint8_t *)&attribute,
                                          ZCL_INT16U_ATTRIBUTE_TYPE);
 #endif
-    sl_zigbee_app_debug_print("%s reported: 0x%X\n", "RH - MeasuredValue", status);
+    sl_zigbee_app_debug_print("%s reported: 0x%X\n",
+                              "RH - MeasuredValue",
+                              status);
   } else {
     sl_zigbee_app_debug_print("Failed to read RHT sensor\n");
   }
@@ -405,6 +426,7 @@ static void led_event_handler(sl_zigbee_event_t *event)
 //                          Static Function Definitions
 // -----------------------------------------------------------------------------
 #if USE_SEND_REPORT_TO_BINDINGS
+
 /** @brief Report Attribute
  *
  * This function reports the specified attribute from the specified cluster
@@ -419,29 +441,31 @@ static EmberStatus reportAttribute(EmberAfClusterId cluster,
 {
   EmberStatus status = EMBER_SUCCESS;
 
-  // Fill attribute record - See af-structs.h for details of ReportAttributeRecord
+  // Fill attribute record - See af-structs.h for details of
+  //   ReportAttributeRecord
   // contents.
   uint8_t attribute_record[] = {
-    LOW_BYTE(attributeID),   //uint16_t attributeId
+    LOW_BYTE(attributeID),   // uint16_t attributeId
     HIGH_BYTE(attributeID),
-    attribute_type,          //uint8_t attributeType;
-    buff[0], buff[1],        //uint8_t* attributeLocation;
+    attribute_type,          // uint8_t attributeType;
+    buff[0], buff[1],        // uint8_t* attributeLocation;
   };
 
-  //Fill a ZCL global report attributes command buffer
+  // Fill a ZCL global report attributes command buffer
   emberAfFillCommandGlobalServerToClientReportAttributes(
-                                      cluster,
-                                      attribute_record,
-                                      sizeof(attribute_record)/sizeof(uint8_t));
+    cluster,
+    attribute_record,
+    sizeof(attribute_record) / sizeof(uint8_t));
 
-  //Specify endpoints for command sending
+  // Specify endpoints for command sending
   emberAfSetCommandEndpoints(RHT_MEASUREMENT_ENDPOINT, 1);
 
-  //Use binding table to send unicast command
+  // Use binding table to send unicast command
   status = emberAfSendCommandUnicastToBindings();
 
   return status;
 }
+
 #endif
 
 static uint8_t binding_table_unicast_binding_count(void)
@@ -452,8 +476,8 @@ static uint8_t binding_table_unicast_binding_count(void)
 
   for (i = 0; i < emberAfGetBindingTableSize(); i++) {
     EmberStatus status = emberGetBinding(i, &result);
-    if (status == EMBER_SUCCESS
-        && result.type == EMBER_UNICAST_BINDING) {
+    if ((status == EMBER_SUCCESS)
+        && (result.type == EMBER_UNICAST_BINDING)) {
       bindings++;
     }
   }
@@ -486,11 +510,11 @@ static void binding_table_print(void)
         emberAfCorePrint("%d: ", i);
         emberAfCorePrint("%p", typeStrings[result.type]);
         emberAfCorePrint("  %d    0x%x  0x%x  0x%2x 0x%2x ",
-                        result.networkIndex,
-                        result.local,
-                        result.remote,
-                        result.clusterId,
-                        emberGetBindingRemoteNodeId(i));
+                         result.networkIndex,
+                         result.local,
+                         result.remote,
+                         result.clusterId,
+                         emberGetBindingRemoteNodeId(i));
         emberAfPrintBigEndianEui64(result.identifier);
         emberAfCorePrintln("");
       }
@@ -501,6 +525,6 @@ static void binding_table_print(void)
     emberAfAppFlush();
   }
   emberAfCorePrintln("%d of %d bindings used",
-      bindings,
-      emberAfGetBindingTableSize());
+                     bindings,
+                     emberAfGetBindingTableSize());
 }

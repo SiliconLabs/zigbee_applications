@@ -1,0 +1,83 @@
+project_name: rht_zigbee_sed_application
+label: Zigbee - RHT Si7021 Sleepy End-Device
+
+description: >
+  This example shows how to use RHT Si7021 sensor on the EFR32xG24 Dev Kit Board and implement it in your Zigbee project with Simplciity Studio. This application acts as an RHT sensor and periodically reports the measured values to the coordinator.
+
+filter:
+- name: Device Type
+  value: [SoC]
+- name: Project Difficulty
+  value: [Advanced]
+- name: Wireless Technology
+  value: [Zigbee]
+
+package: Zigbee
+quality: experimental
+
+component:
+  - id: zigbee_end_device_support
+  - id: zigbee_pro_leaf_stack
+  - id: zigbee_application_bootloader
+  - id: zigbee_find_and_bind_initiator
+  - id: zigbee_binding_table
+  - id: zigbee_zcl_framework_core
+  - id: zigbee_debug_basic
+  - id: zigbee_network_steering
+  - id: zigbee_counters
+  - id: zigbee_identify
+  - id: zigbee_basic
+  - id: zigbee_scan_dispatch
+  - id: zigbee_source_route
+  - id: zigbee_packet_validate
+  - id: zigbee_debug_print
+  - id: zigbee_reporting
+  - id: sensor_rht
+  - id: zigbee_install_code
+  - id: zigbee_update_tc_link_key
+  - id: simple_button
+    instance: [btn0, btn1]
+  - id: cli
+    instance: [example]
+  - id: iostream_usart
+    instance: [vcom]
+  - id: simple_led
+    instance: [led0]
+
+readme:
+  - path: ../README.md
+
+source:
+  - path: ../src/rht_zigbee_sed_application/app.c
+  - path: ../src/rht_zigbee_sed_application/main.c
+
+config_file:
+  - path: ../config/zcl/rht_zigbee_sed_application/zcl_config.zap
+    directory: "zcl"
+
+configuration:
+  - name: SL_BOARD_ENABLE_VCOM
+    value: "1"
+  - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
+    value: usartHwFlowControlCtsAndRts
+  - name: SL_CLI_MAX_INPUT_ARGUMENTS
+    value: "16"
+  - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
+    value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_SLEEPY_END_DEVICE
+  - name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
+    value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
+  - name: EMBER_BINDING_TABLE_SIZE
+    value: "10"
+  - name: SL_CLI_PROMPT_STRING
+    value: '"RHT_SED>"'
+  - condition: [device_series_1]
+    name: NVM3_DEFAULT_NVM_SIZE
+    value: '36864'
+  - condition: [device_series_2]
+    name: NVM3_DEFAULT_NVM_SIZE
+    value: '32768'
+
+ui_hints:
+  highlight:
+    - path: ../README.md
+      focus: true

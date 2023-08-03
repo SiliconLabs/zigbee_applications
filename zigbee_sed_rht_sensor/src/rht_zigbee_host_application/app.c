@@ -45,23 +45,23 @@
 
 // The number of tokens that can be written using ezspSetToken and read using
 // ezspGetToken.
-#define MFGSAMP_NUM_EZSP_TOKENS 8
+#define MFGSAMP_NUM_EZSP_TOKENS        8
 // The size of the tokens that can be written using ezspSetToken and read using
 // ezspGetToken.
-#define MFGSAMP_EZSP_TOKEN_SIZE 8
+#define MFGSAMP_EZSP_TOKEN_SIZE        8
 // The number of manufacturing tokens.
-#define MFGSAMP_NUM_EZSP_MFG_TOKENS 11
+#define MFGSAMP_NUM_EZSP_MFG_TOKENS    11
 // The size of the largest EZSP Mfg token, EZSP_MFG_CBKE_DATA please refer to
 // app/util/ezsp/ezsp-enum.h.
 #define MFGSAMP_EZSP_TOKEN_MFG_MAXSIZE 92
 
 extern EmberStatus emberAfTrustCenterStartNetworkKeyUpdate(void);
 
-//----------------------
+// ----------------------
 // ZCL commands handling
 
 static void ias_ace_cluster_arm_command_handler(uint8_t armMode,
-                                                uint8_t* armDisarmCode,
+                                                uint8_t *armDisarmCode,
                                                 uint8_t zoneId)
 {
   uint16_t armDisarmCodeLength = emberAfStringLength(armDisarmCode);
@@ -82,8 +82,8 @@ static void ias_ace_cluster_arm_command_handler(uint8_t armMode,
 }
 
 static void ias_ace_cluster_bypass_command_handler(uint8_t numberOfZones,
-                                                   uint8_t* zoneIds,
-                                                   uint8_t* armDisarmCode)
+                                                   uint8_t *zoneIds,
+                                                   uint8_t *armDisarmCode)
 {
   EmberNodeId sender = emberGetSender();
   uint8_t i;
@@ -101,8 +101,9 @@ static void ias_ace_cluster_bypass_command_handler(uint8_t numberOfZones,
   emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, sender);
 }
 
-static uint32_t zcl_ias_ace_cluster_server_command_handler(sl_service_opcode_t opcode,
-                                                           sl_service_function_context_t *context)
+static uint32_t zcl_ias_ace_cluster_server_command_handler(
+  sl_service_opcode_t opcode,
+  sl_service_function_context_t *context)
 {
   (void)opcode;
 
@@ -143,7 +144,7 @@ static uint32_t zcl_ias_ace_cluster_server_command_handler(sl_service_opcode_t o
   return EMBER_ZCL_STATUS_UNSUP_COMMAND;
 }
 
-//----------------------
+// ----------------------
 // Implemented Callbacks
 
 /** @brief Init
@@ -179,18 +180,17 @@ bool emberAfReportAttributesCallback(EmberAfClusterId clusterId,
 
   // Custom processing done only for cluster 0x405 and 0x402 (RH and Temperature
   // measurement clusters)
-  if (clusterId == ZCL_RELATIVE_HUMIDITY_MEASUREMENT_CLUSTER_ID ||
-      clusterId == ZCL_TEMP_MEASUREMENT_CLUSTER_ID) {
-
-    attribute = (buffer[bufLen-1] << 8) | (buffer[bufLen-2]);
+  if ((clusterId == ZCL_RELATIVE_HUMIDITY_MEASUREMENT_CLUSTER_ID)
+      || (clusterId == ZCL_TEMP_MEASUREMENT_CLUSTER_ID)) {
+    attribute = (buffer[bufLen - 1] << 8) | (buffer[bufLen - 2]);
 
     if (clusterId == ZCL_RELATIVE_HUMIDITY_MEASUREMENT_CLUSTER_ID) {
       emberAfCorePrintln("RH: %2d.%2d %%",
-                         attribute/100,
+                         attribute / 100,
                          (attribute % 100));
     } else {
       emberAfCorePrintln("Temperature: %2d.%2d C",
-                         attribute/100,
+                         attribute / 100,
                          (attribute % 100));
     }
     return true;
@@ -200,12 +200,12 @@ bool emberAfReportAttributesCallback(EmberAfClusterId clusterId,
 }
 
 #ifdef SL_CATALOG_CLI_PRESENT
-//-------------------------------------
+// -------------------------------------
 // Custom CLI commands and related code
 
 // The manufacturing tokens are enumerated in app/util/ezsp/ezsp-protocol.h.
 // The names are enumerated here to make it easier for the user.
-static const char * ezspMfgTokenNames[] =
+static const char *ezspMfgTokenNames[] =
 {
   "EZSP_MFG_CUSTOM_VERSION...",
   "EZSP_MFG_STRING...........",
@@ -324,8 +324,11 @@ void versionCommand(sl_cli_command_arg_t *arguments)
   sl_zigbee_app_debug_print(" %s\n", __TIME__);
   sl_zigbee_app_debug_print("\n");
 #ifdef EMBER_TEST
-  sl_zigbee_app_debug_print("Print formatter test : 0x%x=0x12, 0x%02x=0x1234 0x%04x=0x12345678\n",
-                            0x12, 0x1234, 0x12345678);
+  sl_zigbee_app_debug_print(
+    "Print formatter test : 0x%x=0x12, 0x%02x=0x1234 0x%04x=0x12345678\n",
+    0x12,
+    0x1234,
+    0x12345678);
 #endif
 }
 

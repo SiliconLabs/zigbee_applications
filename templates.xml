@@ -151,4 +151,32 @@
     <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
+  <descriptors name="zigbee_human_detection_router" label="Zigbee - Human Detection (Router)" description=" This project aims to implement human detection using the MLX90640 low resolution IR camera in an always-on Zigbee router device and reports to zigbee gateway in the zigbee network.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_human_detection/SimplicityStudio/zigbee_human_detection_router.slcp"/>
+    <properties key="readmeFiles" value="zigbee_human_detection/README.md"/>
+    <properties key="boardCompatibility" value="brd2601b brd2703a brd2704a"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32[bm]g24.* .*efr32[x]g24.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="zigbee_human_detection_host" label="Zigbee - Human Detection (Host)" description=" This project aims to implement human detection using the MLX90640 low resolution IR camera in an always-on Zigbee router device and reports to zigbee gateway in the zigbee network.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="zigbee_human_detection/SimplicityStudio/zigbee_human_detection_host.slcp"/>
+    <properties key="readmeFiles" value="zigbee_human_detection/README.md"/>
+    <properties key="boardCompatibility" value="com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*host.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Zigbee Application"/>
+    <properties key="quality" value="production"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Zigbee"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
 </model:MDescriptors>   

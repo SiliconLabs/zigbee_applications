@@ -2,15 +2,16 @@
 
 ## Overview ##
 
-This project aims to implement human detection using the MLX90640 low resolution IR camera. The detection integrates to a Zigbee application, emulating an ultrasonic presence sensor (0x0406) in an always-on Zigbee router device. Besides updating the cluster attributes, the device can bind and report whether a human is present. The device also reports whether a human is present on a SSD1306 OLED display.
+This project aims to implement human detection using the MLX90640 low-resolution IR camera. The detection integrates into a Zigbee application, emulating an ultrasonic presence sensor (0x0406) in an always-on Zigbee router device. Besides updating the cluster attributes, the device can bind and report whether a human is present. The device also reports whether a human is present on an SSD1306 OLED display.
+
+The following picture shows the system view of how it works.
 
 ![system](images/system_connection.png)
 
-## Gecko SDK Suite version ##
+## Gecko SDK version ##
 
-- GSDK v4.2.0
-- Emberznet v7.2.0
-- [Third Party Hardware Drivers v1.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- Gecko SDK Suite 4.2.3
+- [Third Party Hardware Drivers v1.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ## Hardware Required ##
 
@@ -29,47 +30,82 @@ This project aims to implement human detection using the MLX90640 low resolution
 
 ## Connections Required ##
 
-Router device: The SparkFun Micro OLED Breakout (Qwiic) board and the Sparkfun MLX90640 IR Array can be easily connected with the EFR32xG24 Dev Kit by using the Qwiic cable.
+Zigbee Coordinator: The EFR32xG24 Dev Kit (NCP) can be connected to the Desktop (Host) via a Micro USB cable.
+
+![board](images/coordinator_connection.png)
+
+Zigbee Router device: The SparkFun Micro OLED Breakout (Qwiic) board and the Sparkfun MLX90640 IR Array can be easily connected with the EFR32xG24 Dev Kit by using the Qwiic cable.
 
 ![board](images/connection.png)
 
+**Note:**
+
+*If your router device implements on the SparkFun Thing Plus Matter - BRD2704A board*. It does not have an internal button (which is used to join or leave the network without CLI commands). To connect an external button to the board, you should use a ceramic capacitor (ex: Ceramic Capacitor 104) and a resistor to avoid the anti-vibration button used in the project as below.
+
+![button](images/button_connection.png)
+
 ## Setup ##
 
-To test this application, you can either import the provided project files:
+To test this application, you can either create a project based on an example project or start with a "Zigbee - SoC ZigbeeMinimal" project based on your hardware.
 
-- [Host application](SimplicityStudio/zigbee_human_detection_host.sls)
-- [NCP application](SimplicityStudio/zigbee_human_detection_ncp.sls)
-- [BRD2601B bootloader](SimplicityStudio/brd2601b_bootloader.sls)
-- [Router application](SimplicityStudio/zigbee_human_detection_router.sls)
+### Create a project based on an example project ###
 
-If you want to create the projects from scratch for a different radio board or kit, follow these steps: The relevant source code files for the custom application code of the Host and the Router are located in the [src](src) folder.
+- **NCP project**
+    1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with filter "NCP ncp-uart-hw".
+
+    2. Click **Create** button on the **Zigbee - NCP ncp-uart-hw** example. This example project creation dialog pops up -> click Create and Finish and Project should be generated.
+
+    ![create_ncp](images/create_ncp.png)
+
+    3. Build and flash this example to your board.
+
+- **Router project**
+    1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with the filter "human".
+
+    2. Click **Create** button on the **Zigbee - Human Detection (Router)** example. This example project creation dialog pops up -> click Create and Finish and Project should be generated.
+
+    ![create_router](images/create_router.png)
+
+    3. Build and flash this example to your board.
+
+- **Zigbee Gateway Host project**
+    1. From the Launcher Home, add "Linux 32 Bit" to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with the filter "human".
+
+    2. Click **Create** button on the **Zigbee - Human Detection (Host)** example. This example project creation dialog pops up -> click Create and Finish and Project should be generated.
+
+    ![create_coor](images/create_coor.png)
+
+    3. To build this project, please refer to the app note: [AN1389: Running Zigbee Host Applications in a Docker Container](https://www.silabs.com/documents/public/application-notes/an1389-running-host-applications-in-docker-containers.pdf)
+
+### Start with a "Zigbee - SoC ZigbeeMinimal" project ###
+
+*If you want to create the projects from scratch for a different radio board or kit, follow these steps: The relevant source code files for the custom application code of the Host and the Router are located in the [src](src) folder.*
 
 1. Create the projects
 
-   Although the .sls project files are attached, the following are the steps that you can follow to generate the host, NCP, and Router starting point project, especially useful if you're trying to replicate these instructions for a different platform. Depending on the project that you're creating you'll have a different set of selections here:
-
     - **NCP project**
-      - Create a Zigbee - NCP ncp-uart-hw project for the EFR32xG24 Dev Kit (xG24-DK2601B) using Simplicity Studio v5. Use the default project settings. Be sure to connect and select the EFR32xG24 Dev Kit (xG24-DK2601B) Board from the "Debug Adapters" on the left before creating a project
+      - Create a **Zigbee - NCP ncp-uart-hw** project for the EFR32xG24 Dev Kit (xG24-DK2601B) using Simplicity Studio v5.
 
     - **Router project**
-      - Create a Zigbee - SoC ZigbeeMinimal project for the EFR32xG24 Dev Kit (xG24-DK2601B) using Simplicity Studio v5. Use the default project settings. Be sure to connect and select the EFR32xG24 Dev Kit (xG24-DK2601B) Board from the Debug Adapters on the left before creating a project
+      - Create a **Zigbee - SoC ZigbeeMinimal** project for the EFR32xG24 Dev Kit (xG24-DK2601B) using Simplicity Studio v5.
 
     - **Zigbee Gateway Host project**
-      - On the Simplicity Studio launcher add a product with name Linux 32 Bit from the My Products on the left side then create a **Zigbee - Host Gateway** project with **Copy contents**.
+      - On the Simplicity Studio launcher add a product with the name Linux 32 Bit from the My Products on the left side then create a **Zigbee - Host Gateway** project with **Copy contents**.
 
 2. Configuring the projects
 
    2.1 Host project configuration
 
       - Use the default cluster configuration.
-      - Select Z3Gateway.slcp and install the following component for device:
-[Zigbee] → [Zigbee 3.0] → [Find and Bind Target]
+      - Select Z3Gateway.slcp and install the following component for the device:
+
+        - [Zigbee] → [Zigbee 3.0] → [Find and Bind Target]
 
    2.2 Router project configuration
 
       - Load the model file into the project:
 
-        - Create a tflite directory inside the config directory of the project and then copy the [.tflite](config/tflite/thumbs_up_and_down.tflite) model file into it. The project configurator provides a tool that will automatically convert .tflite files into sl_tflite_micro_model source and header files.
+        - Create a tflite directory inside the config directory of the project and then copy the [.tflite](config/tflite/ir_human_detection.tflite) model file into it. The project configurator provides a tool that will automatically convert .tflite files into sl_tflite_micro_model source and header files.
 
       - Cluster configuration:
 
@@ -112,8 +148,8 @@ If you want to create the projects from scratch for a different radio board or k
 **NOTE:**
 
 - Make sure that the SDK extension already be installed. If not please follow [this documentation](https://github.com/SiliconLabs/third_party_hw_drivers_extension/blob/master/README.md).
-- SDK Extension must be enabled for the project to install [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C], [GLIB - OLED Graphics Library] and [MLX90640 - IR Array Breakout (Sparkfun)] components. Selecting [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] and [MLX90640 - IR Array Breakout (Sparkfun)] components will also include the "I2CSPM" component with unconfigurated instance: **inst0**.
-- You need to create the bootloader project and flash it to the device before flashing the application. When flash the application image to the device, use the .hex or .s37 output file. Flashing the .bin files may overwrite (erase) the bootloader.
+- SDK Extension must be enabled for the project to install [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C], [GLIB - OLED Graphics Library], and [MLX90640 - IR Array Breakout (Sparkfun)] components. Selecting [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] and [MLX90640 - IR Array Breakout (Sparkfun)] components will also include the "I2CSPM" component with an unconfigured instance: **inst0**.
+- You need to create the bootloader project and flash it to the device before flashing the application. When flashing the application image to the device, use the .hex or .s37 output file. Flashing the .bin files may overwrite (erase) the bootloader.
 
 ## How It Works ##
 
@@ -199,7 +235,7 @@ Lastly, press button 0 in the Router board, this will trigger the network steeri
 
 ### Model overview ###
 
-Before continuing with this project, it is recommended to review the [MLTK Overview](https://siliconlabs.github.io/mltk/docs/overview.html), which provides an overview of the core concepts used by the this project.
+Before continuing with this project, it is recommended to review the [MLTK Overview](https://siliconlabs.github.io/mltk/docs/overview.html), which provides an overview of the core concepts used by this project.
 
 Image classification is one of the most important applications of deep learning and Artificial Intelligence. Image classification refers to assigning labels to images based on certain characteristics or features present in them. The algorithm identifies these features and uses them to differentiate between different images and assign labels to them [[1]](https://www.simplilearn.com/tutorials/deep-learning-tutorial/guide-to-building-powerful-keras-image-classification-models).
 
@@ -209,7 +245,7 @@ In this project, we have a dataset with two different image types:
 - **Not Human** - Random images not containing human
 
 We assign an ID, a.k.a. **label**, 0 and 1, to each of these classes.  
-We then "train" a machine learning model so that when we input an image from one of the classes is given to the model, the model's output is the corresponding class ID. In this way, at runtime on the embedded device when the camera captures an image of a human, the ML model predicts its corresponding class ID which the firmware application uses accordingly. i.e.
+We then "train" a machine learning model so that when we input an image from one of the classes given to the model, the model's output is the corresponding class ID. In this way, at runtime on the embedded device when the camera captures an image of a human, the ML model predicts its corresponding class ID which the firmware application uses accordingly. i.e.
 
 ![model overview](images/model_overview.png)
 
@@ -282,12 +318,3 @@ Class ROC AUC:
 ![Model Evaluation](images/ir_human_detection-tpr.png)
 ![Model Evaluation](images/ir_human_detection-fpr.png)
 ![Model Evaluation](images/ir_human_detection-tfp_fpr.png)
-
-## .sls Projects Used ##
-
-Project | Use
--|-|
-[zigbee_human_detection_host.sls](SimplicityStudio/zigbee_human_detection_host.sls) | Host application
-[zigbee_human_detection_ncp.sls](SimplicityStudio/zigbee_human_detection_ncp.sls) | BRD2601B NCP application (UART SW flow control)
-[zigbee_human_detection_router.sls](SimplicityStudio/zigbee_human_detection_router.sls) | BRD2601B human detection application
-[brd2601b_bootloader.sls](SimplicityStudio/brd2601b_bootloader.sls)  | BRD2601B bootloader

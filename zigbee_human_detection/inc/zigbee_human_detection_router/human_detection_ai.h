@@ -79,7 +79,6 @@ void human_detection_ai_loop(void);
 // Implemented in Z3SwitchVoice_CallBacks.c
 void human_detection_ai_get_index(uint8_t found_command_index);
 
-
 #ifdef __cplusplus
 }
 #endif

@@ -19,7 +19,8 @@
 #include "app/framework/util/af-main.h"
 #include "app/util/common/common.h"
 #include "app/framework/plugin/network-steering/network-steering.h"
-#include "app/framework/plugin/find-and-bind-initiator/find-and-bind-initiator.h"
+#include \
+  "app/framework/plugin/find-and-bind-initiator/find-and-bind-initiator.h"
 
 #include "sl_simple_button_instances.h"
 
@@ -41,7 +42,7 @@
 #define led_stop(led) do {                    \
     led_turn_off(led);                        \
     sl_zigbee_event_set_inactive(&led_event); \
-} while(0)
+} while (0)
 
 #define BUTTON0                      0
 
@@ -61,11 +62,12 @@ static bool commissioning = false; // Holds the commissioning status
 static bool binding = false; // Holds the binding status
 static bool initialization_is_ok = false;
 
-static sl_zigbee_event_t run_inference_event_control; // Custom event control
-static sl_zigbee_event_t network_control_event_control; // Custom event control
-static sl_zigbee_event_t finding_and_binding_event_control; // Custom event control
-static sl_zigbee_event_t attribute_report_event_control; // Custom event control
-static sl_zigbee_event_t led_event; // Custom event control
+// Custom event controls
+static sl_zigbee_event_t run_inference_event_control;
+static sl_zigbee_event_t network_control_event_control;
+static sl_zigbee_event_t finding_and_binding_event_control;
+static sl_zigbee_event_t attribute_report_event_control;
+static sl_zigbee_event_t led_event;
 
 // -----------------------------------------------------------------------------
 //                          Static Function Declarations
@@ -89,7 +91,7 @@ static uint8_t binding_table_unicast_binding_count(void);
  * routine should be put into this function. This is called before the clusters,
  * plugins, and the network are initialized so some functionality is not yet
  * available.
-        Note: No callback in the Application Framework is
+ * Note: No callback in the Application Framework is
  * associated with resource cleanup. If you are implementing your application on
  * a Unix host where resource cleanup is a consideration, we expect that you
  * will use the standard Posix system calls, including the use of atexit() and
@@ -113,12 +115,16 @@ void emberAfMainInitCallback(void)
     initialization_is_ok = true;
   }
 
-  sl_zigbee_event_init(&run_inference_event_control, run_inference_event_handler);
+  sl_zigbee_event_init(&run_inference_event_control,
+                       run_inference_event_handler);
   sl_zigbee_event_set_delay_ms(&run_inference_event_control,
                                RUN_INFERENCE_DELAY_MS);
-  sl_zigbee_event_init(&network_control_event_control, network_control_event_handler);
-  sl_zigbee_event_init(&finding_and_binding_event_control, finding_and_binding_event_handler);
-  sl_zigbee_event_init(&attribute_report_event_control, attribute_report_event_handler);
+  sl_zigbee_event_init(&network_control_event_control,
+                       network_control_event_handler);
+  sl_zigbee_event_init(&finding_and_binding_event_control,
+                       finding_and_binding_event_handler);
+  sl_zigbee_event_init(&attribute_report_event_control,
+                       attribute_report_event_handler);
   sl_zigbee_event_init(&led_event, led_event_handler);
 }
 
@@ -170,7 +176,10 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
                                                   uint8_t joinAttempts,
                                                   uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n",
+                            "Join",
+                            "complete",
+                            status);
 
   if (status != EMBER_SUCCESS) {
     led_stop(STATUS_LED);
@@ -193,7 +202,9 @@ void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
  */
 void emberAfPluginFindAndBindInitiatorCompleteCallback(EmberStatus status)
 {
-  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n", "complete", status);
+  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n",
+                            "complete",
+                            status);
 
   if (status != EMBER_SUCCESS) {
     sl_zigbee_app_debug_print("Ensure a valid binding target!\n");
@@ -235,7 +246,7 @@ void human_detection_ai_get_index(uint8_t found_command_index)
  * @note The button state should not be updated in this function, it is updated
  * by specific button driver prior to arriving here
  *
-   @param[out] handle             Pointer to button instance
+ * @param[out] handle             Pointer to button instance
  ******************************************************************************/
 void sl_button_on_change(const sl_button_t *handle)
 {
@@ -281,17 +292,21 @@ static void run_inference_event_handler(sl_zigbee_event_t *event)
  */
 static void finding_and_binding_event_handler(sl_zigbee_event_t *event)
 {
-  EmberStatus status = emberAfPluginFindAndBindInitiatorStart(HUMAN_DETECTION_ENDPOINT);
+  EmberStatus status;
+  status = emberAfPluginFindAndBindInitiatorStart(HUMAN_DETECTION_ENDPOINT);
 
-  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n", "start", status);
+  sl_zigbee_app_debug_print("Find and bind initiator %s: 0x%X\n",
+                            "start",
+                            status);
 
   binding = true;
 }
 
 /** @brief Attributes report Event Handler
  *
- * This event handler is called in response to it's respective human detection.
- * It will report the predict of the Human detection to server clusters
+ * This event handler write the attribute which triggers an automatic
+ * report of the occupancy to the Client via the Occupancy Sensing
+ * cluster.
  *
  */
 static void attribute_report_event_handler(sl_zigbee_event_t *event)
@@ -358,8 +373,8 @@ static uint8_t binding_table_unicast_binding_count(void)
 
   for (i = 0; i < emberAfGetBindingTableSize(); i++) {
     EmberStatus status = emberGetBinding(i, &result);
-    if (status == EMBER_SUCCESS
-        && result.type == EMBER_UNICAST_BINDING) {
+    if ((status == EMBER_SUCCESS)
+        && (result.type == EMBER_UNICAST_BINDING)) {
       bindings++;
     }
   }

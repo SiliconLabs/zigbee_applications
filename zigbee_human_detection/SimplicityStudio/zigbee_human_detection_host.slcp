@@ -1,0 +1,204 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: zigbee_human_detection_host
+label: zigbee_human_detection_host
+
+description: |
+  This project aims to implement human detection using the MLX90640 low resolution IR camera in an always-on Zigbee router device and reports to zigbee gateway in the zigbee network.
+
+category: Zigbee Host Application
+
+filter:
+- name: Device Type
+  value: [Host]
+- name: Project Difficulty
+  value: [Beginner]
+- name: Wireless Technology
+  value: [Zigbee]
+
+package: Zigbee
+
+quality: production
+
+readme:
+- path: ../README.md
+
+source:
+- path: ../src/zigbee_human_detection_host/main.c
+- path: ../src/zigbee_human_detection_host/app.c
+
+component:
+- id: zigbee_level_control
+- id: zigbee_ota_server
+- id: zigbee_counters
+- id: zigbee_identify
+- id: zigbee_green_power_common
+- id: zigbee_trust_center_nwk_key_update_unicast
+- id: zigbee_basic
+- id: zigbee_time_server
+- id: linux_arch_32
+- id: zigbee_poll_control_client
+- id: zigbee_ota_common
+- id: zigbee_green_power_client
+- instance: [example]
+  id: cli
+- id: zigbee_ezmode_commissioning
+- id: zigbee_ota_server_policy
+- id: zigbee_manufacturing_library_cli
+- id: zigbee_trust_center_nwk_key_update_broadcast
+- id: zigbee_scan_dispatch
+- id: zigbee_network_creator_security
+- id: zigbee_trust_center_nwk_key_update_periodic
+- id: zigbee_color_control_server
+- id: zigbee_ota_storage_common
+- id: zigbee_test_harness
+- id: zigbee_ezsp_uart
+- id: zigbee_address_table
+- id: native
+- id: zigbee_file_descriptor_dispatch
+- id: zigbee_network_creator
+- id: iostream_stdio
+- id: zigbee_on_off
+- id: zigbee_debug_print
+- id: zigbee_stack_diagnostics
+- id: zigbee_concentrator
+- id: zigbee_network_steering
+- id: zigbee_ias_zone_client
+- id: zigbee_ncp_configuration
+- id: zigbee_reporting
+- id: zigbee_ota_storage_posix_filesystem
+- id: zigbee_identify_feedback
+- id: zigbee_find_and_bind_target
+- id: zigbee_ezsp
+- id: zigbee_update_tc_link_key
+- id: zigbee_simple_metering_client
+
+config_file:
+- path: ../config/zigbee_human_detection_host/zcl_config.zap
+
+template_contribution:
+- name: cli_group
+  priority: 0
+  value:
+    name: custom
+    help: Custom commands
+- name: cli_command
+  priority: 0
+  value:
+    group: custom
+    name: tokdump
+    handler: mfgappTokenDump
+- name: cli_command
+  priority: 0
+  value: 
+    group: custom
+    name: changeNwkKey
+    handler: changeNwkKeyCommand
+- name: cli_command
+  priority: 0
+  value:
+    group: custom
+    name: printNextKey
+    handler: printNextKeyCommand
+- name: cli_command
+  priority: 0
+  value:
+    group: custom
+    name: version
+    handler: versionCommand
+- name: cli_command
+  priority: 0
+  value:
+    group: custom
+    name: txPower
+    handler: setTxPowerCommand
+    argument:
+    - type: int8
+
+configuration:
+- name: SL_BOARD_ENABLE_VCOM
+  value: '1'
+- name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
+  value: usartHwFlowControlCtsAndRts
+- name: SL_CLI_MAX_INPUT_ARGUMENTS
+  value: '16'
+- name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
+  value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
+- name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
+  value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
+- name: SL_CLI_PROMPT_STRING
+  value: '"Z3Gateway>"'
+- name: EMBER_KEY_TABLE_SIZE
+  value: '4'
+- name: SL_ZIGBEE_EVENT_DEBUG_ENABLED
+  value: '1'
+
+other_file:
+  - path: ../images/app_loop.png
+    directory: images
+  - path: ../images/button_connection.png
+    directory: images
+  - path: ../images/cluster_configurator.png
+    directory: images
+  - path: ../images/connection.png
+    directory: images
+  - path: ../images/coordinator_connection.png
+    directory: images
+  - path: ../images/create_coor.png
+    directory: images
+  - path: ../images/create_ncp.png
+    directory: images
+  - path: ../images/create_router.png
+    directory: images
+  - path: ../images/dataset_human.png
+    directory: images
+  - path: ../images/dataset_nothing.png
+    directory: images
+  - path: ../images/display.png
+    directory: images
+  - path: ../images/flash_programmer.png
+    directory: images
+  - path: ../images/host_attr.png
+    directory: images
+  - path: ../images/i2c_instance.png
+    directory: images
+  - path: ../images/initialization.png
+    directory: images
+  - path: ../images/ir_human_detection-fpr.png
+    directory: images
+  - path: ../images/ir_human_detection-precision_vs_recall.png
+    directory: images
+  - path: ../images/ir_human_detection-roc.png
+    directory: images
+  - path: ../images/ir_human_detection-tfp_fpr.png
+    directory: images
+  - path: ../images/ir_human_detection-tpr.png
+    directory: images
+  - path: ../images/logs.png
+    directory: images
+  - path: ../images/mem_config.png
+    directory: images
+  - path: ../images/model_overview.png
+    directory: images
+  - path: ../images/network_creator.png
+    directory: images
+  - path: ../images/network_open.png
+    directory: images
+  - path: ../images/router_report.png
+    directory: images
+  - path: ../images/ssd1306_config.png
+    directory: images
+  - path: ../images/system_connection.png
+    directory: images
+  - path: ../images/system_overview.png
+    directory: images
+  - path: ../images/tflite_configure.png
+    directory: images
+  - path: ../images/zigbee_ui.png
+    directory: images
+
+ui_hints:
+  highlight:
+  - path: ''
+    focus: true
+  - path: ../README.md
+

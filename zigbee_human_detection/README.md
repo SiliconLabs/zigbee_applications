@@ -10,8 +10,8 @@ The following picture shows the system view of how it works.
 
 ## Gecko SDK version ##
 
-- Gecko SDK Suite 4.2.3
-- [Third Party Hardware Drivers v1.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- Gecko SDK Suite 4.3.1
+- [Third Party Hardware Drivers v1.5.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ## Hardware Required ##
 

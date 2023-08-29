@@ -17,7 +17,7 @@ This training demonstrates the basic usage of Non-Volatile data storage on Ember
 
 **You will learn**
 
-- With this hands-on course, you will learn the basic knowledge of non-voltage data storage and how to use token to access non-voltage data storage objects.
+- With this hands-on course, you will learn the basic knowledge of non-volatile data storage and how to use token to access non-volatile data storage objects.
 
 **You need to do**
 

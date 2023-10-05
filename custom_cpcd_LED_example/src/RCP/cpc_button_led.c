@@ -157,31 +157,41 @@ static cpc_endpoint_status_t connect(){
 
 }
 
-void cpc_button_led_init(){
-  cpc_button_led_process_action();
-}
-
-void cpc_button_led_process_action(){
+// Check & Update endpoint status
+void cpc_test_endpoint_status(){
   if ( endpoint_status == CPC_ENDPOINT_DISCONNECTED && sl_cpc_get_endpoint_state(&test_endpoint_handle) == SL_CPC_STATE_FREED){
       endpoint_status = CPC_ENDPOINT_CLOSED;
   }
+  // If closed, open endpoint
   if ( endpoint_status == CPC_ENDPOINT_CLOSED ){
       endpoint_status = connect();
   }
+}
+
+void cpc_button_led_init(){
+  // Check endpoint state and connect
+  cpc_test_endpoint_status();
+
+  // Any other cpc init tasks go here
+}
+
+void cpc_button_led_process_action(){
+  // Verify that endpoint is connected
+  cpc_test_endpoint_status();
 
   if ( send_button_pressed ){
       if ( endpoint_status == CPC_ENDPOINT_CONNECTED ){
-          // Send '1' if LED is toggled ON
+          // Send '1' if LED is ON
           if(sl_led_get_state(&sl_led_led0) == SL_LED_CURRENT_STATE_ON){
               notify_buffer = CPC_NOTIFY_LED_ON;
           }
-          // Send '0' if LED is toggled OFF
+          // Send '0' if LED is OFF
           if(sl_led_get_state(&sl_led_led0) == SL_LED_CURRENT_STATE_OFF){
               notify_buffer = CPC_NOTIFY_LED_OFF;
           }
-        //notify_buffer = CPC_NOTIFY_BUTTON_PRESSED;
+        // Write to endpoint
         sl_cpc_write(&test_endpoint_handle, &notify_buffer, CPC_NOTIFY_LEN,
-                     0, NULL);//no flag, no write complete arg
+                     0, NULL); //no flag, no write complete arg
         send_button_pressed = false;
       }
   }

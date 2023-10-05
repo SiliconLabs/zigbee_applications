@@ -101,5 +101,4 @@ void app_exit(void)
 #if OPENTHREAD_CONFIG_MULTIPLE_INSTANCE_ENABLE
     free(otInstanceBuffer);
 #endif
-    // TO DO : pseudo reset?
 }

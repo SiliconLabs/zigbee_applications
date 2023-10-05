@@ -12,7 +12,6 @@
 #define CPC_COMMAND_LED_ON              '1'
 #define CPC_COMMAND_LED_OFF             '0'
 //secondary->primary notifications
-#define CPC_NOTIFY_BUTTON_PRESSED       'b'
 #define CPC_NOTIFY_LED_ON               '1'
 #define CPC_NOTIFY_LED_OFF              '0'
 

@@ -41,6 +41,7 @@ static void sendCmd(char command){
   cpc_write_endpoint(endpoint, &command, CPC_COMMAND_LEN, CPC_ENDPOINT_WRITE_FLAG_NONE);
 }
 
+// Read RCP data from CPC
 static char getNotify(){
     uint8_t data_from_cpc[SL_CPC_READ_MINIMUM_SIZE];
     int size = cpc_read_endpoint(endpoint,
@@ -74,6 +75,7 @@ int main(int argc, char* argv[]) {
     connectcpc();
     handshake();
 
+    // Set up terminal interface
     initscr();
     noecho();
     nodelay(stdscr,TRUE);
@@ -98,10 +100,13 @@ int main(int argc, char* argv[]) {
             endwin();
             break;
         } else if (ch >= 0x20 && ch <= 0x7F) {
+            // If any other character is pressed
             printUsage = true;
         }
 
+        // Recieve message from seconday
         char notifyCh = getNotify();
+        // Check if message from secondary is a valid ASCII character
         if (notifyCh >= 0x20 && notifyCh <= 0x7F) {
             char output[30];
             snprintf(output, 30, "Notify from secondary: %c", notifyCh);

@@ -1,4 +1,4 @@
-# Custom CPCd commands - Simple Blinky App
+## Summary ##
 The purpose of this example application is to demonstrate how to create custom cpcd commands. The application allows the user to type either '1' or '0' from the primary (host) to turn on or off the LED on the secondary (RCP). Similarily, button 0 on the RCP will toggle the LED on the RCP. Pressing 'q' will terminate the application.
 
 For the purpose of this example, *primary* and *host* as well as *secondary* and *RCP* will be used interchangably.
@@ -15,16 +15,20 @@ When reading, the buffer must be at least SL_CPC_READ_MINIMUM_SIZE bytes.
 
 Both APIs will return a negative value in case of error, otherwise it will return the number of bytes read/written.
 
+## Gecko SDK version ##
+* Simplicity Studio v5
+* GSDK 4.3.1
 
-## Usage
-This tutorial will explain the steps to run this simple custom commands application. It uses the following components:
-#### Hardware
+## Hardware Required ##
 * 1x WPK (brd 4002A) + MG21 (brd 4181B)
 * 1x Raspberry Pi 4 with CPCd installed
 
-#### Software 
-* Simplicity Studio v5
-* GSDK 4.3.1
+## Connections Required ##
+* EFR32 (brd 4181B) connected to WPK (brd 4002A) to form the RCP
+* Connect the RCP to the Rasperry Pi 4 via UART (USB cable)
+* Ssh connection to the Raspberry Pi
+
+## Setup ##
 
 ### On the Secondary (RCP)
 1. Build and flash a bootloader (in this case: bootloader-uart-xmodem)
@@ -68,7 +72,7 @@ This tutorial will explain the steps to run this simple custom commands applicat
 5. start cpcd (/usr/local/bin/cpcd)
 6. start the host app ( ./cpcledbutton)
 
-### From the application
+## How It Works ##
 1. Press any key to bring up the menu
 2. press '1' or '0' on the host to turn on the led on the secondary
 3. press 'btn0' on the secondary to toggle the led and notify the host

@@ -135,7 +135,7 @@ configuration:
 other_file:
   - path: ../images/app_loop.png
     directory: images
-  - path: ../images/button_connection.png
+  - path: ../images/external_button.png
     directory: images
   - path: ../images/cluster_configurator.png
     directory: images

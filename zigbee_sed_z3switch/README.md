@@ -6,7 +6,7 @@ This application is used to create a Zigbee sleepy end device with the Silicon L
 
 ## Gecko SDK version ##
 
-- GSDK v4.2.2
+- GSDK v4.4.0
 
 ## Hardware Required ##
 
@@ -63,7 +63,10 @@ To test this application, you can either create a project based on an example pr
 - [Service] → [Device Initialization] → [Peripherals] → [Energy Management Unit (EMU)]: disable **Allow debugger to remain connected in EM2** as below:
 ![energy_emu_config](images/energy_emu_config.png)
 
-4. Build and flash the project to your device.
+- [Zigbee] → [Utility] → [Watchdog periodic refresh sample implementation]: configure refresh duration to **5000** as below:
+![watchdog_config](images/watchdog_config.png)
+
+1. Build and flash the project to your device.
 
 **Note:**
 

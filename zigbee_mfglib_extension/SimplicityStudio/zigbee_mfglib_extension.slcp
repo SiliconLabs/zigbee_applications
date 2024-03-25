@@ -173,6 +173,7 @@ other_file:
   directory: "images"
 - path: ../images/create_project.png
   directory: "images"
+
 ui_hints:
   highlight:
     - path: README.md

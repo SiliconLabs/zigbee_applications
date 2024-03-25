@@ -4,7 +4,7 @@
 In a common Zigbee network, the gateway normally has the capability of connecting to the internet, so it can get the date and time through NTP. Therefore, the gateway can act as the time server to provide the time source for the other Zigbee devices. This example demonstrates how we synchronize the date and time in the Zigbee network. On the device side, the local date and time will be kept by the plugin **Simple Clock**. 
 
 ## Gecko SDK version ##
-Gecko SDK Suite v4.2.2
+Gecko SDK Suite v4.4.0
 
 ## Hardware Required ##
 
@@ -66,7 +66,7 @@ The hardware connection is shown in the image below:
 
     *note: replace 'Z3Gateway.Makefile' with the makefile in your project*
 
-![make_gateway](images/make%20gateway.png)
+![make_gateway](images/make_gateway.png)
 
 6. Run the Zigbee gateway device by connecting the Zigbee host to your NCP with the following command:
 
@@ -85,7 +85,7 @@ To create a Zigbee Device (time client), you can either create a project based o
 1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with the filter "time sync".
 
 2. Click **Create** button on the **Zigbee - Device RTC Time Synchronize** example. This example projects creation dialog pops up -> click Create and Finish and the project should be generated.
-![Create_device](images/Create_device.png)
+![Create_device](images/create_device.png)
 
 3. Build and flash this example to your boards.
 

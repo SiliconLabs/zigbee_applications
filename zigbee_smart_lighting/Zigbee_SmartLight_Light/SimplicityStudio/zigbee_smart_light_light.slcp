@@ -23,7 +23,6 @@ component:
 - id: cli
   instance: [example]
 - id: zigbee_network_creator_security
-- id: zigbee_binding_table
 - id: zigbee_zcl_framework_core
 - id: zigbee_debug_basic
 - id: zigbee_network_steering
@@ -39,7 +38,6 @@ component:
 - id: zigbee_on_off
 - id: zigbee_debug_print
 - id: zigbee_reporting
-- id: zigbee_install_code
 - id: zigbee_update_tc_link_key
 config_file:
   - path: ../config/zcl/zcl_config.zap
@@ -48,7 +46,7 @@ configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: '1'
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
-    value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_ROUTER
+    value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
     value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
 
@@ -62,6 +60,7 @@ other_file:
   directory: "images"
 - path: ../../images/hardware_connection.png
   directory: "images"
+
 ui_hints:
   highlight:
     - path: README.md

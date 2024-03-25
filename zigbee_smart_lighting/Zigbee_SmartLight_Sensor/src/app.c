@@ -24,13 +24,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "sl_string.h"
-#include "em_device.h"
-#include "em_chip.h"
-#include "em_assert.h"
-#include "em_emu.h"
-#include "em_cmu.h"
-#include "em_gpio.h"
-#include "em_pcnt.h"
 
 #include "sl_board_control.h"
 #include "sl_simple_button.h"

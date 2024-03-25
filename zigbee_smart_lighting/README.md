@@ -10,8 +10,8 @@ In figure above, node 1 is the Zigbee Gateway. Node 2 is the motion sensor. Node
 
 ## Gecko SDK version ##
 
-- Gecko SDK 4.2.2
-- [Third Party Hardware Drivers v1.5.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- Gecko SDK 4.4.0
+- [Third Party Hardware Drivers v2.0.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ## Required Hardware ##
 

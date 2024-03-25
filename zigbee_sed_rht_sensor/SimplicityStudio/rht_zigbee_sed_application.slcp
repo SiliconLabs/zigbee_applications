@@ -20,7 +20,6 @@ component:
   - id: zigbee_pro_leaf_stack
   - id: zigbee_application_bootloader
   - id: zigbee_find_and_bind_initiator
-  - id: zigbee_binding_table
   - id: zigbee_zcl_framework_core
   - id: zigbee_debug_basic
   - id: zigbee_network_steering
@@ -29,11 +28,9 @@ component:
   - id: zigbee_basic
   - id: zigbee_scan_dispatch
   - id: zigbee_source_route
-  - id: zigbee_packet_validate
   - id: zigbee_debug_print
   - id: zigbee_reporting
   - id: sensor_rht
-  - id: zigbee_install_code
   - id: zigbee_update_tc_link_key
   - id: simple_button
     instance: [btn0, btn1]
@@ -54,6 +51,38 @@ source:
 config_file:
   - path: ../config/zcl/rht_zigbee_sed_application/zcl_config.zap
     directory: "zcl"
+
+other_file:
+  - path: ../images/app_diagram.png
+    directory: "images"
+  - path: ../images/create_host_app.png
+    directory: "images"
+  - path: ../images/create_sed_app.png
+    directory: "images"
+  - path: ../images/Decryption_keys.jpg
+    directory: "images"
+  - path: ../images/docker.png
+    directory: "images"
+  - path: ../images/host_application_output_log.png
+    directory: "images"
+  - path: ../images/Keys_print_command_output.jpg
+    directory: "images"
+  - path: ../images/Network_Analyzer_capture_example.jpg
+    directory: "images"
+  - path: ../images/Network_Analyzer_event_details.jpg
+    directory: "images"
+  - path: ../images/network_creation_and_info_output.png
+    directory: "images"
+  - path: ../images/network_security.png
+    directory: "images"
+  - path: ../images/project_folder.png
+    directory: "images"
+  - path: ../images/SED_application_output_log.png
+    directory: "images"
+  - path: ../images/SED_button_report_output_log.png
+    directory: "images"
+  - path: ../images/stream_uart_vcom.png
+    directory: "images"
 
 configuration:
   - name: SL_BOARD_ENABLE_VCOM

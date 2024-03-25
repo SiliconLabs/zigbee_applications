@@ -33,30 +33,27 @@ include:
   - path: ../inc/battery_monitor.h
 
 component:
-- instance: [example]
-  id: cli
 - id: zigbee_pro_leaf_stack
 - id: zigbee_application_bootloader
 - id: zigbee_find_and_bind_initiator
-- id: zigbee_binding_table
 - id: zigbee_zcl_framework_core
 - id: zigbee_debug_basic
-- id: gpiointerrupt
 - id: zigbee_network_steering
 - id: zigbee_counters
 - id: zigbee_basic
+- id: zigbee_scan_dispatch
+- id: zigbee_source_route
+- id: zigbee_debug_print
+- id: zigbee_reporting
+- id: zigbee_update_tc_link_key
+- id: zigbee_end_device_support
 - id: emlib_iadc
 - id: app_log
 - instance: [vcom]
   id: iostream_usart
-- id: zigbee_scan_dispatch
-- id: zigbee_source_route
-- id: zigbee_packet_validate
-- id: zigbee_debug_print
-- id: zigbee_reporting
-- id: zigbee_install_code
-- id: zigbee_update_tc_link_key
-- id: zigbee_end_device_support
+- id: gpiointerrupt
+- instance: [example]
+  id: cli
 
 config_file:
 - path: ../config/end_device/zcl/zcl_config.zap
@@ -88,9 +85,31 @@ configuration:
 - name: SL_PSA_ITS_SUPPORT_V3_DRIVER
   value: '1'
 
+other_file:
+  - path: ../images/create_coor.png
+    directory: images
+  - path: ../images/create_sed.png
+    directory: images
+  - path: ../images/form.png
+    directory: images
+  - path: ../images/hardware.png
+    directory: images
+  - path: ../images/join.png
+    directory: images
+  - path: ../images/overview.png
+    directory: images
+  - path: ../images/pin_conf.png
+    directory: images
+  - path: ../images/rac_prs_gpio.png
+    directory: images
+  - path: ../images/report.png
+    directory: images
+  - path: ../images/zcl_conf.png
+    directory: images
+
 ui_hints:
   highlight:
   - path: ''
     focus: true
-  - path: ../README.md
+  - path: README.md
 

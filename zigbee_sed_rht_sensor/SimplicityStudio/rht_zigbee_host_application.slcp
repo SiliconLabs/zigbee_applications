@@ -70,6 +70,38 @@ component:
 config_file:
   - path: ../config/zcl/rht_zigbee_host_application/zcl_config.zap
 
+other_file:
+  - path: ../images/app_diagram.png
+    directory: "images"
+  - path: ../images/create_host_app.png
+    directory: "images"
+  - path: ../images/create_sed_app.png
+    directory: "images"
+  - path: ../images/Decryption_keys.jpg
+    directory: "images"
+  - path: ../images/docker.png
+    directory: "images"
+  - path: ../images/host_application_output_log.png
+    directory: "images"
+  - path: ../images/Keys_print_command_output.jpg
+    directory: "images"
+  - path: ../images/Network_Analyzer_capture_example.jpg
+    directory: "images"
+  - path: ../images/Network_Analyzer_event_details.jpg
+    directory: "images"
+  - path: ../images/network_creation_and_info_output.png
+    directory: "images"
+  - path: ../images/network_security.png
+    directory: "images"
+  - path: ../images/project_folder.png
+    directory: "images"
+  - path: ../images/SED_application_output_log.png
+    directory: "images"
+  - path: ../images/SED_button_report_output_log.png
+    directory: "images"
+  - path: ../images/stream_uart_vcom.png
+    directory: "images"
+
 template_contribution:
 - name: cli_group
   priority: 0

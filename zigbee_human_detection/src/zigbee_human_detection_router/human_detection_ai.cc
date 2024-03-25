@@ -34,6 +34,7 @@
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
 #include <math.h>
+#include "stdio.h"
 
 #include "sl_sleeptimer.h"
 
@@ -44,8 +45,6 @@
 
 #include "sl_tflite_micro_model_parameters.h"
 #include "sl_tflite_micro_init.h"
-
-#include "printf.h"
 
 #include "human_detection_ai.h"
 #include "image_handler.h"

@@ -8,7 +8,7 @@ This project will provide a Battery Monitor application that supports both serie
 
 Here is how the application works:
 <div align="center">
-    <img src="images/rac-prs-gpio.png">
+    <img src="images/rac_prs_gpio.png">
 </div>
 <br>
 
@@ -21,10 +21,10 @@ Here is how the application works:
 
 **On the Coordinator device side**
 1. The Coordinator periodically hears a report from The end device.
-2. Analys the power configuration report to get the battery voltage.
+2. Analyze the power configuration report to get the battery voltage.
 
 ## Gecko SDK version ##
-Gecko SDK Suite 4.2.2
+Gecko SDK Suite 4.4.0
 
 ## Hardware Required ##
 
@@ -62,7 +62,7 @@ To create a Coordinator, you can either create a project based on an example pro
 
 1. Create a **Zigbee - SoC ZigbeeMinimal** project in Simplicity Studio.
 
-2. Copy all attached files in src/coordinator/ folders into the project root folder (overwriting existing).
+2. Copy all attached files in src/coordinator/ folders into the project root folder (overwriting existing files).
 3. Open the .slcp file:
   - Select the **SOFTWARE COMPONENTS** tab and install these software components:
     - [Zigbee] → [Zigbee 3.0] → [Find and Bind Target]
@@ -121,7 +121,7 @@ To create a Sleepy End Device, you can either create a project based on an examp
 
   - Select the **CONFIGURATION TOOLS** tab and open **Zigbee Cluster Configurator**:
     - Select Endpoint 1: 
-      - [Power Configuration cluster]: enable Server side.
+      - [Power Configuration cluster]: Enable Server side.
       - [Identify cluster]: enable Client side.
 
 5. Copy all attached files in the config/end_device/zcl folder into the project folder (overwriting existing).

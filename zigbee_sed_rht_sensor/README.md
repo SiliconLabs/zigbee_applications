@@ -6,7 +6,7 @@ This example's purpose is to showcase the EFR32xG24 Dev Kit Board RHT sensor and
 
 ## Gecko SDK version ##
 
-- GSDK v4.2.2
+- GSDK v4.4.0
 
 ## Hardware Required ##
 

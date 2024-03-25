@@ -48,7 +48,7 @@ sl_status_t mlx90640_setup(void)
   sl_status_t sc;
   uint16_t refrate = 0;
 
-  sc = sparkfun_mlx90640_init(sl_i2cspm_inst0,
+  sc = sparkfun_mlx90640_init(sl_i2cspm_qwiic,
                               SPARKFUN_MLX90640_DEFAULT_I2C_ADDR);
 
   if (sc != SL_STATUS_OK) {

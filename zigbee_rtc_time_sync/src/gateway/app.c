@@ -23,6 +23,7 @@
 #include "zap-cluster-command-parser.h"
 #include <stdlib.h>
 #include <sys/time.h>
+#include "stack/include/zigbee-security-manager.h"
 
 // The number of tokens that can be written using ezspSetToken and read using
 // ezspGetToken.
@@ -244,16 +245,21 @@ void printNextKeyCommand(sl_cli_command_arg_t *arguments)
 {
   (void)arguments;
 
-  EmberKeyStruct nextNwkKey;
-  EmberStatus status;
+  sl_status_t status;
+  sl_zb_sec_man_context_t context;
+  sl_zb_sec_man_key_t plaintext_key;
 
-  status = emberGetKey(EMBER_NEXT_NETWORK_KEY,
-                       &nextNwkKey);
+  sl_zb_sec_man_init_context(&context);
 
-  if (status != EMBER_SUCCESS) {
+  context.core_key_type = SL_ZB_SEC_MAN_KEY_TYPE_NETWORK;
+  context.key_index = 1;
+
+  status = sl_zb_sec_man_export_key(&context, &plaintext_key);
+
+  if (status != SL_STATUS_OK) {
     sl_zigbee_app_debug_println("Error getting key");
   } else {
-    dcPrintKey(1, nextNwkKey.key.contents);
+    dcPrintKey(1, plaintext_key.key);
   }
 }
 
@@ -281,7 +287,47 @@ void setTxPowerCommand(sl_cli_command_arg_t *arguments)
   emberSetRadioPower(dBm);
 }
 
+#ifdef SL_CATALOG_ZIGBEE_EZSP_SPI_PRESENT
+void setSleepMode(SL_CLI_COMMAND_ARG)
+{
+  uint8_t sleep_mode = sl_cli_get_argument_uint8(arguments, 0);
+  if (sleep_mode <= EZSP_FRAME_CONTROL_RESERVED_SLEEP) {
+    ezspSleepMode = sleep_mode;
+    ezspNop();
+  }
+}
+
+void wakeNcpUp(SL_CLI_COMMAND_ARG)
+{
+  // Wake ncp up then put it into idle state.
+  // This command is useful when sleepy SPI NCP is in deep sleep
+  // or power down mode that require an external interrupt to wake up
+  ezspWakeUp();
+  ezspSleepMode = EZSP_FRAME_CONTROL_IDLE;
+  ezspNop();
+}
+
+#endif // SL_CATALOG_ZIGBEE_EZSP_SPI_PRESENT
+
 #endif
+
+#ifdef SL_CATALOG_ZIGBEE_AF_SUPPORT_PRESENT
+bool emberAfGetEndpointInfoCallback(int8u endpoint,
+                                    int8u *returnNetworkIndex,
+                                    EmberAfEndpointInfoStruct *returnEndpointInfo)
+{
+  // In case GP endpoint is located on the NCP, the host has no way
+  // to know what networkIndex and profileId that endpoint is configured.
+  // User has to manually provide that data.
+  if (endpoint == 242) {
+    *returnNetworkIndex = 0;
+    returnEndpointInfo->profileId = 0xA1E0;
+    return true;
+  }
+  return false;
+}
+
+#endif // SL_CATALOG_ZIGBEE_AF_SUPPORT_PRESENT
 
 #define TIME_UNIX_EPOCH                     (1970u)
 #define TIME_ZIGBEE_EPOCH                   (2000u)
@@ -303,6 +349,6 @@ int32u emberAfGetCurrentTimeCallback(void)
   if (tv.tv_usec >= 500000) {
     tv.tv_sec++;
   }
-  printf("time: ", tv.tv_sec - TIME_ZIGBEE_EPOCH_OFFSET_SEC);
+  printf("time: %lx\r\n", tv.tv_sec - TIME_ZIGBEE_EPOCH_OFFSET_SEC);
   return tv.tv_sec - TIME_ZIGBEE_EPOCH_OFFSET_SEC;
 }

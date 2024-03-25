@@ -10,8 +10,8 @@ The following picture shows the system view of how it works.
 
 ## Gecko SDK version ##
 
-- Gecko SDK Suite 4.3.1
-- [Third Party Hardware Drivers v1.5.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- Gecko SDK Suite 4.4.0
+- [Third Party Hardware Drivers v2.0.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ## Hardware Required ##
 
@@ -42,7 +42,7 @@ Zigbee Router device: The SparkFun Micro OLED Breakout (Qwiic) board and the Spa
 
 *If your router device implements on the SparkFun Thing Plus Matter - BRD2704A board*. It does not have an internal button (which is used to join or leave the network without CLI commands). To connect an external button to the board, you should use a ceramic capacitor (ex: Ceramic Capacitor 104) and a resistor to avoid the anti-vibration button used in the project as below.
 
-![button](images/button_connection.png)
+![button](images/external_button.png)
 
 ## Setup ##
 
@@ -141,14 +141,14 @@ To test this application, you can either create a project based on an example pr
 
         - [Third Party Hardware Drivers] → [Sensors] → [MLX90640 - IR Array Breakout (Sparkfun)]
 
-        - Open [Platform] → [Driver] → [I2C] → [I2CSPM] → [inst0] → Set this component to use I2C1 peripheral, SCL to PC04 pin, SDA to PC05 pin and speed mode to fast mode (400kbit/s).
+        - Open [Platform] → [Driver] → [I2C] → [I2CSPM] → [qwiic] → Use **qwiic** instance and configure speed mode to fast mode (400kbit/s).
 
           ![i2c instance](images/i2c_instance.png)
 
 **NOTE:**
 
 - Make sure that the SDK extension already be installed. If not please follow [this documentation](https://github.com/SiliconLabs/third_party_hw_drivers_extension/blob/master/README.md).
-- SDK Extension must be enabled for the project to install [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C], [GLIB - OLED Graphics Library], and [MLX90640 - IR Array Breakout (Sparkfun)] components. Selecting [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] and [MLX90640 - IR Array Breakout (Sparkfun)] components will also include the "I2CSPM" component with an unconfigured instance: **inst0**.
+- SDK Extension must be enabled for the project to install [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C], [GLIB - OLED Graphics Library], and [MLX90640 - IR Array Breakout (Sparkfun)] components. Selecting [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] and [MLX90640 - IR Array Breakout (Sparkfun)] components will also include the "I2CSPM" component with an **qwiic** instance.
 - You need to create the bootloader project and flash it to the device before flashing the application. When flashing the application image to the device, use the .hex or .s37 output file. Flashing the .bin files may overwrite (erase) the bootloader.
 
 ## How It Works ##

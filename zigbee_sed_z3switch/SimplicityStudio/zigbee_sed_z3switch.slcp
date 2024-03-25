@@ -19,7 +19,6 @@ component:
   - id: zigbee_end_device_support
   - id: zigbee_pro_leaf_stack
   - id: zigbee_find_and_bind_initiator
-  - id: zigbee_binding_table
   - id: zigbee_zcl_framework_core
   - id: zigbee_debug_basic
   - id: zigbee_network_steering
@@ -29,14 +28,12 @@ component:
   - id: zigbee_scenes_client
   - id: zigbee_interpan
   - id: zigbee_scan_dispatch
-  - id: zigbee_packet_validate
   - id: zigbee_zll
   - id: zigbee_zll_commissioning_client
   - id: zigbee_groups_client
   - id: zigbee_zll_commissioning_common
   - id: zigbee_debug_print
   - id: zigbee_zll_utility_client
-  - id: zigbee_install_code
   - id: zigbee_update_tc_link_key
   - id: iostream_usart
     instance: [vcom]
@@ -60,6 +57,32 @@ include:
 config_file:
   - path: "../config/zcl/zcl_config.zap"
     directory: "zcl"
+
+other_file:
+  - path: ../images/board_control_config.png
+    directory: "images"
+  - path: ../images/console_log.png
+    directory: "images"
+  - path: ../images/create_project.png
+    directory: "images"
+  - path: ../images/debug_print_config.png
+    directory: "images"
+  - path: ../images/device_config.png
+    directory: "images"
+  - path: ../images/energy_emu_config.png
+    directory: "images"
+  - path: ../images/energy_not_optimize.png
+    directory: "images"
+  - path: ../images/energy_profiler.png
+    directory: "images"
+  - path: ../images/hardware_connection.png
+    directory: "images"
+  - path: ../images/simple_button_config.png
+    directory: "images"
+  - path: ../images/watchdog_config.png
+    directory: "images"
+  - path: ../images/zcl_framework_core_config.png
+    directory: "images"
 
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
@@ -118,6 +141,9 @@ configuration:
     value: 'SLI_ZIGBEE_NETWORK_DEVICE_TYPE_SLEEPY_END_DEVICE'
   - name: SL_DEVICE_INIT_EMU_EM2_DEBUG_ENABLE
     value: '0'
+  - name: SL_ZIGBEE_WATCHDOG_REFRESH_DURATION_MS
+    value: '5000'
+
 tag:
   - hardware:rf:band:2400
 

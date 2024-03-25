@@ -69,7 +69,7 @@ static glib_context_t glib_context;
  ******************************************************************************/
 void human_detection_ui_oled_init(void)
 {
-  ssd1306_init(sl_i2cspm_inst0);
+  ssd1306_init(sl_i2cspm_qwiic);
 
   // Initialize the display
   glib_init(&glib_context);

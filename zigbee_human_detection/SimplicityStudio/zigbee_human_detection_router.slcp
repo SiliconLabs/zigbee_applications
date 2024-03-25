@@ -39,39 +39,36 @@ include:
   - path: ../inc/zigbee_human_detection_router/recognize_commands.h
 
 component:
-- id: i2cspm
-  instance: [inst0]
-- instance: [btn0]
-  id: simple_button
-- instance: [example]
-  id: cli
-- id: zigbee_application_bootloader
-- id: zigbee_find_and_bind_initiator
-- id: zigbee_binding_table
-- instance: [led0]
-  id: simple_led
-- id: zigbee_zcl_framework_core
-- id: zigbee_debug_basic
-- id: zigbee_network_steering
-- from: third_party_hw_drivers
-  id: services_oled_glib
-- id: zigbee_counters
-- id: zigbee_basic
-- instance: [vcom]
-  id: iostream_usart
-- id: zigbee_scan_dispatch
-- id: zigbee_source_route
-- id: zigbee_packet_validate
-- id: zigbee_pro_stack
-- id: tensorflow_lite_micro
-- from: third_party_hw_drivers
-  id: sparkfun_micro_oled_ssd1306
-- id: zigbee_debug_print
-- from: third_party_hw_drivers
-  id: sparkfun_ir_array
-- id: zigbee_reporting
-- id: zigbee_install_code
-- id: zigbee_update_tc_link_key
+  - id: zigbee_application_bootloader
+  - id: zigbee_find_and_bind_initiator
+  - id: zigbee_zcl_framework_core
+  - id: zigbee_debug_basic
+  - id: zigbee_network_steering
+  - id: zigbee_counters
+  - id: zigbee_basic
+  - id: zigbee_scan_dispatch
+  - id: zigbee_source_route
+  - id: zigbee_pro_stack
+  - id: zigbee_reporting
+  - id: zigbee_update_tc_link_key
+  - id: zigbee_debug_print
+  - id: simple_led
+    instance: [led0]
+  - id: sparkfun_micro_oled_ssd1306
+    from: third_party_hw_drivers
+  - id: tensorflow_lite_micro
+  - id: sparkfun_ir_array
+    from: third_party_hw_drivers
+  - id: services_oled_glib
+    from: third_party_hw_drivers
+  - id: iostream_usart
+    instance: [vcom]
+  - id: cli
+    instance: [example]
+  - id: simple_button
+    instance: [btn0]
+  - id: i2cspm
+    instance: [qwiic]
 
 config_file:
   - path: ../config/zigbee_human_detection_router/zcl_config.zap
@@ -81,17 +78,11 @@ config_file:
     directory: tflite
 
   - override:
-      component: i2cspm
-      instance: inst0
-      file_id: i2cspm_config
-    path: "../config/zigbee_human_detection_router/sl_i2cspm_inst0_config.h"
-
-  - override:
       component: simple_button
       instance: btn0
       file_id: simple_button_config
-      condition: brd2704a
-    path: "../config/zigbee_human_detection_router/sl_simple_button_btn0_config.h"
+      condition: [brd2704a]
+    path: "../config/zigbee_human_detection_router/brd2704a/sl_simple_button_btn0_config.h"
 
 configuration:
 - name: SL_BOARD_ENABLE_VCOM
@@ -124,6 +115,8 @@ configuration:
   value: '10240'
 - name: SL_HEAP_SIZE
   value: '12288'
+- name: SL_I2CSPM_QWIIC_SPEED_MODE
+  value: '1'
 
 ui_hints:
   highlight:
@@ -134,7 +127,7 @@ ui_hints:
 other_file:
   - path: ../images/app_loop.png
     directory: images
-  - path: ../images/button_connection.png
+  - path: ../images/external_button.png
     directory: images
   - path: ../images/cluster_configurator.png
     directory: images
@@ -197,4 +190,4 @@ other_file:
 
 sdk_extension:
 - id: third_party_hw_drivers
-  version: 1.5.0
+  version: 2.0.0

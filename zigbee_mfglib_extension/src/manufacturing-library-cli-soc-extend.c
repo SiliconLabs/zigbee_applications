@@ -56,7 +56,8 @@ extern RAIL_Handle_t emPhyRailHandle;
 void halInternalSleep(SleepModes sleepMode);
 void packetSendHandler(void);
 
-sl_zigbee_event_t packetSend;
+static sl_zigbee_event_t packetSendEvent;
+static bool packetSendEventInited = false;
 
 // The max packet size for 802.15.4 is 128, minus 1 byte for the length, and 2
 //   bytes for the CRC.
@@ -253,7 +254,7 @@ void packetSendHandler(void)
   char sig[15] = "test";
   EmberStatus status;
 
-  sl_zigbee_event_set_inactive(&packetSend);
+  sl_zigbee_event_set_inactive(&packetSendEvent);
 
   if (contPacket) {
     packetCounter++;
@@ -268,7 +269,7 @@ void packetSendHandler(void)
   }
 
   // Reschedule the event after a delay of 1 seconds
-  sl_zigbee_event_set_delay_ms(&packetSend, MY_DELAY_IN_MS);
+  sl_zigbee_event_set_delay_ms(&packetSendEvent, MY_DELAY_IN_MS);
 }
 
 // Sends packets continuously, set in milliseconds
@@ -284,6 +285,10 @@ void emAfMfglibContinuousPacket(void)
   contPacket = TRUE;
   emberAfCorePrintln("Continuous packet test started!");
   packetCounter = 0;
+  if (!packetSendEventInited) {
+    sl_zigbee_event_init(&packetSendEvent, packetSendHandler);
+    packetSendEventInited = true;
+  }
   packetSendHandler();
 }
 
@@ -297,6 +302,9 @@ void emAfMfglibStopContinuous(void)
   contPacket = FALSE;
   emberAfCorePrintln("Continuous packet testing ended :(");
   emberAfCorePrintln("Packet Counter: %u", packetCounter);
+  if (packetSendEventInited) {
+    sl_zigbee_event_set_inactive(&packetSendEvent);
+  }
 }
 
 void emAfMfglibClearPacketCounter(void)

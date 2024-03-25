@@ -59,7 +59,7 @@ receive-mode modes
 
 ## Gecko SDK version ##
 
-- GSDK v4.2.2
+- GSDK v4.4.0
 
 ## Hardware Required ##
 

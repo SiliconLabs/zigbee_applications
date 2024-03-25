@@ -28,8 +28,6 @@ source:
 component:
 - instance: [example]
   id: cli
-- id: zigbee_application_bootloader
-- id: zigbee_binding_table
 - id: zigbee_zcl_framework_core
 - id: zigbee_debug_basic
 - id: zigbee_network_steering
@@ -40,15 +38,41 @@ component:
 - id: zigbee_scan_dispatch
 - id: zigbee_source_route
 - id: zigbee_simple_clock
-- id: zigbee_packet_validate
 - id: zigbee_pro_stack
 - id: zigbee_debug_print
-- id: zigbee_install_code
 - id: zigbee_update_tc_link_key
 
 config_file:
 - path: ../config/zcl_config.zap
   directory: zcl
+
+other_file:
+  - path: ../images/connect_ncp.png
+    directory: "images"
+  - path: ../images/create_device.png
+    directory: "images"
+  - path: ../images/create_gateway.png
+    directory: "images"
+  - path: ../images/create_minimal.png
+    directory: "images"
+  - path: ../images/create_ncp.png
+    directory: "images"
+  - path: ../images/form_network.png
+    directory: "images"
+  - path: ../images/hardware.png
+    directory: "images"
+  - path: ../images/join_network.png
+    directory: "images"
+  - path: ../images/make_gateway.png
+    directory: "images"
+  - path: ../images/open_network.png
+    directory: "images"
+  - path: ../images/print_time.png
+    directory: "images"
+  - path: ../images/query_time.png
+    directory: "images"
+  - path: ../images/time_cluster.png
+    directory: "images"
 
 configuration:
 - name: SL_BOARD_ENABLE_VCOM

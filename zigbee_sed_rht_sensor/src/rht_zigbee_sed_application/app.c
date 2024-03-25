@@ -308,6 +308,8 @@ static void network_steering_event_handler(sl_zigbee_event_t *event)
     // Check if the device has successfully established bindings, if not do so
     if (!binding) {
       sl_zigbee_event_set_active(&finding_and_binding_event_control);
+    } else {
+      sl_zigbee_event_set_active(&attribute_report_event_control);
     }
     led_stop(STATUS_LED);
   } else {

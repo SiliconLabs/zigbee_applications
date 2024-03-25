@@ -30,7 +30,6 @@ component:
 - id: zigbee_end_device_support
 - id: zigbee_pro_leaf_stack
 - id: zigbee_find_and_bind_initiator
-- id: zigbee_binding_table  
 - id: zigbee_zcl_framework_core
 - id: zigbee_debug_basic
 - id: zigbee_network_steering
@@ -39,9 +38,7 @@ component:
 - id: zigbee_basic  
 - id: zigbee_interpan
 - id: zigbee_scan_dispatch
-- id: zigbee_packet_validate
 - id: zigbee_debug_print
-- id: zigbee_install_code
 - id: zigbee_update_tc_link_key
 config_file:
 - path: ../config/zcl/zcl_config.zap
@@ -53,7 +50,7 @@ configuration:
   value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_SLEEPY_END_DEVICE
 sdk_extension:
 - id: third_party_hw_drivers
-  version: 1.5.0
+  version: 2.0.0
 
 other_file:
 - path: ../../images/Flow_Steps.png
@@ -64,6 +61,7 @@ other_file:
   directory: "images"
 - path: ../../images/hardware_connection.png
   directory: "images"
+
 ui_hints:
   highlight:
     - path: README.md

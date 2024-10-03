@@ -1,0 +1,31 @@
+alias: Sunrise and Sunset
+description: ""
+trigger:
+  - platform: sun
+    event: sunrise
+    offset: "+00:30"
+    id: sunrise+30
+  - platform: sun
+    event: sunset
+    offset: "-00:15"
+    id: sunset-15
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - sunset-15
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.office_lamps
+      - conditions:
+          - condition: trigger
+            id:
+              - sunrise+30
+        sequence:
+          - service: light.turn_off
+            target:
+              entity_id: light.office_lamps
+mode: single

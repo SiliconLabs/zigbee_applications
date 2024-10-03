@@ -28,6 +28,7 @@ This repository provides only SLCP projects (as External Repositories) that are 
 | 5  | Zigbee - Smart Lighting using Motion Sensor PIR | [Click Here](./zigbee_smart_lighting) |
 | 6  | Zigbee - Sleepy End-Device and Gateway | [Click Here](./zigbee_sed_rht_sensor) |
 | 7  | Zigbee - Human Detection - MLX90640 | [Click Here](./zigbee_human_detection) |
+| 8  | Zigbee - Philips Hue Smart Light with Home Assistant OS | [Click here](./zigbee_philips_hue_with_home_assistant_os) |
 
 ## Working with Projects ##
 

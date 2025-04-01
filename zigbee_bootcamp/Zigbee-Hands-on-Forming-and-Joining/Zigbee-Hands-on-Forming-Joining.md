@@ -1,7 +1,7 @@
 # 1. Introduction
 
-In this worksheet we provide a step-by-step guide to create, build and run ZigBee 3.0 applications based on EmberZNet Stack 7.1.0. If you use a later release in the future, most of the instructions should be still applied, although there could be minor differences not foreseen at the time of this document.
-These exercises help you get familiar with ZigBee 3.0 in the EmberZNet Stack, Simplicity Studio v5 development environment, and the Wireless Start Kit (WSTK) with EFR32MG12 SoC. We assume that you have two WSTK with SoC Radio boards and the following software (Simplicity Studio and EmberZnet SDK).
+In this worksheet we provide a step-by-step guide to create, build and run ZigBee 3.0 applications based on EmberZNet Stack 8.1.1. If you use a later release in the future, most of the instructions should be still applied, although there could be minor differences not foreseen at the time of this document.
+These exercises help you get familiar with ZigBee 3.0 in the EmberZNet Stack, Simplicity Studio v5 development environment, and the Wireless Start Kit (WSTK) with EFR32MG24 SoC. We assume that you have two WSTK with SoC Radio boards and the following software (Simplicity Studio and EmberZnet SDK).
 
 ## 1.1. Application features
 
@@ -16,9 +16,9 @@ The exercise in this documentation is the first exercise in the "Zigbee Boot Cam
 ## 1.2. Purpose
 
 This tutorial will give an overall knowledge about how to build a Light and Switch device from scratch. By the end of this Lab, the user will be familiar with Simplicity Studio and  Zigbee fundamentals. 
-The network will consist of two devices using the EFR32MG12 SoCs (BRD4162A).
-- One of the devices is the Light. Since the created network is centralized, the Light will work as the Coordinator and Trust Center of the network. This device forms and opens the network, permits other devices to join, and manages security keys.
-- The other device is the Switch. It joins the network opened by the Light and sends On-Off commands to the Light.
+The network will consist of two devices using the EFR32MG24 SoCs (BRD4187C).
+- One of the devices is the Light. The Light will act as a Coordinator and Trust Center of the network and create a centralized network. This device will form and open the network, permit other devices to join, and manage security keys.
+- The other device is the Switch. It joins the network opened by the Light and sends On-Off commands to the Light. This device will act as an End Device.
 The figure below illustrates the workflow of this hands-on. 
 
 <div align="center">
@@ -46,7 +46,7 @@ The Silicon Labs Project Wizard will be used for creating the application. Silic
 </div>  
 </br>
 
-2. Select your Target Board (BRD4162A), Target Device (EFR32MG12P332F1024GL125), and ensure that you have selected GSDK 4.1.0 and GNU ARM v10.3.1 click Next. See Figure 2-2.
+2. Select your Target Board (BRD4187C), Target Device (EFR32MG24B220F1536IM48), and ensure that you have selected Simplicity SDK v2024.12.1 and GNU ARM v12.2.1 click Next. See Figure 2-2.
 
 <div align="center">
   <img src="Images/ProjectExample.png">
@@ -83,10 +83,9 @@ Once the project has been created Simplicity Studio should automatically open th
 
 ### Zigbee Cluster Configurator.
 
-For this tutorial, you must define the device type which will provide the proper clusters and attributes for the Light application. It is important to set the ZCL (Zigbee Cluster Library) configuration for the Light Application as it assists in configuration of the cluster functionality incorporated . In order to change the ZCL configuration, you must open the Zigbee Cluster Configurator in the Configuration Tools tab of the .slcp.
- If an endpoint is not created, click on ADD NEW ENDPOINT. Once an endpoint has been added click on edit and select Device: “HA On/Off Light (0x0100)”. By selecting a device type endpoint is configured according to the Zigbee Specifications.
+For this tutorial, you must define the device type which will provide the proper clusters and attributes for the Light application. It is important to set the ZCL (Zigbee Cluster Library) configuration for the Light Application as it assists in configuration of the cluster functionality incorporated. In order to change the ZCL configuration, you must open the ZCL Advanced Platform (ZAP) in the Configuration Tools tab of the .slcp. If an endpoint is not created, click on ADD NEW ENDPOINT. Once an endpoint has been added click on edit and select Device: “HA On/Off Light (0x0100)”. By selecting a device type, the endpoint is configured according to the Zigbee Specifications.
 
-**Note:** The endpoint clusters with a yellow warning sign implies that the component corresponding to that cluster is not installed in the Software Components tab see Figure 2-5. Click on the warning sign and it will automatically install the component. The Enabled Clusters filter can be used to identify the required clusters easily.
+**Note:** The endpoint clusters with a yellow warning sign implies that the component corresponding to that cluster is not installed in the Software Components tab, see Figure 2-5. Click on the warning sign and it will automatically install the component. The Enabled Clusters filter can be used to identify the required clusters easily.
 
 <div align="center">
   <img src="Images/MissingComponents.png">
@@ -99,7 +98,11 @@ For this tutorial, you must define the device type which will provide the proper
 Configure the Zigbee Light as a coordinator:
 - In the Project Configurator click on “Software Components”. This will show the components that can be installed/uninstalled in the project.
 - Go to Zigbee > Utility > Zigbee Device Config and click Configure.
-- Change the Primary Network Device Type to Coordinator.
+- Change the Primary Network Device Type to Coordinator or Router.
+- Install the Network Creator 
+- Install the Network Creator Security Component. 
+- Install the Security Link Keys Component
+
 The components mentioned below must be installed or removed to get a device that can operate as a Coordinator. See Figure 2-6 on how to install components in Project Configurator. Please note that the components mentioned below are the minimal requirements to finish the Forming and Joining hands-on, however, it’s not enough for making the “Coordinator/Router” and “Router” device to pass the Z3 certification. For Z3 certification, please refer to the Z3LightSoc and Z3SwitchSoc examples for the necessary Components.
 
 <div align="center">
@@ -110,18 +113,17 @@ The components mentioned below must be installed or removed to get a device that
 </div>  
 </br>
 
-​ •The **Network Creator** and **Network Creator Security** components implement the network forming and opening functionality, therefore these are required to have for the Coordinator.
+​ •The **Network Creator** and **Network Creator Security** components implement the network forming and opening functionality, therefore these are required to have for the Coordinator. Make sure to check the configuration such that it matches the security settings desired. 
 
 ​ •The **Network Steering** and **Update TC Link Key** can be removed, since the device doesn't intend to join to any network.
 
-​ •The **Pro Stack** component under Zigbee > Stack > Pro Core includes one of the most complex stack libraries. It contains routing, networking, scanning, neighbor, child-handler and other functionalities. It's mandatory for Coordinator and Router. The sample application uses this component by default.
+​ •The **Pro Stack** component under Zigbee > Stack > Pro Core includes one of the most complex stack libraries. It contains routing, networking, scanning, neighbor, child-handler and other functionalities. It's mandatory for Coordinator and Router. The sample application uses this component by default. Note for End Devices, please use the *Pro Leaf Stack* which only includes the functionality an End Device needs.
 
 ​ •The **Security Link Keys** component under Zigbee > Stack provides management of APS link keys in the key table. It is used by a trust center (coordinator) to manage link keys of devices in the network, or by non-trust center devices wishing to manage partner link keys. Therefore, it is required to have.
 
 ​ •The **CLI: Command Line Interface**, **CLI Core** components in **Services > CLI**. This interface lets the user communicate with the SoC. In case of selecting the correct board at project creation phase, the component settings should fit to the pinout of the device, but it is also important to double check the values. The WSTK comes with a built-in VCOM, and application can use it by connecting WSTK to PC via USB connector. This is the Virtual COM port, which must be enabled by installing the IO Stream: USART Component under Services > IO Stream. 
 
 **Note:** Ensure the Zigbee > Zigbee Core CLI is also installed in the project. This component should be preinstalled by the Zigbee Minimal Project Configuration. 
-
 
 Table 2.1 depicts the affected components on the Light (Coordinator) node:
 
@@ -141,7 +143,7 @@ Press the Build button. Upon a successful build, the binary files should appear 
 
 Let's download the Zigbee_Light_ZC.s37 file to the development kit as shown below. See Figure 3-1 and Figure 3-2.
 The highlighted "Advanced Settings.." in Figure 3-3 allows the user to decide how to flash the chip. Here, the flash can be merged with a new image (Merge Content), partially (Page Erase) or completely (Full Erase) erase before downloading the file.
-Keep in mind that neither erase type cleans the bootloader section in EFR32MG12 part, but the Full erase deletes the token region.
+Keep in mind that neither erase type cleans the bootloader section in EFR32MG24 part, but the Full erase deletes the token region.
 After the image has been downloaded, it's possible to communicate with the device. For this purpose, open the Launch console, which is a built-in serial port terminal in the Studio. 
 
 **Note:** Please execute an "Erase" process before the following steps to avoid any unintended effect by the existing network settings in the device.
@@ -183,7 +185,7 @@ If the serial console is opened, switch to "Serial 1" and press "Enter". See Fig
 
 The "\n\r" characters triggers the project name printing. This basic test shows that the RX and TX of the CLI is working correctly.
 If the same text is printed, put away the Light application and start creating the Switch.
-Note: If the project name does not appear in console you can add this in the Services > CLI: CLI Core Component > New Command prompt option as depicted in Figure 3-5. 
+Note: If the project name does not appear in console you can add this in the Services > Command Line Interface > Security > CLI Global Configuration > New Command prompt option as depicted in Figure 3-5. 
 
 
 <div align="center">
@@ -198,25 +200,27 @@ Note: If the project name does not appear in console you can add this in the Ser
 
 In this hands-on, the Switch is the device that will join the network created and opened by the Light. However, the procedure to create and form the network is described in the [next module](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md).
 Creating the project and configuration is similar to the Light application. The Switch application is also based on the "ZigBeeMinimal" sample application, therefore:
-1.  Repeat the step 1-4 of [Create Light application](#2-create-light-application), except name the project to "Zigbee_Switch_ZR".
+1.  Repeat the step 1-4 of [Create Light application](#2-create-light-application), except name the project to "Zigbee_Switch_ZED".
 2.  Open the .slcp file of the project.
- - Go to  Configuration Tools  tab, open the Zigbee Cluster Configurator and choose HA On/Off Switch(0x0000) device template. Install the clusters that have a yellow warning sign. The Enabled Clusters filter can be used to identify the required clusters easily. 
- - Go to Software Components tab and search for Zigbee Device Config select the Router device type from the dropdown menu.
+ - Go to  Configuration Tools  tab, open the ZCL Advanced Platform (ZAP) and choose HA On/Off Light Switch(0x0103) device template. Install the clusters that have a yellow warning sign. The Enabled Clusters filter can be used to identify the required clusters easily. 
+ - Go to the Pro Leaf Stack and click Install. Note it will ask if you want to replace the Pro Stack component with the Pro Leaf Stack. Click OK.
+ - Go to Software Components tab and search for Zigbee Device Config select the End device type from the dropdown menu. 
   - Go to Software Components tab and double check the below components are installed: 
    - Debug Print
    - CLI: Command Line Interface 
    - CLI: CLI Core Components.
    - Network Steering.
    - Update TC Link Key.
-   - Install code library.
 
 The major difference between the Light application and Switch application is the selection of the network related components. Let's have a closer look at the enabled components.
+
+​ •The **Device Config: End Device** This configured the Zigbee Device to be an End Device. Furthermore, the Pro Leaf Stack is the Zigbee Stack used for an End Device and does not include router specific components like the routing table and neighbor table.
 
 ​ •The **Network Steering** component serves to discover the existing networks on the enabled channels. The device issues a Beacon Request message and listens to the responses. If the Beacon response (from ZC or ZR) is received with "permit association" flag set, the device starts the joining process for the network, otherwise continue the scanning. Please see the Table 5.1 below for the recommended and required components.
 
 ​ •The **Update TC Link Key** is used to request new APS Link Key from the Trust Center. It should be installed since the Light (Trust Center) has the Security Link Keys Library.
 
-​ •The **Install Code Library** provides an initial link key based upon an install code manufacturing token in the device. The key is hashed according to the ZigBee spec.
+
 Summarized the above, the following table presents the affected plugins on the Switch (Router) node.
 
 Table 4-1 presents the affected plugins on the Switch (Router) node.
@@ -259,7 +263,7 @@ To save your time on this hands-on, we have prepared a batch file below that can
 
 :: use PATH_SCMD env var to override default path for Simplicity Commander
 if "%PATH_SCMD%"=="" (
-  set COMMANDER="C:\SiliconLabs\SimplicityStudio\v4\developer\adapter_packs\commander\commander.exe"
+  set COMMANDER="C:\SiliconLabs\SimplicityStudio\v5\developer\adapter_packs\commander\commander.exe"
 ) else (
   set COMMANDER=%PATH_SCMD%\commander.exe
 )
@@ -511,7 +515,7 @@ plugin network-creator-security open-with-key {00 0B 57 FF FE 64 8D D8} {66 B6 9
 On the Switch node, enter this CLI to use the Network Steering plugin to join the network:
 
 ```
-plugin network-steering start 0
+plugin network-steering start 1
 ```
 
 And the serial console will output similar as below to indicate that the Switch node has joined the network 0x220E successfully.
@@ -534,26 +538,29 @@ keys print
 Result:
 
 ```
+keys print
 EMBER_SECURITY_LEVEL: 05
-NWK Key out FC: 00000057
+NWK Key out FC: 00001043
 NWK Key seq num: 0x00
-NWK Key: C1 05 57 73 1A 09 83 71  77 C3 22 B7 E1 90 9A A1  
-Link Key out FC: 00000006
-TC Link Key
+NWK Key: 6E 41 58 D6 E1 18 07 49  97 58 93 4B BB 0C BC 76  
+Link Key out FC: 00001006
+TC Link Key 
 Index IEEE Address         In FC     Type  Auth  Key
--     (>)000B57FFFE648D95  00000000  L     y     A8 ED 49 FB C5 13 FA 64  E5 60 D1 76 13 FD B8 6A  
+-     (>)000B57FFFE648DD8  00000000  L     y     2E C9 17 F9 91 DC 20 16  8A D5 33 8C 3A FB DD 44  
 Link Key Table
 Index IEEE Address         In FC     Type  Auth  Key
-0     (>)000B57FFFE648DD8  00001002  L     y     66 B6 90 09 81 E1 EE 3C  A4 20 6B 6B 86 1C 02 BB  
-1/6 entries used.
+0/0 entries used.
 Transient Key Table
-Index IEEE Address         In FC     TTL(s) Flag    Key    
-0 entry consuming 0 packet buffer.
+Index IEEE Address         NWKIndex  In FC     TTL(s) Flag    Key    
+0     (>)000B57FFFE648DD8  0         00000000  0x010E 0x0080  66 B6 90 09 81 E1 EE 3C  A4 20 6B 6B 86 1C 02 BB  
+
+1 entry consuming 1 packet buffer.
+Zigbee_Light_ZC
 ```
 
 ### 6.4.2 Add network key and Derived link key to Network Analyzer
 
-Add the network key C1 05 57 73 1A 09 83 71 77 C3 22 B7 E1 90 9A A1 and derived link key 66 B6 90 09 81 E1 EE 3C A4 20 6B 6B 86 1C 02 BB to the Network Analyzer's key storage to be able to decode the messages.
+Add the network key 6E 41 58 D6 E1 18 07 49  97 58 93 4B BB 0C BC 76 and derived link key 66 B6 90 09 81 E1 EE 3C A4 20 6B 6B 86 1C 02 BB to the Network Analyzer's key storage to be able to decode the messages.
 
 1. Open Window -> Preferences
 

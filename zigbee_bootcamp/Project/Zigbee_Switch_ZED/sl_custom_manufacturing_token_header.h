@@ -68,17 +68,20 @@
  *     uint8_t data[8];
  *     sl_token_get_data(TOKEN_MFG_EXAMPLE, 0, &data, sizeof(data));
  ******************************************************************************/
-
-/*
- #define CREATOR_MFG_EXAMPLE 0x4242
- #ifdef DEFINETYPES
-   typedef uint8_t tokTypeMfgExample[8];
- #endif
- #ifdef DEFINETOKENS
- #define MFG_EXAMPLE_LOCATION (USERDATA_TOKENS | 0x2000)
-   DEFINE_MFG_TOKEN(MFG_EXAMPLE,
-                 tokTypeMfgExample,
-                 MFG_EXAMPLE_LOCATION,
-                 {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF})
- #endif
+/**
+ * Custom Zigbee Application Tokens
  */
+// Define token names here
+#define NVM3KEY_LAST_BUTTON_PRESSED     (NVM3KEY_DOMAIN_USER | 0x0001)
+
+#if defined(DEFINETYPES)
+// Include or define any typedef for tokens here
+typedef uint8_t lastButtonPressed;        // Last Button Pressed status
+#endif //DEFINETYPES
+
+#ifdef DEFINETOKENS
+// Define the actual token storage information here
+DEFINE_BASIC_TOKEN(LAST_BUTTON_PRESSED,
+                   lastButtonPressed,
+                   0xFF)
+#endif

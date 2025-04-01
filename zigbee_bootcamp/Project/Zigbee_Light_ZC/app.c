@@ -17,11 +17,18 @@
 
 #include "app/framework/include/af.h"
 
+// Sending-OnOff-Commands: Step 1
+#include "sl_led.h"
+#include "sl_simple_led_instances.h"
+#define led_turn_on(led)  sl_led_turn_on(led)
+#define led_turn_off(led) sl_led_turn_off(led)
+#define ON_OFF_LIGHT_LED         (&sl_led_led0)
+
 /** @brief Complete network steering.
  *
  * This callback is fired when the Network Steering plugin is complete.
  *
- * @param status On success this will be set to EMBER_SUCCESS to indicate a
+ * @param status On success this will be set to SL_STATUS_OK to indicate a
  * network was joined successfully. On failure this will be the status code of
  * the last join or scan attempt. Ver.: always
  *
@@ -34,47 +41,50 @@
  * this, one is able to tell on which channel mask and with which key the
  * process was complete. Ver.: always
  */
-void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
-                                                  uint8_t totalBeacons,
-                                                  uint8_t joinAttempts,
-                                                  uint8_t finalState)
+void sl_zigbee_af_network_steering_complete_cb(sl_status_t status,
+                                               uint8_t totalBeacons,
+                                               uint8_t joinAttempts,
+                                               uint8_t finalState)
 {
-  sl_zigbee_app_debug_print("%s network %s: 0x%02X\n", "Join", "complete", status);
+  sl_zigbee_app_debug_println("%s network %s: 0x%02X",
+                              "Join",
+                              "complete",
+                              status);
 }
 
 /** @brief
  *
- * Application framework equivalent of ::emberRadioNeedsCalibratingHandler
+ * Application framework equivalent of ::sl_zigbee_radio_needs_calibrating_handler
  */
-void emberAfRadioNeedsCalibratingCallback(void)
+void sl_zigbee_af_radio_needs_calibrating_cb(void)
 {
   sl_mac_calibrate_current_channel();
 }
 
 // Sending-OnOff-Commands: Step 1
-void emberAfPostAttributeChangeCallback(uint8_t endpoint,
-                                        EmberAfClusterId clusterId,
-                                        EmberAfAttributeId attributeId,
-                                        uint8_t mask,
-                                        uint16_t manufacturerCode,
-                                        uint8_t type,
-                                        uint8_t size,
-                                        uint8_t* value)
+void sl_zigbee_af_post_attribute_change_cb(uint8_t endpoint,
+                                           sl_zigbee_af_cluster_id_t clusterId,
+                                           sl_zigbee_af_attribute_id_t attributeId,
+                                           uint8_t mask,
+                                           uint16_t manufacturerCode,
+                                           uint8_t type,
+                                           uint8_t size,
+                                           uint8_t *value)
 {
-  if (clusterId == ZCL_ON_OFF_CLUSTER_ID
-      && attributeId == ZCL_ON_OFF_ATTRIBUTE_ID
-      && mask == CLUSTER_MASK_SERVER) {
+  if ((clusterId == ZCL_ON_OFF_CLUSTER_ID)
+      && (attributeId == ZCL_ON_OFF_ATTRIBUTE_ID)
+      && (mask == CLUSTER_MASK_SERVER)) {
     bool onOff;
-    if (emberAfReadServerAttribute(endpoint,
-                                   ZCL_ON_OFF_CLUSTER_ID,
-                                   ZCL_ON_OFF_ATTRIBUTE_ID,
-                                   (uint8_t *)&onOff,
-                                   sizeof(onOff))
-        == EMBER_ZCL_STATUS_SUCCESS) {
+    if (sl_zigbee_af_read_server_attribute(endpoint,
+                                           ZCL_ON_OFF_CLUSTER_ID,
+                                           ZCL_ON_OFF_ATTRIBUTE_ID,
+                                           (uint8_t *)&onOff,
+                                           sizeof(onOff))
+        == SL_ZIGBEE_ZCL_STATUS_SUCCESS) {
       if (onOff) {
-        sl_led_turn_on(&sl_led_led0);
+        led_turn_on(ON_OFF_LIGHT_LED);
       } else {
-        sl_led_turn_off(&sl_led_led0);
+        led_turn_off(ON_OFF_LIGHT_LED);
       }
     }
   }

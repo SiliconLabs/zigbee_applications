@@ -21,7 +21,7 @@ This training demonstrates the basic usage of Non-Volatile data storage on Ember
 
 **You need to do**
 
-- Using the token to store the Light On/Off status locally over power cycle on our EFR32MG12 platform without EEPROM.
+- Using the token to store the last button press value over power cycle on our EFR32MG24 platform without EEPROM.
 - Retrieving the manufacturing string that the manufacturer has programmed during production.
 
 
@@ -124,7 +124,7 @@ The EmberZNet PRO stack has defined lots of tokens for stack, Application Framew
 Stack Tokens are runtime configuration options set by the stack. These dynamic tokens should not be changed by the application.
 
 To view the stack tokens, refer to the file:
-`<project_name>/geck_sdk_4.1.0/protocol/zigbee/stack/config/token-stack.h`
+`<project_name>/simplicity_sdk_2024.12.1/protocol/zigbee/stack/config/token-stack.h`
 
 - Manufaturing Token
 
@@ -132,7 +132,7 @@ Manufacturing Tokens are set at manufacturing time and cannot be changed by the 
 
 To view the Manufacturing Token for the EFR32 series of chips, refer to the following files.
 
-`gecko_sdk/platform/service/token_manager/inc/sl_token_manufacturing.h`
+`simplicity_sdk_2024.12.1/platform/service/token_manager/inc/sl_token_manufacturing.h`
 
 - Application Framework Token
 
@@ -192,7 +192,7 @@ In general, creating a dynamic token involves three steps below.
 * Custom Zigbee Application Tokens
 */
 // Define token names here
-#define NVM3KEY_LED0_ON_OFF			(NVM3KEY_DOMAIN_USER | 0x0001)
+#define NVM3KEY_LAST_BUTTON_PRESSED			(NVM3KEY_DOMAIN_USER | 0x0001)
 ```
 
 
@@ -213,7 +213,7 @@ In general, creating a dynamic token involves three steps below.
 ```
 #if defined(DEFINETYPES)
 // Include or define any typedef for tokens here
-typedef bool ledOnOff;        // LED ON OFF status
+typedef uint8_t lastButtonPressed;        // Last Button Pressed status
 #endif //DEFINETYPES
 ```
 
@@ -224,15 +224,15 @@ typedef bool ledOnOff;        // LED ON OFF status
 ```
 #ifdef DEFINETOKENS
 // Define the actual token storage information here
-DEFINE_BASIC_TOKEN(LED0_ON_OFF,
-                   ledOnOff,
-                   false)
+DEFINE_BASIC_TOKEN(LAST_BUTTON_PRESSED,
+                   lastButtonPressed,
+                   0xFF)
 #endif
 ```
 
-​	DEFINE_BASIC_TOKEN takes three arguments: the token name (LED0_ON_OFF, without the prefix "NVM3KEY"), the token type (ledOnOff) what we defined above, and the default value of the token if it has never been written by the application (false).
+​	DEFINE_BASIC_TOKEN takes three arguments: the token name (LAST_BUTTON_PRESSED, without the prefix "NVM3KEY"), the token type (lastButtonPressed) what we defined above, and the default value of the token if it has never been written by the application (0xFF).
 
-​	In this case, the value (ledOnOff) is set to `false` to represent the default status of the LED0.
+​	In this case, the value (lastButtonPressed) is set to 0xFF to represent the default status of the lastButtonPressed.
 
 ### 3.1.2 Accessing Dynamic Tokens
 
@@ -245,25 +245,23 @@ The networking stack provides a simple set of APIs for accessing token data. The
 The non-indexed/basic token token API functions include:
 
 ```
-Ecode_t sl_token_get_data (uint32_t token, uint32_t index, void *data, uint32_t length)
-Ecode_t sl_token_set_data (uint32_t token, uint32_t index, void *data, uint32_t length)
+sl_status_t sl_token_get_data (uint32_t token, uint32_t index, void *data, uint32_t length)
+sl_status_t sl_token_set_data (uint32_t token, uint32_t index, void *data, uint32_t length)
 ```
 
 In this case, 'token' is the token key, ‘index’ is 1 for non-indexed/basic tokens, 'data' is the token data, and ‘length’ is the size in bytes of the data. Note that sl_token_get_data() and sl_token_set_data() are specific for basic dynamic tokens.
 
 Now let us use an example to explain the usage of these APIs.
-As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, we need to store the LED0's on/off status frequently, and restore the LED0 last on/off status after power up. Since we have defined the tokens above, you can access it with a code snippet like this:
+As mentioned in the section [You need to do](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/Zigbee-Hands-on-Non-volatile-Data-Storage#12-purpose) at the beginning of this documentation, we need to store the last button that has been pressed, and read the value of the last status of the button press. Since we have defined the tokens above, you can access it with a code snippet like this:
 
 ```
-ledOnOffStatus_t led0OnOffStatus;
+lastButtonPressed lightStatus;
 
-// Retrieve the previous status of LED0
-sl_token_get_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
-
-led0OnOffStatus.ledOnOff = <current status>;
+// Retrieve the previous status of switch
+sl_token_get_data(TOKEN_LAST_BUTTON_PRESSED, 1, &lightStatus, sizeof(TOKEN_LAST_BUTTON_PRESSED));
 
 // Store the current status of LED0
-sl_token_set_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
+sl_token_set_data(TOKEN_LAST_BUTTON_PRESSED, 1, &lastButton, sizeof(TOKEN_LAST_BUTTON_PRESSED));
 ```
 
 Since this hands-on is designed for new users to the Silicon Labs stack, we will focus on the basic token usage, if you are interested about how to write the counter token, please read the section [3.4.1.1 Accessing Counter Tokens](https://www.silabs.com/documents/public/application-notes/an1154-tokens-for-non-volatile-storage.pdf) of AN1154.
@@ -312,13 +310,13 @@ sl_token_get_manufacturing_data (TOKEN_MFG_STRING, 1, &mfgString, sizeof(mfgStri
 
 # 4. Lab
 
-This hands-on is building on top of previous three [hands-on](#11-application-features). Since the Non-volatile data storage mechanism does not depend on the mesh node type, we will only demonstrate how to access the NVM3 object via token API on the Switch (router) device side, it refers to the `Zigbee_Switch_ZR` project. 
+This hands-on is building on top of previous three [hands-on](#11-application-features). Since the Non-volatile data storage mechanism does not depend on the mesh node type, we will only demonstrate how to access the NVM3 object via token API on the Switch (router) device side, it refers to the `Zigbee_Switch_ZED` project. 
 
 This section provides step-by-step instructions to demonstrate how to store and retrieve the LED0's status to/from the Non-Volatile data storage (it's NVM3 in this hands-on) objects with basic token. And also demonstrate how to access manufacturing token with the dedicated APIs.
 
 **Hardware Requirements**
 
-This hands-on requires either EFR32MG21/EFR32MG13/EFR32MG12 radio board, and EFR32MG12 radio board BRD4162A is recommended since we created the example project with that kit. Below is the layout of the starter kit.
+This hands-on requires either EFR32MG21/EFR32MG13/EFR32MG12 radio board, and EFR32MG24 radio board BRD4187C is recommended since we created the example project with that kit. Below is the layout of the starter kit.
 
 **Software Requirements**
 
@@ -353,18 +351,18 @@ Add the following code to the token header, sl_custom_token_header.h to define t
 * Custom Zigbee Application Tokens
 */
 // Define token names here
-#define NVM3KEY_LED0_ON_OFF     (NVM3KEY_DOMAIN_USER | 0x0001)
+#define NVM3KEY_LAST_BUTTON_PRESSED     (NVM3KEY_DOMAIN_USER | 0x0001)
 
 #if defined(DEFINETYPES)
 // Include or define any typedef for tokens here
-typedef bool ledOnOff;        // LED ON OFF status
+typedef uint8_t lastButtonPressed;        // Last Button Pressed status
 #endif //DEFINETYPES
 
 #ifdef DEFINETOKENS
 // Define the actual token storage information here
-DEFINE_BASIC_TOKEN(LED0_ON_OFF,
-                   ledOnOff,
-                   false)
+DEFINE_BASIC_TOKEN(LAST_BUTTON_PRESSED,
+                   lastButtonPressed,
+                   0xFF)
 #endif
 ```
 
@@ -374,63 +372,64 @@ Let's move on to accessing the defined token. Below are step-by-step instruction
 
 ### 4.2.1 Write the Basic Token data
 
-In the last [hands-on](https://github.com/SiliconLabs/zigbee_applications/blob/f7059cdff81e6c57b711aaa2f0bd3634e2300b6f/zigbee_bootcamp/Zigbee-Hands-on-Using-Event/Zigbee-Hands-on-Using-Event.md#22-implement-the-event-handler), we defined an event handler `ledBlinkingHandler()` to toggle the LED0 periodically, we need to store the LED0 status after each toggling process.
+In the last [hands-on](../Zigbee-Hands-on-Sending-OnOff-Commands/Zigbee-Hands-on-Sending-OnOff-Commands.md), we defined an event handler `sl_button_on_change()` to handle pusshing Button 0 or Button 1 to turn on and off the Light. Let us say we need to store the switch state in NVM in cases of a reboot. 
 
 Open the `app.c`, include the head file and define "led0OnOffStatus" variable at the top of this file.
 
 ```C
 #include "sl_token_manager.h"
-
-ledOnOff led0OnOffStatus;
+lastButtonPressed lightStatus;
 ```
 
-Navigate to the function `void ledBlinkingHandler(void)` in the `app.c`. Write the basic token `LED0_ON_OFF` with the API `sl_token_set_data()`. Please note that the LED0 toggle process of last hands-on is surrounded by the token retrieving and storing process.
+Navigate to the function `void sl_button_on_change(const sl_button_t *handle)` in the `app.c`. Write the basic token `LAST_BUTTON_PRESSED` with the API `sl_token_set_data()`.
 
 ```c
-void ledBlinkingEventHandler(void)
+void sl_button_on_change(const sl_button_t *handle)
 {
-  sl_zigbee_event_set_inactive(&ledBlinkingEventControl);
+  if (SL_SIMPLE_BUTTON_INSTANCE(BUTTON0) == handle) {
+    if ( sl_button_get_state(handle) == SL_SIMPLE_BUTTON_RELEASED) {
+      lastButton = BUTTON0;
 
-  // Retrieve the previous status of LED0
-  sl_token_get_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
+      // NVM Storage: Step 4
+      sl_token_set_data(TOKEN_LAST_BUTTON_PRESSED, 1, &lastButton, sizeof(TOKEN_LAST_BUTTON_PRESSED));
+      sl_zigbee_app_debug_println("Button 0: %d", lastButton);
 
-  sl_led_toggle(&sl_led_led0);
-  led0OnOffStatus = !led0OnOffStatus;
+      sl_zigbee_af_event_set_active(&button_event);
+    }
+  } else if (SL_SIMPLE_BUTTON_INSTANCE(BUTTON1) == handle) {
+    if ( sl_button_get_state(handle) == SL_SIMPLE_BUTTON_RELEASED) {
+      lastButton = BUTTON1;
 
-  // Store the current status of LED0
-  sl_token_set_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
+      // NVM Storage: Step 4
+      sl_token_set_data(TOKEN_LAST_BUTTON_PRESSED, 1, &lastButton, sizeof(TOKEN_LAST_BUTTON_PRESSED));
+      sl_zigbee_app_debug_println("Button 1: %d", lastButton);
 
-  //Reschedule the event after a delay of 2 seconds
-  sl_zigbee_event_set_delay_ms(&ledBlinkingEventControl, 2000);
+      sl_zigbee_af_event_set_active(&button_event);
+    }
+  }
 }
+
 ```
 
 ### 4.2.2 Retrieve the Basic Token data
 
-Navigate to the function `void emberAfMainInitCallback(void)` of the `app.c` which will be called from the application's main function during the initialization, and retrieve the basic token "LED0_ON_OFF" with the API `sl_token_get_data()`. And then apply the retrieved status to the LED0 by using the API `sl_led_turn_on()` or `sl_led_turn_off()`
+Navigate to the function `void sl_zigbee_af_main_init_cb(void)` of the `app.c` which will be called from the application's main function during the initialization, and retrieve the basic token "LAST_BUTTON_PRESSED" with the API `sl_token_get_data()` and print that value to the console.
 
 ```C
-void emberAfMainInitCallback(void)
+void sl_zigbee_af_main_init_cb(void)
 {
-  // Retrieve the LED0 status before reset/power-off from the token
-  sl_token_get_data(TOKEN_LED0_ON_OFF, 1, &led0OnOffStatus, sizeof(led0OnOffStatus));
+  // Retrieve the switch status before reset/power-off from the token and print to console
+   sl_token_get_data(TOKEN_LAST_BUTTON_PRESSED, 1, &lightStatus, sizeof(TOKEN_LAST_BUTTON_PRESSED));
+   sl_zigbee_app_debug_println("The Last Button Pressed: %d", lightStatus);
 
-  // Restore the LED0 status during initialization
-  if(led0OnOffStatus){
-      sl_led_turn_on(&sl_led_led0);
-  }
-  else{
-      sl_led_turn_off(&sl_led_led0);
-  }
-	....
 }
 ```
 
 ### 4.2.3 Testing your project
 
-Once you've added the necessary code to you project, Build and flash the `Zigbee_Switch_ZR` project to your BRD4162A radio board.
+Once you've added the necessary code to you project, Build and flash the `Zigbee_Switch_ZED` project to your BRD4187C radio board.
 
-The LED0 on the starter kit will blink periodically after a few seconds delay after power up. If the device is reset the application will restore the LED0 to the status before reset / power-off.
+Now for testing purposes if you press button 1 and then hit 'reset' button or power off and on your switch you should see upon boot up the last button that was pressed printed to the console.
 **Note:** You may notice the device spends more time in booting up, it is because Zigbee project is using LFXO as the clock source by default in SDK 7.x, which is LFRCO in SDK 6.x. This can be found in `<project_name>/autogen/sl_device_init_clocks.c`
 
 ## 4.3 Access the Manufacturing Token
@@ -439,16 +438,17 @@ Manufacturing token can be written from on-chip code only if the token is curren
 
 ### 4.3.1 Read the Manufacturing Token MFG_STRING
 
-This part will involve reading the manufacturing Token `MFG_STRING` which holds the manufacturing string programmed by the manufacture during production. Navigate to the function `void emberAfMainInitCallback(void)` of the `app.c`, and read the manufacturing Token MFG_STRING with the API `sl_token_get_manufacturing_data()`.
+This part will involve reading the manufacturing Token `MFG_STRING` which holds the manufacturing string programmed by the manufacturer during production. Navigate to the function `void sl_zigbee_af_main_init_cb(void)` of the `app.c`, and read the manufacturing Token MFG_STRING with the API `sl_token_get_manufacturing_data()`.
 
 ```
-// Non-volatile Data Storage: Step 4
-tokTypeMfgString mfgString;
-sl_token_get_manufacturing_data (TOKEN_MFG_STRING, 1, &mfgString, sizeof(mfgString));
-emberAfAppPrintln("MFG String: %s", mfgString);
+  // Non-volatile Data Storage: Step 4
+  tokTypeMfgManufId mfgId;
+  // Testing Manfuacturing Token:
+  sl_token_get_manufacturing_data(TOKEN_MFG_MANUF_ID, 0, &mfgId, sizeof(mfgId));
+  sl_zigbee_app_debug_println("MFG ID: 0x%x", mfgId);
 ```
 
-Please note that if the manufacturing string token is not programmed by external programming tool before, the debug output will be NULL which indicates the manufacturing string is NULL.
+Please note that if the manufacturing id token is not programmed by external programming tool before, the debug output will be NULL (0xFFFF) which indicates the manufacturing string is NULL.
 
 And also you can use the Simplicity Commander to dump the manufacturing tokens as below.
 
@@ -456,9 +456,17 @@ And also you can use the Simplicity Commander to dump the manufacturing tokens a
 $ commander tokendump --tokengroup znet
 ```
 
-![img](https://github.com/SiliconLabs/IoT-Developer-Boot-Camp/wiki/files/ZB-Zigbee-Hands-on-Non-volatile-Data-Storage/dump_manufacturing_tokens.png)
+![img](./Images/mfg_manuf_id.png)
 
+In this case you will see the following on your console:
 
+```
+Zigbee_Switch_ZED> Button 1: 1
+The Last Button Pressed: 1
+MFG ID: 0x1234
+Reset info: 0x03 (EXT)
+Extended Reset info: 0x0301 (PIN)
+```
 
 # 5. Conclusion 
 
